@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/content_bg" >
+
+    <ImageView
+        android:id="@+id/iv_goal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/target"
+        android:layout_gravity="center" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4sp"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:id="@+id/iv_step"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/step"
+                android:layout_centerInParent="true" />
+            <TextView 
+                android:id="@+id/tv_step"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="0"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4sp"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:id="@+id/iv_caroli"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/caroli"
+                android:layout_centerInParent="true" />
+            <TextView 
+                android:id="@+id/tv_caroli"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="0.00"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+        
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4sp"
+            android:layout_weight="1" >
+        <ImageView
+            android:id="@+id/iv_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/distance"
+             android:layout_marginRight="4sp"
+            />
+        
+        <TextView 
+                android:id="@+id/tv_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="0.00"
+                android:layout_centerInParent="true"/>
+         </RelativeLayout>
+
+         <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4sp"
+            android:layout_weight="1" >
+        <ImageView
+            android:id="@+id/iv_sporttime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/sporttime"
+             android:layout_marginLeft="4sp"
+            android:layout_weight="1"
+            android:layout_centerInParent="true" />
+        
+        <TextView 
+                android:id="@+id/tv_sporttime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="00:00"
+                android:layout_centerInParent="true"/>
+         </RelativeLayout>
+
+    </LinearLayout>
+
+    
+
+</LinearLayout>
