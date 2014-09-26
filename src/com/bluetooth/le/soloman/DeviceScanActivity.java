@@ -47,8 +47,8 @@ import com.bluetooth.le.soloman.R;
 public class DeviceScanActivity extends ListActivity {
 	private final static String TAG = DeviceScanActivity.class.getSimpleName();
 	private final static String UUID_KEY_SERVICE = "0000fe18-0000-1000-8000-00805f9b34fb";
-	private final static String UUID_KEY_DATA_SEND = "0000fe11-0000-1000-8000-00805f9b34fb";
-	private final static String UUID_KEY_DATA_RECIV = "0000fe10-0000-1000-8000-00805f9b34fb";
+	private final static String UUID_KEY_DATA_SEND = "0000fe11-0000-1000-8000-00805f9b34fb"; //write
+	private final static String UUID_KEY_DATA_RECIV = "0000fe10-0000-1000-8000-00805f9b34fb"; //notify
 
     private LeDeviceListAdapter mLeDeviceListAdapter;
     /**搜索BLE终端*/
@@ -288,7 +288,7 @@ public class DeviceScanActivity extends ListActivity {
         			Log.e(TAG,"---->char value:"+ Utils.bytesToHexString(data) );
         		}
 
-//        		if ( gattService.getUuid().toString().equals(UUID_KEY_SERVICE) ) { //如果是手环的service
+        		if ( gattService.getUuid().toString().equals(UUID_KEY_SERVICE) ) { //如果是手环的service
         			//UUID_KEY_DATA是可以跟蓝牙模块串口通信的Characteristic
             		if(gattCharacteristic.getUuid().toString().equals(UUID_KEY_DATA_RECIV)) {        			
             			//测试读取当前Characteristic数据，会触发mOnDataAvailable.onCharacteristicRead()
@@ -297,7 +297,7 @@ public class DeviceScanActivity extends ListActivity {
                             public void run() {
                             	 appState.mBLE_reciv.readCharacteristic(gattCharacteristic);
                             }
-                        }, 50);
+                        }, 1000);
             			
             			//接受Characteristic被写的通知,收到蓝牙模块的数据后会触发mOnDataAvailable.onCharacteristicWrite()
             			 appState.mBLE_reciv.setCharacteristicNotification(gattCharacteristic, true);
@@ -315,7 +315,7 @@ public class DeviceScanActivity extends ListActivity {
                             public void run() {
                             	 appState.mBLE_send.readCharacteristic(gattCharacteristic);
                             }
-                        }, 50);
+                        }, 1000);
             			
             			//接受Characteristic被写的通知,收到蓝牙模块的数据后会触发mOnDataAvailable.onCharacteristicWrite()
             			 appState.mBLE_send.setCharacteristicNotification(gattCharacteristic, true);
@@ -336,7 +336,7 @@ public class DeviceScanActivity extends ListActivity {
             			}
             			
             		}
-//        		} 	//结束 if ( gattService.getUuid().toString().equals(UUID_KEY_SERVICE) )
+        		} 	//结束 if ( gattService.getUuid().toString().equals(UUID_KEY_SERVICE) )
         		
         		
         		//-----Descriptors的字段信息-----//
