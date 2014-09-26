@@ -60,10 +60,7 @@ public class FragmentSetting extends Fragment {
 	*/
 	
 	public void findView(View view){
-		tv_step = (TextView) view.findViewById(R.id.tv_step);
-		tv_caroli = (TextView) view.findViewById(R.id.tv_caroli);
-		tv_distance= (TextView) view.findViewById(R.id.tv_distance);
-		tv_sporttime= (TextView) view.findViewById(R.id.tv_sporttime);
+
 //		
 //		checkB_record.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){ 
 //            @Override

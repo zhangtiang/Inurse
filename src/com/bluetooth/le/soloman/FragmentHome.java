@@ -10,12 +10,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 
 public class FragmentHome extends Fragment {
 
 	public GlobalVar appState;
-	public TextView tv_step, tv_caroli, tv_distance, tv_sporttime;
+	public Button btn_getTemp;
 	//public sportDataThread st = null;
 	
 	@Override
@@ -40,7 +40,6 @@ public class FragmentHome extends Fragment {
 		// 此处甚至可以不需要设置Looper，因为 Handler默认就使用当前线程的Looper
 		messageHandler = new MessageHandler(looper);
 
-		new sportDataThread().start();
 				
         return view;       
 	}
@@ -65,10 +64,7 @@ public class FragmentHome extends Fragment {
 			// 更新UI
 			if (!((String) msg.obj == null)) {
 				if ("sportdata".equals((String) msg.obj)) {
-					tv_step.setText(String.valueOf(appState.step));
-					tv_caroli.setText(String.valueOf(appState.caroli));
-					tv_distance.setText(String.valueOf(appState.distance));
-					tv_sporttime.setText(appState.sptime);
+
 				}
 
 			}
@@ -76,28 +72,6 @@ public class FragmentHome extends Fragment {
 	}
 	
 	
-	// 更新数据进程----------------------------------------
-	public class sportDataThread extends Thread {
-		public sportDataThread() {
-			appState.runThread = true;
-		}
-
-		@Override
-		public void run() {
-			while (appState.runThread && !this.isInterrupted()) {
-				//System.out.println("sportDataThread run again");
-				updateHandler("sportdata");
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-
-	}
-	//==================end thread
 	
 	/*
 	@Override
@@ -121,52 +95,17 @@ public class FragmentHome extends Fragment {
 	*/
 	
 	public void findView(View view){
-		tv_step = (TextView) view.findViewById(R.id.tv_step);
-		tv_caroli = (TextView) view.findViewById(R.id.tv_caroli);
-		tv_distance= (TextView) view.findViewById(R.id.tv_distance);
-		tv_sporttime= (TextView) view.findViewById(R.id.tv_sporttime);
-//		
-//		checkB_record.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){ 
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, 
-//                    boolean isChecked) { 
-//                // TODO Auto-generated method stub 
-//                appState.recTag = isChecked;
-//            } 
-//        });
-//        
-//		checkB_sleep.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){ 
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, 
-//                    boolean isChecked) { 
-//                // TODO Auto-generated method stub 
-//                if(isChecked){	//默认checked，是今日睡眠
-//                	checkB_sleep.setText(R.string.today_sleep);
-//                	showToday();
-//                }else{
-//                	checkB_sleep.setText(R.string.sleep_debt);
-//                	showDept();
-//                }
-//            } 
-//        });
-//		
-//		checkB_autoClock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){ 
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, 
-//                    boolean isChecked) { 
-//                // TODO Auto-generated method stub 
-//                if(isChecked){
-//                	alarmOn();
-//                }else{//默认unchecked，不设闹钟
-//                	
-//                }
-//            } 
-//        });
+		btn_getTemp = (Button) view.findViewById(R.id.btn_getTemp);
+
+		btn_getTemp.setOnClickListener(new Button.OnClickListener(){//创建监听    
+            public void onClick(View v) {    
+                appState.getTemp(appState.gattCharacteristic_send);
+            }    
+  
+        });    
+						
 	}
 
-	
-	
-	
 	
 }
 

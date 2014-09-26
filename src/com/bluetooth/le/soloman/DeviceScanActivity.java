@@ -49,14 +49,17 @@ public class DeviceScanActivity extends ListActivity {
 	private final static String UUID_KEY_SERVICE = "0000fe18-0000-1000-8000-00805f9b34fb";
 	private final static String UUID_KEY_DATA_SEND = "0000fe11-0000-1000-8000-00805f9b34fb"; //write
 	private final static String UUID_KEY_DATA_RECIV = "0000fe10-0000-1000-8000-00805f9b34fb"; //notify
+	private final static String CCC = "00002902-0000-1000-8000-00805f9b34fb"; //CCC
 
+	public BluetoothGatt mBluetoothGatt = null;	//全局bluetoothgatt
+	
     private LeDeviceListAdapter mLeDeviceListAdapter;
     /**搜索BLE终端*/
     private BluetoothAdapter mBluetoothAdapter;
     /**读写BLE终端*/
-    //private BluetoothLeClass mBLE_send, mBLE_reciv;
+    private BluetoothLeClass mBLE_send, mBLE_reciv;
     private boolean mScanning;
-    private Handler mHandler;
+    private Handler mHandler = new Handler();
 
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
@@ -71,7 +74,7 @@ public class DeviceScanActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         //getActionBar().setTitle(R.string.title_devices);
         requestWindowFeature(Window.FEATURE_NO_TITLE); 	//去掉title
-        mHandler = new Handler();
+        //mHandler = new Handler();
 
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
@@ -96,27 +99,29 @@ public class DeviceScanActivity extends ListActivity {
         mBluetoothAdapter.enable();
         
         
-        //appState. mBLE_reciv = new BluetoothLeClass(this);
-        appState.init_BluetoothLeClass();
-        if (! appState.mBLE_reciv.initialize()) {
+        mBLE_reciv = new BluetoothLeClass(this);
+        appState.mBLE_reciv = mBLE_reciv;
+        //appState.init_BluetoothLeClass();
+        if (! mBLE_reciv.initialize()) {
             Log.e(TAG, "Unable to initialize Bluetooth");
             finish();
         }
         //发现BLE终端的Service时回调
-        appState.mBLE_reciv.setOnServiceDiscoverListener(mOnServiceDiscover);
+        mBLE_reciv.setOnServiceDiscoverListener(mOnServiceDiscover);
         //收到BLE终端数据交互的事件
-        appState.mBLE_reciv.setOnDataAvailableListener(mOnDataAvailable);     
+        mBLE_reciv.setOnDataAvailableListener(mOnDataAvailable);     
         
         
-        //appState.mBLE_send = new BluetoothLeClass(this);
+        mBLE_send = new BluetoothLeClass(this);
+        appState.mBLE_send = mBLE_send;
         if (! appState.mBLE_send.initialize()) {
             Log.e(TAG, "Unable to initialize Bluetooth");
             finish();
         }
         //发现BLE终端的Service时回调
-        appState.mBLE_send.setOnServiceDiscoverListener(mOnServiceDiscover);
+        mBLE_send.setOnServiceDiscoverListener(mOnServiceDiscover);
         //收到BLE终端数据交互的事件
-        appState.mBLE_send.setOnDataAvailableListener(mOnDataAvailable);               
+        mBLE_send.setOnDataAvailableListener(mOnDataAvailable);               
     }
 
 
@@ -152,10 +157,10 @@ public class DeviceScanActivity extends ListActivity {
     	
     	scanLeDevice(false);
         mLeDeviceListAdapter.clear();
-        appState.mBLE_send.disconnect();
-        appState.mBLE_reciv.disconnect();
-        appState.mBLE_send.close();
-        appState.mBLE_reciv.close();
+        mBLE_send.disconnect();
+        mBLE_reciv.disconnect();
+        mBLE_send.close();
+        mBLE_reciv.close();
     }
     
     @Override
@@ -167,8 +172,8 @@ public class DeviceScanActivity extends ListActivity {
             mScanning = false;
         }
         
-        appState.mBLE_reciv.connect(device.getAddress());
-        appState.mBLE_send.connect(device.getAddress());
+        mBLE_reciv.connect(device.getAddress());
+        mBLE_send.connect(device.getAddress());
     }
 
     private void scanLeDevice(final boolean enable) {
@@ -180,6 +185,7 @@ public class DeviceScanActivity extends ListActivity {
                     mScanning = false;
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
                     invalidateOptionsMenu();
+                    //Log.i("info", "正在搜索");
                 }
             }, SCAN_PERIOD);
 
@@ -199,7 +205,8 @@ public class DeviceScanActivity extends ListActivity {
 
 		@Override
 		public void onServiceDiscover(BluetoothGatt gatt) {
-			displayGattServices( appState.mBLE_send.getSupportedGattServices());
+			mBluetoothGatt = gatt;  //搜索到服务后，给全局bluetoothgatt赋值
+			displayGattServices( mBLE_send.getSupportedGattServices());
 		}
     	
     };
@@ -236,8 +243,8 @@ public class DeviceScanActivity extends ListActivity {
 					+Utils.bytesToHexString(characteristic.getValue()));
 			
 			switch (characteristic.getValue()[0]) {
-			case 0x09:	//实时运动数据
-				appState.ExecuteStortData(characteristic.getValue());
+			case (byte) 0xFA:	//实时温度数据
+				
 				break;
 
 			default:
@@ -288,23 +295,24 @@ public class DeviceScanActivity extends ListActivity {
         			Log.e(TAG,"---->char value:"+ Utils.bytesToHexString(data) );
         		}
 
-        		if ( gattService.getUuid().toString().equals(UUID_KEY_SERVICE) ) { //如果是手环的service
+//        		if ( gattService.getUuid().toString().equals(UUID_KEY_SERVICE) ) { //如果是手环的service
         			//UUID_KEY_DATA是可以跟蓝牙模块串口通信的Characteristic
-            		if(gattCharacteristic.getUuid().toString().equals(UUID_KEY_DATA_RECIV)) {        			
+            		if(gattCharacteristic.getUuid().toString().equals(UUID_KEY_DATA_RECIV)) {    
             			//测试读取当前Characteristic数据，会触发mOnDataAvailable.onCharacteristicRead()
             			mHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                            	 appState.mBLE_reciv.readCharacteristic(gattCharacteristic);
+                            	 mBLE_reciv.readCharacteristic(gattCharacteristic);
                             }
-                        }, 1000);
+                        }, 500);
             			
             			//接受Characteristic被写的通知,收到蓝牙模块的数据后会触发mOnDataAvailable.onCharacteristicWrite()
-            			 appState.mBLE_reciv.setCharacteristicNotification(gattCharacteristic, true);
+            			 mBLE_reciv.setCharacteristicNotification(gattCharacteristic, true);
+            			 appState.gattCharacteristic_reciv = gattCharacteristic;
             			//设置数据内容
-            			//gattCharacteristic.setValue("send data->");
+//            			gattCharacteristic.setValue("0");
             			//往蓝牙模块写入数据
-            			//mBLE_reciv.writeCharacteristic(gattCharacteristic);
+//            			appState.mBLE_reciv.writeCharacteristic(gattCharacteristic);
             		}
             		
             		//UUID_KEY_DATA是可以跟蓝牙模块串口通信的Characteristic
@@ -313,12 +321,13 @@ public class DeviceScanActivity extends ListActivity {
             			mHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                            	 appState.mBLE_send.readCharacteristic(gattCharacteristic);
+                            	 mBLE_send.readCharacteristic(gattCharacteristic);
+                            	 //Log.i("info", "appState.mBLE_send 尝试读数据");
                             }
-                        }, 1000);
+                        }, 500);
             			
             			//接受Characteristic被写的通知,收到蓝牙模块的数据后会触发mOnDataAvailable.onCharacteristicWrite()
-            			 appState.mBLE_send.setCharacteristicNotification(gattCharacteristic, true);
+            			 mBLE_send.setCharacteristicNotification(gattCharacteristic, true);
             			//设置数据内容
             			//gattCharacteristic.setValue("send data->");
             			//往蓝牙模块写入数据
@@ -327,7 +336,7 @@ public class DeviceScanActivity extends ListActivity {
             			if ( !appState.firstActivityRunning ){
 //            				appState.StartSportDateForTime(gattCharacteristic);
 //            				appState.setMode(gattCharacteristic);
-            				appState.getTemp(gattCharacteristic);
+            				appState.gattCharacteristic_send = gattCharacteristic;
                 			
                 			Intent it = new Intent(this, FirstActivity.class);
                 			startActivity(it);
@@ -336,7 +345,7 @@ public class DeviceScanActivity extends ListActivity {
             			}
             			
             		}
-        		} 	//结束 if ( gattService.getUuid().toString().equals(UUID_KEY_SERVICE) )
+//        		} 	//结束 if ( gattService.getUuid().toString().equals(UUID_KEY_SERVICE) )
         		
         		
         		//-----Descriptors的字段信息-----//
@@ -350,11 +359,23 @@ public class DeviceScanActivity extends ListActivity {
 					if (desData != null && desData.length > 0) {
 						Log.e(TAG, "-------->desc value:"+ Utils.bytesToHexString(data) );
 					}
+					
+					
+					//soloman 设置CCC通知enable，并回写到BluetoothGatt
+					if (gattDescriptor.getUuid().toString().equals(CCC)){
+						gattDescriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+						mBluetoothGatt.writeDescriptor(gattDescriptor);
+					}
         		 }
             }
         }//
 
     }
+    
+    
+    
+    
+    
     
     
 }
