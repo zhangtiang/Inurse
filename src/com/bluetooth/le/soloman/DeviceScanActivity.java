@@ -244,7 +244,7 @@ public class DeviceScanActivity extends ListActivity {
 			
 			switch (characteristic.getValue()[0]) {
 			case (byte) 0xFA:	//实时温度数据
-				
+				appState.calcTemp(characteristic.getValue()); //解析温度
 				break;
 
 			default:

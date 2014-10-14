@@ -37,6 +37,35 @@ public class GlobalVar extends Application{
 
 		sendData(gattCharacteristic, c1);
 	}
+	
+	public float surface, body, room;
+	public String mode, unit;
+	//计算温度
+	public void calcTemp(byte c[]){
+		if ( c[1]==0x10  && c[2] == 0x08){
+			surface =  (float) (( (int) ((c[4] & 0xff)) * 256 + (int)(c[3] & 0xff) ) / 10.0);
+			body = (float) (( (int) ((c[6] & 0xff)) * 256 + (int)(c[5] & 0xff )) / 10.0);
+			room = (float) (( (int) ((c[8] & 0xff)) * 256 +(int) (c[7] & 0xff )) / 10.0);
+			
+			if (c[9] == 0x01){ 				
+				mode = "surface";
+			}else if (c[9] == 0x00){ 				
+				mode = "body";
+			}else if (c[9] == 0x02){ 				
+				mode = "room";
+			}
+			
+			if (c[10] == 0x00){
+				unit = "℃";
+			}else if (c[10] == 0x01){
+				unit = "F";
+				surface = surface * 9 / 5 + 32;
+				body = body * 9 / 5 + 32;
+				room = room * 9 / 5 + 32;
+			}
+			
+		}
+	}
 		
 	// 设置模式
 	public void setMode(BluetoothGattCharacteristic gattCharacteristic) {

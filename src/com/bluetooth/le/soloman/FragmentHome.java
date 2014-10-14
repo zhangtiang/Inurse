@@ -11,11 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class FragmentHome extends Fragment {
 
 	public GlobalVar appState;
 	public Button btn_getTemp;
+	public TextView tv_tempre;
 	//public sportDataThread st = null;
 	
 	@Override
@@ -96,10 +98,21 @@ public class FragmentHome extends Fragment {
 	
 	public void findView(View view){
 		btn_getTemp = (Button) view.findViewById(R.id.btn_getTemp);
+		tv_tempre = (TextView) view.findViewById(R.id.tv_tempre);
 
 		btn_getTemp.setOnClickListener(new Button.OnClickListener(){//创建监听    
             public void onClick(View v) {    
                 appState.getTemp(appState.gattCharacteristic_send);
+                messageHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                    	tv_tempre.setText("表温：" + String.valueOf(appState.surface) +
+                    			"，体温：" + String.valueOf(appState.body) +
+                    			"，环温："+ String.valueOf(appState.room) +
+                    			"，模式："+ appState.mode +
+                    			"，单位："+ appState.unit );
+                    }
+                }, 2000);
             }    
   
         });    
