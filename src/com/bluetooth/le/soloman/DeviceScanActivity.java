@@ -172,6 +172,8 @@ public class DeviceScanActivity extends ListActivity {
             mScanning = false;
         }
         
+        appState.deviceAddress = device.getAddress();
+        
         mBLE_reciv.connect(device.getAddress());
         mBLE_send.connect(device.getAddress());
     }
@@ -264,6 +266,32 @@ public class DeviceScanActivity extends ListActivity {
                 public void run() {
                     mLeDeviceListAdapter.addDevice(device);
                     mLeDeviceListAdapter.notifyDataSetChanged();
+                    
+                  //自动连接功能-------------------------------------------
+                    String lastDevice = "";
+                    appState.autoConnect = true;
+                    appState.deviceAddress = device.getAddress();
+                    //读上次的设备
+                    //Thermometer温度计
+                    if ( appState.file.isFileExist("inurse/Thermometer.txt") ){
+                    	lastDevice =  appState.file.readFile(appState.file.SDPATH + "inurse/Thermometer.txt");
+                    }
+                    
+                    //如果和上次的相等，就直接连接
+                    if (lastDevice.equals(device.getAddress())){
+                    	appState.file.write2SDFromInput("inurse/", "Thermometer.txt", device.getAddress());                    	
+                    	
+                    	if (mScanning) {
+                            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                            mScanning = false;
+                        }
+                        
+                        appState.mBLE_reciv.connect(device.getAddress());
+                        appState.mBLE_send.connect(device.getAddress());             
+                    }else{
+                    	appState.autoConnect = false;
+                    }
+                    //---------------------------------------------------------------------
                 }
             });
         }
@@ -334,12 +362,12 @@ public class DeviceScanActivity extends ListActivity {
             			//mBLE_send.writeCharacteristic(gattCharacteristic);
             			
             			if ( !appState.firstActivityRunning ){
-//            				appState.StartSportDateForTime(gattCharacteristic);
-//            				appState.setMode(gattCharacteristic);
             				appState.gattCharacteristic_send = gattCharacteristic;
+            				
+            				appState.file.write2SDFromInput("inurse/", "Thermometer.txt", appState.deviceAddress);
                 			
                 			Intent it = new Intent(this, FirstActivity.class);
-                			startActivity(it);
+                			startActivityForResult(it, 0);	//配合onActivityResult，当FirstActivity退出时获得一个0值，然后自己也退出
                 			
                 			appState.firstActivityRunning = true;
             			}
@@ -373,7 +401,13 @@ public class DeviceScanActivity extends ListActivity {
     }
     
     
-    
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		if (requestCode == 0 && resultCode == RESULT_OK) {
+			finish();
+		}
+	}
     
     
     

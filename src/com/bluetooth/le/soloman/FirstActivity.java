@@ -14,6 +14,7 @@ import android.content.pm.ActivityInfo;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -119,6 +120,20 @@ public class FirstActivity extends FragmentActivity {
 		appState.runThread = false;
 	}
 	
+	// 检测按键
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// 按下键盘上返回按钮
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			System.out.println("返回按钮");
+			setResult(RESULT_OK);
+			finish();
+			return true;
+		} else {
+			return super.onKeyDown(keyCode, event);
+		}
+	}
+			
 	public void findView(){
 		viewPager = (ViewPager) findViewById(R.id.viewPager);		
 	

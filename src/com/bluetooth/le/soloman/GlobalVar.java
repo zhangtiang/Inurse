@@ -5,6 +5,10 @@ import android.bluetooth.BluetoothGattCharacteristic;
 
 public class GlobalVar extends Application{
 
+	public FileUtils file = new FileUtils();
+	public String deviceAddress;
+	public boolean autoConnect;
+	
 	 /**读写BLE终端*/
 	public BluetoothLeClass mBLE_send, mBLE_reciv;
 	BluetoothGattCharacteristic  gattCharacteristic_send, gattCharacteristic_reciv;
