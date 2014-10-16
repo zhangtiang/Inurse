@@ -2,19 +2,74 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/content_bg" >
+    android:orientation="horizontal" >
 
-    <Button
-        android:id="@+id/btn_getTemp"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="读温度" />
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/tv_tempre"
-        android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/btn_xueya"
+            android:layout_width="96dip"
+            android:layout_height="96dip"
+            android:layout_gravity="right"
+            android:layout_marginBottom="16dip"
+            android:layout_marginRight="16dip"
+            android:text="血压" />
+
+        <Button
+            android:id="@+id/btn_xinlv"
+            android:layout_width="96dip"
+            android:layout_height="96dip"
+            android:layout_gravity="right"
+            android:layout_marginBottom="16dip"
+            android:layout_marginRight="16dip"
+            android:text="心率计" />
+
+        <Button
+            android:id="@+id/btn_shuimian"
+            android:layout_width="96dip"
+            android:layout_height="96dip"
+            android:layout_gravity="right"
+            android:layout_marginRight="16dip"
+            android:text="睡眠" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/btn_wendu"
+            android:layout_width="96dip"
+            android:layout_height="96dip"
+            android:layout_gravity="left"
+            android:layout_marginBottom="16dip"
+            android:layout_marginRight="16dip"
+            android:text="温度计" />
+
+        <Button
+            android:id="@+id/btn_xueyang"
+            android:layout_width="96dip"
+            android:layout_height="96dip"
+            android:layout_gravity="left"
+            android:layout_marginBottom="16dip"
+            android:layout_marginRight="16dip"
+            android:text="血氧仪" />
+
+        <Button
+            android:id="@+id/btn_dianzichen"
+            android:layout_width="96dip"
+            android:layout_height="96dip"
+            android:layout_gravity="left"
+            android:layout_marginRight="16dip"
+            android:text="电子秤" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -2,7 +2,7 @@ package com.bluetooth.le.soloman;
 
 import java.util.ArrayList;
 
-import com.bluetooth.le.soloman.FragmentHome;
+import com.bluetooth.le.soloman.FragmentThemometer;
 import com.bluetooth.le.soloman.R;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -53,8 +53,8 @@ public class FirstActivity extends FragmentActivity {
 		fragmentHome = (FragmentHome) fm.findFragmentById(R.layout.fragment_home);
 		fragmentSetting = (FragmentSetting) fm.findFragmentById(R.layout.fragment_setting);
 		
-		ft.add(R.id.viewPager,new FragmentHome(), "home");	
-		ft.add(R.id.viewPager,new FragmentHome(), "setting");
+		ft.add(R.id.viewPager,new FragmentThemometer(), "home");	
+		ft.add(R.id.viewPager,new FragmentThemometer(), "setting");
 		
 		//ft.replace(R.id.viewPager, fragmentSleep);
 		ft.commit();	

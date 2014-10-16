@@ -36,16 +36,16 @@ limitations under the License.
                  android:icon="@drawable/ic_launcher"
                  android:theme="@android:style/Theme.Holo.Light"
                  android:name="GlobalVar" >
-        <activity android:name="com.bluetooth.le.soloman.DeviceScanActivity"
-                  android:label="@string/app_name"
-                  android:theme="@android:style/Theme.Holo.Dialog">
+        <activity android:name="com.bluetooth.le.soloman.FirstActivity"
+                  android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         
-        <activity android:name="com.bluetooth.le.soloman.FirstActivity" >
+        <activity android:name="com.bluetooth.le.soloman.DeviceScanActivity"
+           		  android:theme="@android:style/Theme.Holo.Dialog" >
         </activity>
 
     </application>
