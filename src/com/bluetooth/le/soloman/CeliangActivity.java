@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -18,21 +17,19 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
 
-public class FirstActivity extends FragmentActivity {
+public class CeliangActivity extends FragmentActivity {
 
 	public GlobalVar appState;
 	
 	public android.support.v4.app.FragmentTransaction ft;
-	public FragmentHome fragmentHome;
-	public FragmentSetting fragmentSetting;
+	public FragmentThemometer FragmentThemometer;
+
 
 	public MediaRecorder recorder;	
 	public ViewPager viewPager;	
 	public ImageView iv_home, iv_setting;	//首页图片  设置图片
-	public Button btn_wendu;	//温度
 
 	
 	@Override
@@ -42,7 +39,7 @@ public class FirstActivity extends FragmentActivity {
 		
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE); 	//去掉title
-		setContentView(R.layout.first_activity);
+		setContentView(R.layout.celiang_activity);
 
 		
 		findView();
@@ -53,11 +50,9 @@ public class FirstActivity extends FragmentActivity {
 		android.support.v4.app.FragmentManager fm =  getSupportFragmentManager();
 		ft = fm.beginTransaction();
 		
-		fragmentHome = (FragmentHome) fm.findFragmentById(R.layout.fragment_home);
-		fragmentSetting = (FragmentSetting) fm.findFragmentById(R.layout.fragment_setting);
+		FragmentThemometer = (FragmentThemometer) fm.findFragmentById(R.layout.fragment_themometer);
 		
 		ft.add(R.id.viewPager,new FragmentThemometer(), "home");	
-		ft.add(R.id.viewPager,new FragmentThemometer(), "setting");
 		
 		//ft.replace(R.id.viewPager, fragmentSleep);
 		ft.commit();	
@@ -86,14 +81,6 @@ public class FirstActivity extends FragmentActivity {
 				viewPager.setCurrentItem(1);
 			}
 		});
-		
-	}
-	
-	public void btn_wendu_onclick(View view){
-		Log.i("info","点击温度按钮");
-//		Intent it = new Intent(FirstActivity.this, CeliangActivity.class);
-		Intent it = new Intent(FirstActivity.this, DeviceScanActivity.class);
-		startActivity(it);
 	}
 
 
@@ -150,8 +137,6 @@ public class FirstActivity extends FragmentActivity {
 	
 		iv_home = (ImageView) findViewById(R.id.iv_home);		
 		iv_setting = (ImageView) findViewById(R.id.iv_setting);
-		
-		btn_wendu =  (Button) findViewById(R.id.btn_wendu);
 	}
 
 	
@@ -160,11 +145,9 @@ public class FirstActivity extends FragmentActivity {
 		//viewPager = (ViewPager)findViewById(R.id.viewpager);  
 		fragmentArryList = new ArrayList<Fragment>();  
  
-		fragmentHome = new FragmentHome();
-		fragmentSetting = new FragmentSetting();
+		FragmentThemometer = new FragmentThemometer();
         
-		fragmentArryList.add(fragmentHome);  
-		fragmentArryList.add(fragmentSetting);  
+		fragmentArryList.add(FragmentThemometer);  
           
         //给ViewPager设置适配器  
 		viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentArryList));  

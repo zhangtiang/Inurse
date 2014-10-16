@@ -366,7 +366,8 @@ public class DeviceScanActivity extends ListActivity {
             				
             				appState.file.write2SDFromInput("inurse/", "Thermometer.txt", appState.deviceAddress);
                 			
-                			Intent it = new Intent(this, FirstActivity.class);
+//                			Intent it = new Intent(this, FirstActivity.class);
+            				Intent it = new Intent(this, CeliangActivity.class);
                 			startActivityForResult(it, 0);	//配合onActivityResult，当FirstActivity退出时获得一个0值，然后自己也退出
                 			
                 			appState.firstActivityRunning = true;

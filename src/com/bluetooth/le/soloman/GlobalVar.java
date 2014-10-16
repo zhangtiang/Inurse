@@ -1,5 +1,7 @@
 package com.bluetooth.le.soloman;
 
+import java.math.BigDecimal;
+
 import android.app.Application;
 import android.bluetooth.BluetoothGattCharacteristic;
 
@@ -50,6 +52,19 @@ public class GlobalVar extends Application{
 			surface =  (float) (( (int) ((c[4] & 0xff)) * 256 + (int)(c[3] & 0xff) ) / 10.0);
 			body = (float) (( (int) ((c[6] & 0xff)) * 256 + (int)(c[5] & 0xff )) / 10.0);
 			room = (float) (( (int) ((c[8] & 0xff)) * 256 +(int) (c[7] & 0xff )) / 10.0);
+			
+			BigDecimal bd = new BigDecimal(surface);
+			bd = bd.setScale(1,BigDecimal.ROUND_HALF_UP);  
+			surface = bd.floatValue();
+			
+			bd = new BigDecimal(body);
+			bd = bd.setScale(1,BigDecimal.ROUND_HALF_UP);  
+			body = bd.floatValue();
+			
+			bd = new BigDecimal(room);
+			bd = bd.setScale(1,BigDecimal.ROUND_HALF_UP);  
+			room = bd.floatValue();
+			
 			
 			if (c[9] == 0x01){ 				
 				mode = "surface";

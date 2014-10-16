@@ -2,6 +2,8 @@ package com.bluetooth.le.soloman;
 
 
 import com.bluetooth.le.soloman.R;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,7 +15,7 @@ import android.widget.TextView;
 public class FragmentHome extends Fragment {
 
 	public GlobalVar appState;
-	public Button btn_getTemp;
+	
 	public TextView tv_tempre;
 	//public sportDataThread st = null;
 	
@@ -32,15 +34,15 @@ public class FragmentHome extends Fragment {
 		//return inflater.inflate(R.layout.fragment_sleep, container, false);	
 		
 		View view = inflater.inflate(R.layout.fragment_home, container, false);
-		findView(view);		
+		findView(view);	
 
 
 				
         return view;       
 	}
-
-
 	
+
+
 	public void findView(View view){
 		
 						

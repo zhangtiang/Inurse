@@ -47,6 +47,8 @@ limitations under the License.
         <activity android:name="com.bluetooth.le.soloman.DeviceScanActivity"
            		  android:theme="@android:style/Theme.Holo.Dialog" >
         </activity>
+         <activity android:name="com.bluetooth.le.soloman.CeliangActivity" >
+        </activity>
 
     </application>
 </manifest>

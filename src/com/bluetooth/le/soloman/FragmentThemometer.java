@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ public class FragmentThemometer extends Fragment {
 
 	public GlobalVar appState;
 	public Button btn_getTemp;
-	public TextView tv_tempre;
+	public TextView tv_user1_cewen, tv_user2_cewen, tv_device_cewen, tv_tempre, tv_cewenwendu, tv_cewenunit, tv_cewennum;
 	//public sportDataThread st = null;
 	
 	@Override
@@ -99,10 +100,22 @@ public class FragmentThemometer extends Fragment {
 	public void findView(View view){
 		btn_getTemp = (Button) view.findViewById(R.id.btn_getTemp);
 		tv_tempre = (TextView) view.findViewById(R.id.tv_tempre);
+		tv_user1_cewen = (TextView) view.findViewById(R.id.tv_user1_cewen);
+		tv_user2_cewen = (TextView) view.findViewById(R.id.tv_user2_cewen);
+		tv_device_cewen = (TextView) view.findViewById(R.id.tv_device_cewen);
+		tv_cewenwendu = (TextView) view.findViewById(R.id.tv_cewenwendu);
+		tv_cewenunit = (TextView) view.findViewById(R.id.tv_cewenunit);
+		tv_cewennum = (TextView) view.findViewById(R.id.tv_cewennum);
+		
+		tv_user1_cewen.setText("ID:A10234         User Name: Ken Block");
+		tv_user2_cewen.setText("Note:This is my first patient!");
+		tv_device_cewen.setText("Device ID:" + appState.deviceAddress);
 
 		btn_getTemp.setOnClickListener(new Button.OnClickListener(){//创建监听    
             public void onClick(View v) {    
+            	Log.i("info", "点击侧温度");
                 appState.getTemp(appState.gattCharacteristic_send);
+                Log.i("info", "已调用测温度方法");
                 messageHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -111,6 +124,21 @@ public class FragmentThemometer extends Fragment {
                     			"，环温："+ String.valueOf(appState.room) +
                     			"，模式："+ appState.mode +
                     			"，单位："+ appState.unit );
+                    	
+								if ("body".equals(appState.mode)) {
+									tv_cewenwendu.setText(String.valueOf(appState.body));
+								} else if ("surface".equals(appState.mode)) {
+									tv_cewenwendu.setText(String.valueOf(appState.surface));
+								} else if ("room".equals(appState.mode)) {
+									tv_cewenwendu.setText(String.valueOf(appState.room));
+								}
+
+								if (appState.mode != null) {
+									tv_cewenunit.setText(String.valueOf(appState.unit));
+									tv_cewennum.setText("Record Total:xx\nbody:xx    surface:xx    room:xx");
+								}
+								
+								
                     }
                 }, 2000);
             }    

@@ -52,7 +52,8 @@
             android:layout_gravity="left"
             android:layout_marginBottom="16dip"
             android:layout_marginRight="16dip"
-            android:text="温度计" />
+            android:text="温度计"
+            android:onClick="btn_wendu_onclick" />
 
         <Button
             android:id="@+id/btn_xueyang"
