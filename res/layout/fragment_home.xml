@@ -18,6 +18,7 @@
             android:layout_gravity="right"
             android:layout_marginBottom="16dip"
             android:layout_marginRight="16dip"
+            android:enabled="false"
             android:text="血压" />
 
         <Button
@@ -27,6 +28,7 @@
             android:layout_gravity="right"
             android:layout_marginBottom="16dip"
             android:layout_marginRight="16dip"
+            android:enabled="false"
             android:text="心率计" />
 
         <Button
@@ -35,6 +37,7 @@
             android:layout_height="96dip"
             android:layout_gravity="right"
             android:layout_marginRight="16dip"
+            android:enabled="false"
             android:text="睡眠" />
     </LinearLayout>
 
@@ -52,8 +55,8 @@
             android:layout_gravity="left"
             android:layout_marginBottom="16dip"
             android:layout_marginRight="16dip"
-            android:text="温度计"
-            android:onClick="btn_wendu_onclick" />
+            android:onClick="btn_wendu_onclick"
+            android:text="温度计" />
 
         <Button
             android:id="@+id/btn_xueyang"
@@ -62,6 +65,7 @@
             android:layout_gravity="left"
             android:layout_marginBottom="16dip"
             android:layout_marginRight="16dip"
+            android:enabled="false"
             android:text="血氧仪" />
 
         <Button
@@ -70,6 +74,7 @@
             android:layout_height="96dip"
             android:layout_gravity="left"
             android:layout_marginRight="16dip"
+            android:enabled="false"
             android:text="电子秤" />
     </LinearLayout>
 

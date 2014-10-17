@@ -17,8 +17,10 @@ import android.widget.TextView;
 public class FragmentThemometer extends Fragment {
 
 	public GlobalVar appState;
-	public Button btn_getTemp;
+	public Button btn_getTemp, btn_swichcewenmode, btn_swichcewenunit;
 	public TextView tv_user1_cewen, tv_user2_cewen, tv_device_cewen, tv_tempre, tv_cewenwendu, tv_cewenunit, tv_cewennum;
+	public byte mode, unit;
+	int ti, tj;
 	//public sportDataThread st = null;
 	
 	@Override
@@ -36,6 +38,9 @@ public class FragmentThemometer extends Fragment {
 		//return inflater.inflate(R.layout.fragment_sleep, container, false);	
 		
 		View view = inflater.inflate(R.layout.fragment_themometer, container, false);
+		
+		ti = 0;
+		tj = 0;
 		findView(view);
 		
 		// 得到当前线程的Looper实例，由于当前线程是UI线程也可以通过Looper.getMainLooper()得到
@@ -99,6 +104,8 @@ public class FragmentThemometer extends Fragment {
 	
 	public void findView(View view){
 		btn_getTemp = (Button) view.findViewById(R.id.btn_getTemp);
+		btn_swichcewenmode  = (Button) view.findViewById(R.id.btn_swichcewenmode);
+		btn_swichcewenunit = (Button) view.findViewById(R.id.btn_swichcewenunit);
 		tv_tempre = (TextView) view.findViewById(R.id.tv_tempre);
 		tv_user1_cewen = (TextView) view.findViewById(R.id.tv_user1_cewen);
 		tv_user2_cewen = (TextView) view.findViewById(R.id.tv_user2_cewen);
@@ -127,14 +134,22 @@ public class FragmentThemometer extends Fragment {
                     	
 								if ("body".equals(appState.mode)) {
 									tv_cewenwendu.setText(String.valueOf(appState.body));
+									ti = 0;
 								} else if ("surface".equals(appState.mode)) {
 									tv_cewenwendu.setText(String.valueOf(appState.surface));
+									ti = 1;
 								} else if ("room".equals(appState.mode)) {
 									tv_cewenwendu.setText(String.valueOf(appState.room));
+									ti = 2;
 								}
 
 								if (appState.mode != null) {
-									tv_cewenunit.setText(String.valueOf(appState.unit));
+									if ("℃".equals(appState.unit)) {
+										tj = 0;
+									}else if ("℉".equals(appState.unit)) {
+										tj = 1;
+									}
+									tv_cewenunit.setText(appState.unit);
 									tv_cewennum.setText("Record Total:xx\nbody:xx    surface:xx    room:xx");
 								}
 								
@@ -144,6 +159,29 @@ public class FragmentThemometer extends Fragment {
             }    
   
         });    
+		
+		//切换模式0body 1surface 2room
+		btn_swichcewenmode.setOnClickListener(new Button.OnClickListener(){//创建监听    
+            public void onClick(View v) {    
+            	ti ++;
+            	appState.setMode(appState.gattCharacteristic_send, (byte) (ti % 3 & 0xff), (byte) (tj % 2 & 0xff) );
+            }
+		});
+		
+		btn_swichcewenunit.setOnClickListener(new Button.OnClickListener(){//创建监听    
+            public void onClick(View v) {    
+            	tj ++;
+            	if (tj %2 ==0){
+            		tv_cewenunit.setText("℃");
+            	}else if (tj % 2 ==1){
+            		tv_cewenunit.setText("℉");
+            	}
+            	appState.setMode(appState.gattCharacteristic_send, (byte) (ti % 3 & 0xff), (byte) (tj % 2 & 0xff) );
+            	tv_cewenwendu.setText("- -");
+            }
+		});
+		
+		
 						
 	}
 

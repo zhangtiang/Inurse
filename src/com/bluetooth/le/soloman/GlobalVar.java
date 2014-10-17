@@ -51,20 +51,7 @@ public class GlobalVar extends Application{
 		if ( c[1]==0x10  && c[2] == 0x08){
 			surface =  (float) (( (int) ((c[4] & 0xff)) * 256 + (int)(c[3] & 0xff) ) / 10.0);
 			body = (float) (( (int) ((c[6] & 0xff)) * 256 + (int)(c[5] & 0xff )) / 10.0);
-			room = (float) (( (int) ((c[8] & 0xff)) * 256 +(int) (c[7] & 0xff )) / 10.0);
-			
-			BigDecimal bd = new BigDecimal(surface);
-			bd = bd.setScale(1,BigDecimal.ROUND_HALF_UP);  
-			surface = bd.floatValue();
-			
-			bd = new BigDecimal(body);
-			bd = bd.setScale(1,BigDecimal.ROUND_HALF_UP);  
-			body = bd.floatValue();
-			
-			bd = new BigDecimal(room);
-			bd = bd.setScale(1,BigDecimal.ROUND_HALF_UP);  
-			room = bd.floatValue();
-			
+			room = (float) (( (int) ((c[8] & 0xff)) * 256 +(int) (c[7] & 0xff )) / 10.0);	
 			
 			if (c[9] == 0x01){ 				
 				mode = "surface";
@@ -77,23 +64,33 @@ public class GlobalVar extends Application{
 			if (c[10] == 0x00){
 				unit = "℃";
 			}else if (c[10] == 0x01){
-				unit = "F";
+				unit = "℉";
 				surface = surface * 9 / 5 + 32;
 				body = body * 9 / 5 + 32;
 				room = room * 9 / 5 + 32;
 			}
+			BigDecimal bd = new BigDecimal(surface);
+			bd = bd.setScale(1,BigDecimal.ROUND_HALF_UP);  
+			surface = bd.floatValue();
 			
+			bd = new BigDecimal(body);
+			bd = bd.setScale(1,BigDecimal.ROUND_HALF_UP);  
+			body = bd.floatValue();
+			
+			bd = new BigDecimal(room);
+			bd = bd.setScale(1,BigDecimal.ROUND_HALF_UP);  
+			room = bd.floatValue();
 		}
 	}
 		
 	// 设置模式
-	public void setMode(BluetoothGattCharacteristic gattCharacteristic) {
+	public void setMode(BluetoothGattCharacteristic gattCharacteristic, byte mode, byte unit) {
 		byte c1[] = new byte[7];
 		c1[0] = (byte) 0xf5;
 		c1[1] = 0x11;
 		c1[2] = 0x02;
-		c1[3] = 0x00; // body
-		c1[4] = 0x00; // ℃
+		c1[3] = mode; // body surface room
+		c1[4] = unit; // ℃ ℉  
 		c1[5] = (byte) (c[3] ^ c[4]);
 		c1[6] = (byte) 0xff;
 
