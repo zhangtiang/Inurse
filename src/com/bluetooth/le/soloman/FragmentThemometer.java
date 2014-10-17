@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -43,6 +44,16 @@ public class FragmentThemometer extends Fragment {
 		tj = 0;
 		findView(view);
 		
+		view.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				Log.i("info","FagmentThemometer onTouch");
+				cewen();
+				return false;
+			}
+
+		});
+		
 		// 得到当前线程的Looper实例，由于当前线程是UI线程也可以通过Looper.getMainLooper()得到
 		Looper looper = Looper.myLooper();
 		// 此处甚至可以不需要设置Looper，因为 Handler默认就使用当前线程的Looper
@@ -52,6 +63,9 @@ public class FragmentThemometer extends Fragment {
         return view;       
 	}
 
+	
+	
+	
 	private Handler messageHandler;
 	private void updateHandler(Object obj) {
 		// 创建一个Message对象，并把得到的网络信息赋值给Message对象
@@ -120,44 +134,8 @@ public class FragmentThemometer extends Fragment {
 
 		btn_getTemp.setOnClickListener(new Button.OnClickListener(){//创建监听    
             public void onClick(View v) {    
-            	Log.i("info", "点击侧温度");
-                appState.getTemp(appState.gattCharacteristic_send);
-                Log.i("info", "已调用测温度方法");
-                messageHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                    	tv_tempre.setText("表温：" + String.valueOf(appState.surface) +
-                    			"，体温：" + String.valueOf(appState.body) +
-                    			"，环温："+ String.valueOf(appState.room) +
-                    			"，模式："+ appState.mode +
-                    			"，单位："+ appState.unit );
-                    	
-								if ("body".equals(appState.mode)) {
-									tv_cewenwendu.setText(String.valueOf(appState.body));
-									ti = 0;
-								} else if ("surface".equals(appState.mode)) {
-									tv_cewenwendu.setText(String.valueOf(appState.surface));
-									ti = 1;
-								} else if ("room".equals(appState.mode)) {
-									tv_cewenwendu.setText(String.valueOf(appState.room));
-									ti = 2;
-								}
-
-								if (appState.mode != null) {
-									if ("℃".equals(appState.unit)) {
-										tj = 0;
-									}else if ("℉".equals(appState.unit)) {
-										tj = 1;
-									}
-									tv_cewenunit.setText(appState.unit);
-									tv_cewennum.setText("Record Total:xx\nbody:xx    surface:xx    room:xx");
-								}
-								
-								
-                    }
-                }, 2000);
-            }    
-  
+            	cewen();
+            }  
         });    
 		
 		//切换模式0body 1surface 2room
@@ -185,6 +163,44 @@ public class FragmentThemometer extends Fragment {
 						
 	}
 
+	public void cewen(){
+		Log.i("info", "点击侧温度");
+        appState.getTemp(appState.gattCharacteristic_send);
+        Log.i("info", "已调用测温度方法");
+        messageHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+            	tv_tempre.setText("表温：" + String.valueOf(appState.surface) +
+            			"，体温：" + String.valueOf(appState.body) +
+            			"，环温："+ String.valueOf(appState.room) +
+            			"，模式："+ appState.mode +
+            			"，单位："+ appState.unit );
+            	
+						if ("body".equals(appState.mode)) {
+							tv_cewenwendu.setText(String.valueOf(appState.body));
+							ti = 0;
+						} else if ("surface".equals(appState.mode)) {
+							tv_cewenwendu.setText(String.valueOf(appState.surface));
+							ti = 1;
+						} else if ("room".equals(appState.mode)) {
+							tv_cewenwendu.setText(String.valueOf(appState.room));
+							ti = 2;
+						}
+
+						if (appState.mode != null) {
+							if ("℃".equals(appState.unit)) {
+								tj = 0;
+							}else if ("℉".equals(appState.unit)) {
+								tj = 1;
+							}
+							tv_cewenunit.setText(appState.unit);
+							tv_cewennum.setText("Record Total:xx\nbody:xx    surface:xx    room:xx");
+						}
+						
+						
+            }
+        }, 2000);
+	}
 	
 }
 

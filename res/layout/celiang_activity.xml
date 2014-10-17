@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="60sp" />
     
-    <include layout="@layout/main_bottom"
+    <include layout="@layout/celiang_bottom"
         android:id="@+id/main_bottom"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"

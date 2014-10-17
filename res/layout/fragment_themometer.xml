@@ -118,12 +118,14 @@
         android:id="@+id/btn_getTemp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="读温度" />
+        android:text="读温度"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_tempre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="TextView"
+        android:visibility="gone" />
 
 </LinearLayout>

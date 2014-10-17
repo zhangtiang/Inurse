@@ -29,7 +29,7 @@ public class CeliangActivity extends FragmentActivity {
 
 	public MediaRecorder recorder;	
 	public ViewPager viewPager;	
-	public ImageView iv_home, iv_setting;	//首页图片  设置图片
+	public ImageView iv_celianghome, iv_graph;
 
 	
 	@Override
@@ -52,7 +52,8 @@ public class CeliangActivity extends FragmentActivity {
 		
 		FragmentThemometer = (FragmentThemometer) fm.findFragmentById(R.layout.fragment_themometer);
 		
-		ft.add(R.id.viewPager,new FragmentThemometer(), "home");	
+		ft.add(R.id.viewPager,new FragmentThemometer(), "home");
+		ft.add(R.id.viewPager,new FragmentThemometer(), "graph");
 		
 		//ft.replace(R.id.viewPager, fragmentSleep);
 		ft.commit();	
@@ -64,7 +65,7 @@ public class CeliangActivity extends FragmentActivity {
 	
 	private void setOnClickListener() {
 		// TODO Auto-generated method stub
-		iv_home.setOnClickListener(new View.OnClickListener() {
+		iv_celianghome.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -73,7 +74,7 @@ public class CeliangActivity extends FragmentActivity {
 			}
 		});
 		
-		iv_setting.setOnClickListener(new View.OnClickListener() {
+		iv_graph.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -83,7 +84,8 @@ public class CeliangActivity extends FragmentActivity {
 		});
 	}
 
-
+	
+	
 //	@Override
 //	public boolean onCreateOptionsMenu(Menu menu) {
 //		// Inflate the menu; this adds items to the action bar if it is present.
@@ -131,12 +133,13 @@ public class CeliangActivity extends FragmentActivity {
 			return super.onKeyDown(keyCode, event);
 		}
 	}
-			
+
+	
 	public void findView(){
 		viewPager = (ViewPager) findViewById(R.id.viewPager);		
 	
-		iv_home = (ImageView) findViewById(R.id.iv_home);		
-		iv_setting = (ImageView) findViewById(R.id.iv_setting);
+		iv_graph = (ImageView) findViewById(R.id.iv_graph);		
+		iv_celianghome = (ImageView) findViewById(R.id.iv_celianghome);
 	}
 
 	
@@ -146,8 +149,10 @@ public class CeliangActivity extends FragmentActivity {
 		fragmentArryList = new ArrayList<Fragment>();  
  
 		FragmentThemometer = new FragmentThemometer();
+//		FragmentGraph = new FragmentGraph();
         
 		fragmentArryList.add(FragmentThemometer);  
+//		fragmentArryList.add(FragmentGraph);
           
         //给ViewPager设置适配器  
 		viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentArryList));  
@@ -163,12 +168,12 @@ public class CeliangActivity extends FragmentActivity {
 			// TODO Auto-generated method stub
 			switch (arg0) {
 			case 0:
-				iv_home.setBackgroundResource(R.drawable.home1);
-				iv_setting.setBackgroundResource(R.drawable.setting);
+				iv_celianghome.setBackgroundResource(R.drawable.home1);
+				iv_graph.setBackgroundResource(R.drawable.setting);
 				break;
 			case 1:
-				iv_setting.setBackgroundResource(R.drawable.setting1);
-				iv_home.setBackgroundResource(R.drawable.home);
+				iv_graph.setBackgroundResource(R.drawable.setting1);
+				iv_celianghome.setBackgroundResource(R.drawable.home);
 				break;
 
 			}
