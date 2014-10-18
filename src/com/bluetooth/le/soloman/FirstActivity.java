@@ -28,11 +28,13 @@ public class FirstActivity extends FragmentActivity {
 	public android.support.v4.app.FragmentTransaction ft;
 	public FragmentHome fragmentHome;
 	public FragmentSetting fragmentSetting;
+	public FragmentHelp fragmentHelp;
+	public FragmentUser fragmentUser;
 
 	public MediaRecorder recorder;	
 	public ViewPager viewPager;	
-	public ImageView iv_home, iv_setting;	//首页图片  设置图片
-	public Button btn_wendu;	//温度
+	public ImageView iv_home, iv_setting, iv_help, iv_user, iv_sound, iv_repair;	//首页图片  设置图片
+	public Button btn_wendu;	//温度计
 
 	
 	@Override
@@ -55,9 +57,13 @@ public class FirstActivity extends FragmentActivity {
 		
 		fragmentHome = (FragmentHome) fm.findFragmentById(R.layout.fragment_home);
 		fragmentSetting = (FragmentSetting) fm.findFragmentById(R.layout.fragment_setting);
+		fragmentHelp = (FragmentHelp) fm.findFragmentById(R.layout.fragment_help);
+		fragmentUser = (FragmentUser) fm.findFragmentById(R.layout.fragment_user);
 		
 		ft.add(R.id.viewPager,new FragmentThemometer(), "home");	
 		ft.add(R.id.viewPager,new FragmentThemometer(), "setting");
+		ft.add(R.id.viewPager,new FragmentThemometer(), "help");
+		ft.add(R.id.viewPager,new FragmentThemometer(), "user");
 		
 		//ft.replace(R.id.viewPager, fragmentSleep);
 		ft.commit();	
@@ -87,10 +93,46 @@ public class FirstActivity extends FragmentActivity {
 			}
 		});
 		
+		iv_help.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Log.i("info", "iv_help onClicked");
+				viewPager.setCurrentItem(2);
+			}
+		});
+		
+		iv_user.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Log.i("info", "iv_user onClicked");
+				viewPager.setCurrentItem(3);
+			}
+		});
+		
+		iv_repair.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Log.i("info", "iv_repair onClicked");
+				
+			}
+		});
+		
+		iv_sound.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Log.i("info", "iv_sound onClicked");
+
+			}
+		});
+		
 	}
 	
 	public void btn_wendu_onclick(View view){
-		Log.i("info","点击温度按钮");
+		Log.i("info","点击温度计按钮");
 //		Intent it = new Intent(FirstActivity.this, CeliangActivity.class);
 		Intent it = new Intent(FirstActivity.this, DeviceScanActivity.class);
 		startActivity(it);
@@ -150,6 +192,10 @@ public class FirstActivity extends FragmentActivity {
 	
 		iv_home = (ImageView) findViewById(R.id.iv_home);		
 		iv_setting = (ImageView) findViewById(R.id.iv_setting);
+		iv_help = (ImageView) findViewById(R.id.iv_help);
+		iv_user = (ImageView) findViewById(R.id.iv_user);
+		iv_repair = (ImageView) findViewById(R.id.iv_repair);
+		iv_sound = (ImageView) findViewById(R.id.iv_sound);
 		
 		btn_wendu =  (Button) findViewById(R.id.btn_wendu);
 	}
@@ -162,9 +208,13 @@ public class FirstActivity extends FragmentActivity {
  
 		fragmentHome = new FragmentHome();
 		fragmentSetting = new FragmentSetting();
+		fragmentHelp = new FragmentHelp();
+		fragmentUser = new FragmentUser();
         
 		fragmentArryList.add(fragmentHome);  
 		fragmentArryList.add(fragmentSetting);  
+		fragmentArryList.add(fragmentHelp);
+		fragmentArryList.add(fragmentUser);
           
         //给ViewPager设置适配器  
 		viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentArryList));  
@@ -182,12 +232,27 @@ public class FirstActivity extends FragmentActivity {
 			case 0:
 				iv_home.setBackgroundResource(R.drawable.home1);
 				iv_setting.setBackgroundResource(R.drawable.setting);
+				iv_help.setBackgroundResource(R.drawable.setting);
+				iv_user.setBackgroundResource(R.drawable.setting);
 				break;
 			case 1:
 				iv_setting.setBackgroundResource(R.drawable.setting1);
 				iv_home.setBackgroundResource(R.drawable.home);
+				iv_help.setBackgroundResource(R.drawable.setting);
+				iv_user.setBackgroundResource(R.drawable.setting);
 				break;
-
+			case 2:
+				iv_home.setBackgroundResource(R.drawable.home);
+				iv_setting.setBackgroundResource(R.drawable.setting);
+				iv_help.setBackgroundResource(R.drawable.setting1);
+				iv_user.setBackgroundResource(R.drawable.setting);
+				break;
+			case 3:
+				iv_home.setBackgroundResource(R.drawable.home);
+				iv_setting.setBackgroundResource(R.drawable.setting);
+				iv_help.setBackgroundResource(R.drawable.setting);
+				iv_user.setBackgroundResource(R.drawable.setting1);
+				break;
 			}
 		}
 

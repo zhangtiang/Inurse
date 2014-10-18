@@ -24,12 +24,16 @@ public class CeliangActivity extends FragmentActivity {
 	public GlobalVar appState;
 	
 	public android.support.v4.app.FragmentTransaction ft;
-	public FragmentThemometer FragmentThemometer;
+	public FragmentThemometer fragmentThemometer;
+	public FragmentThemometerGraph fragmentThemometerGraph;
+	public FragmentThemometerCloud fragmentThemometerCloud;
+	public FragmentThemometerHelp fragmentThemometerHelp;
+	public FragmentThemometerSetting fragmentThemometerSetting;
 
 
 	public MediaRecorder recorder;	
 	public ViewPager viewPager;	
-	public ImageView iv_celianghome, iv_graph;
+	public ImageView iv_fanhui, iv_celianghome, iv_graph, iv_cloud, iv_celianghelp, iv_celiangsetting;
 
 	
 	@Override
@@ -50,7 +54,7 @@ public class CeliangActivity extends FragmentActivity {
 		android.support.v4.app.FragmentManager fm =  getSupportFragmentManager();
 		ft = fm.beginTransaction();
 		
-		FragmentThemometer = (FragmentThemometer) fm.findFragmentById(R.layout.fragment_themometer);
+		fragmentThemometer = (FragmentThemometer) fm.findFragmentById(R.layout.fragment_themometer);
 		
 		ft.add(R.id.viewPager,new FragmentThemometer(), "home");
 		ft.add(R.id.viewPager,new FragmentThemometer(), "graph");
@@ -65,11 +69,22 @@ public class CeliangActivity extends FragmentActivity {
 	
 	private void setOnClickListener() {
 		// TODO Auto-generated method stub
+		iv_fanhui.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Log.i("info", "iv_fanhui onClicked");
+				setResult(RESULT_OK);
+				finish();
+			}
+		});
+		
+		
 		iv_celianghome.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				Log.i("info", "iv_home onClicked");
+				Log.i("info", "iv_celianghome onClicked");
 				viewPager.setCurrentItem(0);
 			}
 		});
@@ -78,8 +93,35 @@ public class CeliangActivity extends FragmentActivity {
 
 			@Override
 			public void onClick(View v) {
-				Log.i("info", "iv_setting onClicked");
+				Log.i("info", "iv_graph onClicked");
 				viewPager.setCurrentItem(1);
+			}
+		});
+		
+		iv_cloud.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Log.i("info", "iv_cloud onClicked");
+				viewPager.setCurrentItem(2);
+			}
+		});
+		
+		iv_celianghelp.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Log.i("info", "iv_celianghelp onClicked");
+				viewPager.setCurrentItem(3);
+			}
+		});
+		
+		iv_celiangsetting.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Log.i("info", "iv_celiangsetting onClicked");
+				viewPager.setCurrentItem(4);
 			}
 		});
 	}
@@ -138,8 +180,12 @@ public class CeliangActivity extends FragmentActivity {
 	public void findView(){
 		viewPager = (ViewPager) findViewById(R.id.viewPager);		
 	
-		iv_graph = (ImageView) findViewById(R.id.iv_graph);		
+		iv_fanhui = (ImageView) findViewById(R.id.iv_fanhui);				
 		iv_celianghome = (ImageView) findViewById(R.id.iv_celianghome);
+		iv_graph = (ImageView) findViewById(R.id.iv_graph);
+		iv_cloud = (ImageView) findViewById(R.id.iv_cloud);
+		iv_celianghelp = (ImageView) findViewById(R.id.iv_celianghelp);
+		iv_celiangsetting = (ImageView) findViewById(R.id.iv_celiangsetting);
 	}
 
 	
@@ -148,11 +194,17 @@ public class CeliangActivity extends FragmentActivity {
 		//viewPager = (ViewPager)findViewById(R.id.viewpager);  
 		fragmentArryList = new ArrayList<Fragment>();  
  
-		FragmentThemometer = new FragmentThemometer();
-//		FragmentGraph = new FragmentGraph();
+		fragmentThemometer = new FragmentThemometer();
+		fragmentThemometerGraph = new FragmentThemometerGraph();
+		fragmentThemometerCloud = new FragmentThemometerCloud();
+		fragmentThemometerHelp = new FragmentThemometerHelp();
+		fragmentThemometerSetting = new FragmentThemometerSetting();
         
-		fragmentArryList.add(FragmentThemometer);  
-//		fragmentArryList.add(FragmentGraph);
+		fragmentArryList.add(fragmentThemometer);  
+		fragmentArryList.add(fragmentThemometerGraph);
+		fragmentArryList.add(fragmentThemometerCloud);
+		fragmentArryList.add(fragmentThemometerHelp);
+		fragmentArryList.add(fragmentThemometerSetting);
           
         //给ViewPager设置适配器  
 		viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentArryList));  
@@ -170,12 +222,38 @@ public class CeliangActivity extends FragmentActivity {
 			case 0:
 				iv_celianghome.setBackgroundResource(R.drawable.home1);
 				iv_graph.setBackgroundResource(R.drawable.setting);
+				iv_cloud.setBackgroundResource(R.drawable.setting);
+				iv_celianghelp.setBackgroundResource(R.drawable.setting);
+				iv_celiangsetting.setBackgroundResource(R.drawable.setting);
 				break;
 			case 1:
 				iv_graph.setBackgroundResource(R.drawable.setting1);
 				iv_celianghome.setBackgroundResource(R.drawable.home);
+				iv_cloud.setBackgroundResource(R.drawable.setting);
+				iv_celianghelp.setBackgroundResource(R.drawable.setting);
+				iv_celiangsetting.setBackgroundResource(R.drawable.setting);
 				break;
-
+			case 2:
+				iv_graph.setBackgroundResource(R.drawable.setting);
+				iv_celianghome.setBackgroundResource(R.drawable.home);
+				iv_cloud.setBackgroundResource(R.drawable.setting1);
+				iv_celianghelp.setBackgroundResource(R.drawable.setting);
+				iv_celiangsetting.setBackgroundResource(R.drawable.setting);
+				break;
+			case 3:
+				iv_graph.setBackgroundResource(R.drawable.setting);
+				iv_celianghome.setBackgroundResource(R.drawable.home);
+				iv_cloud.setBackgroundResource(R.drawable.setting);
+				iv_celianghelp.setBackgroundResource(R.drawable.setting1);
+				iv_celiangsetting.setBackgroundResource(R.drawable.setting);
+				break;
+			case 4:
+				iv_graph.setBackgroundResource(R.drawable.setting);
+				iv_celianghome.setBackgroundResource(R.drawable.home);
+				iv_cloud.setBackgroundResource(R.drawable.setting);
+				iv_celianghelp.setBackgroundResource(R.drawable.setting);
+				iv_celiangsetting.setBackgroundResource(R.drawable.setting1);
+				break;
 			}
 		}
 
