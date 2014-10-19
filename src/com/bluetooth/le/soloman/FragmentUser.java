@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import com.bluetooth.le.soloman.R;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,6 +21,7 @@ import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -28,6 +30,8 @@ import android.widget.TextView;
 public class FragmentUser extends Fragment {
 
 	public GlobalVar appState;
+	public EditText et_uid, et_note, et_fname, et_lname, et_tel, et_mail;
+	public Button btn_add, btn_modify, btn_delete;
 	
 	//public sportDataThread st = null;
 	
@@ -47,8 +51,10 @@ public class FragmentUser extends Fragment {
 		
 		View view = inflater.inflate(R.layout.fragment_user, container, false);
 	
+		appState.getDB();
 		findView(view);
 		updateUI(view);
+		setOnclickListener(view);
 		
 //		view.setOnTouchListener(new View.OnTouchListener() {
 //			@Override
@@ -66,8 +72,34 @@ public class FragmentUser extends Fragment {
 
 				
         return view;       
-	}
+	}	
 
+	public void disableAll(){
+		et_uid.setEnabled(false);
+		et_note.setEnabled(false);
+		et_fname.setEnabled(false);
+		et_lname.setEnabled(false);
+		et_tel.setEnabled(false);
+		et_mail.setEnabled(false);
+	}
+	
+	public void enableAll(){
+		et_uid.setEnabled(true);
+		et_note.setEnabled(true);
+		et_fname.setEnabled(true);
+		et_lname.setEnabled(true);
+		et_tel.setEnabled(true);
+		et_mail.setEnabled(true);
+	}
+	
+	public void clearAll(){
+		et_uid.setText("");
+		et_note.setText("");
+		et_fname.setText("");
+		et_lname.setText("");
+		et_tel.setText("");
+		et_mail.setText("");
+	}
 	
 	
 	
@@ -99,29 +131,54 @@ public class FragmentUser extends Fragment {
 	}
 	
 	
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();		
+	}
 	
-	/*
 	@Override
 	protected void finalize() throws Throwable {
 		// TODO Auto-generated method stub
 		super.finalize();
-		if (mAudioCapture != null) {
-            mAudioCapture.stop();
-            mAudioCapture.release();
-            mAudioCapture = null;
-        }
 	}
 	
 	public void onClose() {
-		if (mAudioCapture != null) {
-            mAudioCapture.stop();
-            mAudioCapture.release();
-            mAudioCapture = null;
-        }
+		appState.dbClose();
 	}
-	*/
+
 	
 	public void findView(View view){
+		et_uid = (EditText) view.findViewById(R.id.et_uid);
+		et_note = (EditText) view.findViewById(R.id.et_note);
+		et_fname = (EditText) view.findViewById(R.id.et_fname);
+		et_lname = (EditText) view.findViewById(R.id.et_lname);
+		et_tel = (EditText) view.findViewById(R.id.et_tel);
+		et_mail = (EditText) view.findViewById(R.id.et_mail);
+		
+		btn_add = (Button) view.findViewById(R.id.btn_add);
+		btn_modify = (Button) view.findViewById(R.id.btn_modify);
+		btn_delete = (Button) view.findViewById(R.id.btn_delete);
+	}
+	
+	private void setOnclickListener(View view) {
+		// TODO Auto-generated method stub
+		final View lview = view;
+		btn_add.setOnClickListener(new Button.OnClickListener(){//创建监听    
+            public void onClick(View v) {
+            	if (!"".equals(et_uid.getText().toString())){
+            		appState.add_patient(et_uid.getText().toString(), 
+            				et_fname.getText().toString(), 
+            				et_lname.getText().toString(), 
+            				et_tel.getText().toString(), 
+            				et_mail.getText().toString(), 
+            				et_note.getText().toString() 
+            				);
+            		clearAll();
+            	}
+            	updateUI(lview);
+            }            
+		});
 		
 	}
 
@@ -139,44 +196,37 @@ public class FragmentUser extends Fragment {
 	
 	private ArrayList<HashMap<String, Object>> lst;
 	// 生成适配器的ImageItem <====> 动态数组的元素，两者一一对应
-	private MyListAdapter saImageItems;
+	private MyListAdapter saImageItems = null;
 	private ListView listView_user;
 	private HashMap<String, Object> map = new HashMap<String, Object>();
+	private Cursor cursor = null;
 
 	private void updateUI(View view) {
 		// TODO Auto-generated method stub
 		lst = new ArrayList<HashMap<String, Object>>();
 		saImageItems = new MyListAdapter(getActivity(), lst);// 没什么解释
 		listView_user = (ListView) view.findViewById(R.id.lv_user);
-
-		map.put("uid", "A10203");
-		map.put("xinmin", "John Smith");
-		map.put("tel", "13800009999");
-		map.put("mail", "dfsidfudf@163.com");
-		map.put("note", "There is nothing to say!");
-		lst.add(map);
 		
-		map = new HashMap<String, Object>();
-		map.put("uid", "A10204");
-		map.put("xinmin", "Ken Block");
-		map.put("tel", "18911112222");
-		map.put("mail", "dfssdfsddf@163.com");
-		map.put("note", "I'm healthy!");
-		lst.add(map);
-		
-		map = new HashMap<String, Object>();
-		map.put("uid", "A10205");
-		map.put("xinmin", "James Bond");
-		map.put("tel", "18911112222");
-		map.put("mail", "dfssdfsddf@163.com");
-		map.put("note", "I'm healthy!");
-		lst.add(map);
+		cursor = appState.get_patient();
+		if (cursor != null && cursor.getCount() > 0){
+			while (cursor.moveToNext()) {
+				map = new HashMap<String, Object>();
+				map.put("uid", cursor.getString(0));
+				map.put("xinmin", cursor.getString(1) + " " + cursor.getString(2));
+				map.put("tel", cursor.getString(3));
+				map.put("mail", cursor.getString(4));
+				map.put("note", cursor.getString(5));
+				lst.add(map);
+			}
+			cursor.close();
+		}				
 
 		// 生成适配器的ImageItem <====> 动态数组的元素，两者一一对应
 		// MyListAdapter saImageItems = new MyListAdapter(this, lst);// 没什么解释
 
 		// 绑定数据
-		BinderListData(saImageItems);
+		BinderListData(saImageItems);		
+		
 	}
 
 	// 绑定数据

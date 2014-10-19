@@ -53,7 +53,7 @@ public final class R {
         public static final int btn_delete=0x7f07004f;
         public static final int btn_dianzichen=0x7f070014;
         public static final int btn_getTemp=0x7f070041;
-        public static final int btn_modifi=0x7f07004e;
+        public static final int btn_modify=0x7f07004e;
         public static final int btn_shuimian=0x7f070011;
         public static final int btn_swichcewenmode=0x7f07003b;
         public static final int btn_swichcewenunit=0x7f07003c;

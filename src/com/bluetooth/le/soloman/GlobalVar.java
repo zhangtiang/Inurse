@@ -2,8 +2,11 @@ package com.bluetooth.le.soloman;
 
 import java.math.BigDecimal;
 
+import com.soloman.DB.Database;
+
 import android.app.Application;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.database.Cursor;
 
 public class GlobalVar extends Application{
 
@@ -95,5 +98,27 @@ public class GlobalVar extends Application{
 		c1[6] = (byte) 0xff;
 
 		sendData(gattCharacteristic, c1);
+	}
+	
+	//数据库-----------------------------------
+	private Database database;
+
+	public Database getDB() {
+		System.out.println("全局getDB");
+		database = new Database(this);
+		database.open();
+		return database;
+	}
+	
+	public void dbClose(){
+		database.close();
+	}
+	
+	public void add_patient(String id, String firstname, String lastname, String tel, String mail, String note ){
+		database.add_patient( id,  firstname,  lastname, tel, mail, note);
+	}
+	
+	public Cursor get_patient(){
+		return database.get_patient();
 	}
 }
