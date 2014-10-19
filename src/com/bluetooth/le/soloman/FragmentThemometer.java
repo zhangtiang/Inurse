@@ -21,7 +21,8 @@ public class FragmentThemometer extends Fragment {
 	public Button btn_getTemp, btn_swichcewenmode, btn_swichcewenunit;
 	public TextView tv_user1_cewen, tv_user2_cewen, tv_device_cewen, tv_tempre, tv_cewenwendu, tv_cewenunit, tv_cewennum;
 	public byte mode, unit;
-	int ti, tj;
+	public int cnttotal, cntbody, cntsurface, cntroom;
+	public int ti, tj;
 	//public sportDataThread st = null;
 	
 	@Override
@@ -58,8 +59,12 @@ public class FragmentThemometer extends Fragment {
 		Looper looper = Looper.myLooper();
 		// 此处甚至可以不需要设置Looper，因为 Handler默认就使用当前线程的Looper
 		messageHandler = new MessageHandler(looper);
-
-				
+		
+		cntbody = 0;
+		cntsurface = 0;
+		cntroom = 0;
+		cnttotal = cntbody + cntsurface + cntroom;
+		
         return view;       
 	}
 
@@ -179,13 +184,17 @@ public class FragmentThemometer extends Fragment {
 						if ("body".equals(appState.mode)) {
 							tv_cewenwendu.setText(String.valueOf(appState.body));
 							ti = 0;
+							cntbody++;
 						} else if ("surface".equals(appState.mode)) {
 							tv_cewenwendu.setText(String.valueOf(appState.surface));
 							ti = 1;
+							cntsurface++;
 						} else if ("room".equals(appState.mode)) {
 							tv_cewenwendu.setText(String.valueOf(appState.room));
 							ti = 2;
+							cntroom++;
 						}
+						cnttotal = cntbody + cntsurface + cntroom;
 
 						if (appState.mode != null) {
 							if ("℃".equals(appState.unit)) {
@@ -194,7 +203,10 @@ public class FragmentThemometer extends Fragment {
 								tj = 1;
 							}
 							tv_cewenunit.setText(appState.unit);
-							tv_cewennum.setText("Record Total:xx\nbody:xx    surface:xx    room:xx");
+							tv_cewennum.setText("Record Total:" + String.valueOf(cnttotal)
+									+ "\nbody:" + String.valueOf(cntbody) 
+									+ "\nsurface:" + String.valueOf(cntsurface) 
+									+ "\nroom:" + String.valueOf(cntroom));
 						}
 						
 						

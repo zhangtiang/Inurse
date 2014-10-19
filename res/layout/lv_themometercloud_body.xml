@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_themocloud"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <CheckBox
+        android:id="@+id/list_themocloud_xuanzhong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dip"
+        android:text=""
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/list_themocloud_uid"
+        android:layout_width="48dip"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dip"
+        android:layout_marginLeft="4dip"
+        android:text="A10103"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/list_themocloud_username"
+        android:layout_width="64dip"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dip"
+        android:layout_marginLeft="4dip"
+        android:text="Jonh Smith"
+        android:textSize="12sp" />
+
+
+
+    <TextView
+        android:id="@+id/list_themocloud_value"
+        android:layout_width="48dip"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dip"
+        android:layout_marginLeft="4dip"
+        android:text="103.3℃F"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/list_themocloud_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dip"
+        android:layout_marginLeft="4dip"
+        android:text="2014/10/19"
+        android:textSize="12sp" />
+
+</LinearLayout>

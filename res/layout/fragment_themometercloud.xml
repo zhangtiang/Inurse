@@ -2,12 +2,59 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="horizontal" >
 
-    <TextView
-        android:id="@+id/textView1"
+    <include
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cloud" />
+        android:layout_gravity="center_vertical"
+        layout="@layout/cloud_left" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="User:" />
+
+            <TextView
+                android:id="@+id/editText1"
+                android:layout_width="48dip"
+                android:layout_height="wrap_content"
+                android:text="S1011"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/btn_clouddelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete" />
+
+            <Button
+                android:id="@+id/btn_cloudsend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send" />
+        </LinearLayout>
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/lv_themometercloud_head" />
+
+        <ListView
+            android:id="@+id/lv_cloudrecord"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
+    </LinearLayout>
 
 </LinearLayout>
