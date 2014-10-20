@@ -3,7 +3,6 @@ package com.bluetooth.le.soloman;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import com.bluetooth.le.soloman.R;
 import android.content.Context;
 import android.database.Cursor;
@@ -18,20 +17,25 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class FragmentUser extends Fragment {
 
 	public GlobalVar appState;
 	public EditText et_uid, et_note, et_fname, et_lname, et_tel, et_mail;
 	public Button btn_add, btn_modify, btn_delete;
+	public CheckBox cb_user_quanxuan;
+	public String selectPatient = "";
+	StringBuilder sb = new StringBuilder();  
 	
 	//public sportDataThread st = null;
 	
@@ -159,25 +163,97 @@ public class FragmentUser extends Fragment {
 		btn_add = (Button) view.findViewById(R.id.btn_add);
 		btn_modify = (Button) view.findViewById(R.id.btn_modify);
 		btn_delete = (Button) view.findViewById(R.id.btn_delete);
+		
+		cb_user_quanxuan = (CheckBox) view.findViewById(R.id.cb_user_quanxuan);
 	}
 	
 	private void setOnclickListener(View view) {
 		// TODO Auto-generated method stub
 		final View lview = view;
+		
 		btn_add.setOnClickListener(new Button.OnClickListener(){//创建监听    
             public void onClick(View v) {
             	if (!"".equals(et_uid.getText().toString())){
-            		appState.add_patient(et_uid.getText().toString(), 
-            				et_fname.getText().toString(), 
-            				et_lname.getText().toString(), 
-            				et_tel.getText().toString(), 
-            				et_mail.getText().toString(), 
-            				et_note.getText().toString() 
-            				);
-            		clearAll();
+            		cursor = appState.get_patient(et_uid.getText().toString());
+            		if (cursor == null || cursor.getCount() == 0 ){//如果没有就添加
+            			appState.add_patient(et_uid.getText().toString(), 
+                				et_fname.getText().toString(), 
+                				et_lname.getText().toString(), 
+                				et_tel.getText().toString(), 
+                				et_mail.getText().toString(), 
+                				et_note.getText().toString() 
+                				);
+                		clearAll();                		
+            		}else {
+            			cursor.close();
+            		}
             	}
             	updateUI(lview);
             }            
+		});
+		
+		btn_modify.setOnClickListener(new Button.OnClickListener(){//创建监听    
+            public void onClick(View v) {
+            	if (!"".equals(et_uid.getText().toString())){
+            		cursor = appState.get_patient(et_uid.getText().toString());
+            		if (cursor != null && cursor.getCount() > 0){//如果有就修改
+            			appState.Update_patient(et_uid.getText().toString(), 
+                				et_fname.getText().toString(), 
+                				et_lname.getText().toString(), 
+                				et_tel.getText().toString(), 
+                				et_mail.getText().toString(), 
+                				et_note.getText().toString() 
+                				);
+                		clearAll();
+                		cursor.close();
+            		}            		
+            	}
+            	updateUI(lview);
+            }            
+		});
+		
+		btn_delete.setOnClickListener(new Button.OnClickListener(){//创建监听    
+            public void onClick(View v) {
+            	if (sb.length() > 0){
+            		sb.deleteCharAt(sb.length()- 1);
+                	String s = sb.toString();
+                	String [] sa = s.split(",");
+                	for (int i=0; i<sa.length; i++){
+                		appState.del_patient(sa[i]);
+                	}
+                	sb.delete(0, sb.length());
+            	}            	
+            	updateUI(lview);
+            }            
+		});
+		
+		cb_user_quanxuan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				// TODO Auto-generated method stub
+				HashMap<String, Object> m = new HashMap<String, Object>();
+				if (isChecked) {
+					for (int i = 0; i < lst.size(); i++) {
+						m = lst.get(i);
+						m.remove("sel");
+						m.put("sel", true);
+						lst.remove(i);
+						lst.add(i, m);
+						
+						sb.append( m.get("uid") + ",");
+					}
+				} else {
+					for (int i = 0; i < lst.size(); i++) {
+						m = lst.get(i);
+						m.remove("sel");
+						m.put("sel", false);
+						lst.remove(i);
+						lst.add(i, m);
+					}
+					sb.delete(0, sb.length());
+				}
+				saImageItems.notifyDataSetChanged();
+			}
 		});
 		
 	}
@@ -186,7 +262,7 @@ public class FragmentUser extends Fragment {
 	//------------------------------------------------------------------
 	public class ZuJian_user {
 		public LinearLayout list_user;
-		public CheckBox list_user_xuanzhong;
+		public TextView list_user_xuanzhong;
 		public TextView list_uid;
 		public TextView list_username;
 		public TextView list_tel;
@@ -208,11 +284,13 @@ public class FragmentUser extends Fragment {
 		listView_user = (ListView) view.findViewById(R.id.lv_user);
 		
 		cursor = appState.get_patient();
-		if (cursor != null && cursor.getCount() > 0){
+		if (cursor != null && cursor.getCount() > 0){			
 			while (cursor.moveToNext()) {
 				map = new HashMap<String, Object>();
+				map.put("sel", false);
 				map.put("uid", cursor.getString(0));
-				map.put("xinmin", cursor.getString(1) + " " + cursor.getString(2));
+				map.put("fname", cursor.getString(1));
+				map.put("lname", cursor.getString(2));
 				map.put("tel", cursor.getString(3));
 				map.put("mail", cursor.getString(4));
 				map.put("note", cursor.getString(5));
@@ -236,8 +314,50 @@ public class FragmentUser extends Fragment {
 		// 添加并且显示
 		listView_user.setAdapter(saImageItems);
 		saImageItems.notifyDataSetChanged();
+		// 点击控件监听器
+		listView_user.setOnItemClickListener(new ItemClickListener());
 	}
     
+	class ItemClickListener implements OnItemClickListener {
+		public void onItemClick(AdapterView<?> arg0,// The AdapterView where the click happened
+				View arg1,// The view within the AdapterView that was clicked
+				int position,// The position of the view in the adapter
+				long id// The row id of the item that was clicked
+		) {
+			Log.i("info", String.valueOf(position));
+			HashMap<String, Object> m = new HashMap<String, Object>();
+			m = lst.get(position);
+			if ((Boolean) m.get("sel")){ //已经选中，变没选中
+				m.remove("sel");
+				m.put("sel", false);						
+				lst.remove(position);
+				lst.add(position, m);
+				
+				int start = sb.indexOf(m.get("uid") + ",");
+            	int end = start + (m.get("uid") + ",").length();
+//            	Log.i("info", sb.toString() + "/" + String.valueOf(start) + "/" + String.valueOf(end));
+            	sb.delete(start, end);
+            	Log.i("info", sb.toString());
+			}else{ //没选中，变选中
+				m.remove("sel");
+				m.put("sel", true);						
+				lst.remove(position);
+				lst.add(position, m);
+				
+				sb.append( m.get("uid") + ",");
+            	Log.i("info", sb.toString());
+			}
+			saImageItems.notifyDataSetChanged();
+			
+			et_uid.setText(m.get("uid").toString());
+			et_fname.setText(m.get("fname").toString());
+			et_lname.setText(m.get("lname").toString());
+			et_tel.setText(m.get("tel").toString());
+			et_mail.setText(m.get("mail").toString());
+			et_note.setText(m.get("note").toString());
+		}
+	}
+	
 	/*
 	 * 以下是自定义的BaseAdapter类
 	 */
@@ -283,18 +403,20 @@ public class FragmentUser extends Fragment {
 		/**
 		 * android绘制每一列的时候，都会调用这个方法
 		 */
-		ZuJian_user zuJian = null;
+		
 
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
-
+			ZuJian_user zuJian = null;
 			if (convertView == null) {
 				zuJian = new ZuJian_user();
 				// 获取组件布局
 				convertView = layoutInflater.inflate(R.layout.lv_user_body, null);
+				
 				zuJian.list_user = (LinearLayout) convertView.findViewById(R.id.list_user);
-				zuJian.list_user_xuanzhong = (CheckBox) convertView.findViewById(R.id.list_user_xuanzhong);
+				
+				zuJian.list_user_xuanzhong = (TextView) convertView.findViewById(R.id.list_user_xuanzhong);
 				zuJian.list_uid = (TextView) convertView.findViewById(R.id.list_uid);
 				zuJian.list_username = (TextView) convertView.findViewById(R.id.list_username);
 				zuJian.list_tel = (TextView) convertView.findViewById(R.id.list_tel);
@@ -308,17 +430,21 @@ public class FragmentUser extends Fragment {
 
 			}
 
-			// 绑定数据、以及事件触发
+			// 绑定数据、以及事件触发		
+			if ( (Boolean) data.get(position).get("sel") ){
+				zuJian.list_user_xuanzhong.setText("√");
+			}else{
+				zuJian.list_user_xuanzhong.setText("");
+			}
 			zuJian.list_uid.setText((String) data.get(position).get("uid"));
-			zuJian.list_username.setText((String) data.get(position).get("xinmin"));
+			zuJian.list_username.setText((String) data.get(position).get("fname") + " " + (String) data.get(position).get("lname"));
 			zuJian.list_tel.setText((String) data.get(position).get("tel"));
 			zuJian.list_mail.setText((String) data.get(position).get("mail"));
-			zuJian.list_note.setText((String) data.get(position).get("note"));
+			zuJian.list_note.setText((String) data.get(position).get("note"));		
 
 			return convertView;
 		}
+		
+		
 	}
 }
-
-
-

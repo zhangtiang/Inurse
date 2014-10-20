@@ -130,8 +130,13 @@ public class Database {
 	public Cursor get_patient(String id){
 		Cursor cursor = null;
 		try {
-			String sql ="select * from binren where id =" + id;   
-			cursor = SQLdb.rawQuery(sql, new String[] { "" });
+			cursor = SQLdb.query(table_patient, // tableÃû
+					new String[] { "id", "firstname", "lastname", "tel", "mail","note"}, // ×Ö¶Î
+					"id = '" + id + "'", // Ìõ¼þ
+					null, 
+					null, //group by
+					null, //having
+					"id desc");//order by
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println(e.toString());
@@ -152,8 +157,8 @@ public class Database {
 		return SQLdb.update(table_patient, cv, "id=?", args);
 	}
 	
-	public long del_patient(int id) {
-		return SQLdb.delete(table_patient, "id = " + id, null);
+	public long del_patient(String id) {
+		return SQLdb.delete(table_patient, "id = '" + id + "'", null);
 	}
 
 	//-------------------------------------------------------------------------------------

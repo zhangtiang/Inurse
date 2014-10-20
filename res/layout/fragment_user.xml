@@ -90,7 +90,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:ems="6"
+            android:ems="7"
+            android:numeric="integer"
             android:singleLine="true" />
 
         <TextView

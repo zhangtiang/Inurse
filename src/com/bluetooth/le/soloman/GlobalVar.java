@@ -121,4 +121,16 @@ public class GlobalVar extends Application{
 	public Cursor get_patient(){
 		return database.get_patient();
 	}
+	
+	public Cursor get_patient(String uid){
+		return database.get_patient(uid);
+	}
+	
+	public int Update_patient(String id, String firstname, String lastname, String tel, String mail, String note ) {
+		return database.Update_patient(id, firstname, lastname, tel, mail, note );
+	}
+	
+	public long del_patient(String id) {
+		return database.del_patient(id);
+	}
 }
