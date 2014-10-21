@@ -4,7 +4,10 @@ package com.bluetooth.le.soloman;
 import java.util.ArrayList;
 import java.util.HashMap;
 import com.bluetooth.le.soloman.R;
+
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,10 +16,8 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -59,6 +60,9 @@ public class FragmentUser extends Fragment {
 		findView(view);
 		updateUI(view);
 		setOnclickListener(view);
+		disableAll();//禁用编辑区域
+		btn_modify.setEnabled(false);
+		btn_delete.setEnabled(false);
 		
 //		view.setOnTouchListener(new View.OnTouchListener() {
 //			@Override
@@ -105,7 +109,20 @@ public class FragmentUser extends Fragment {
 		et_mail.setText("");
 	}
 	
-	
+	public void clearSelected(){
+		if (lst != null && lst.size()>0){
+			for (int i = 0;i<lst.size(); i++){
+				HashMap<String, Object> m = new HashMap<String, Object>();
+				m = lst.get(i);
+				m.remove("sel");
+				m.put("sel", false);
+				lst.remove(i);
+				lst.add(i, m);
+				sb.delete(0, sb.length());
+				saImageItems.notifyDataSetChanged();
+			}
+		}		
+	}
 	
 	private Handler messageHandler;
 	private void updateHandler(Object obj) {
@@ -173,57 +190,103 @@ public class FragmentUser extends Fragment {
 		
 		btn_add.setOnClickListener(new Button.OnClickListener(){//创建监听    
             public void onClick(View v) {
-            	if (!"".equals(et_uid.getText().toString())){
-            		cursor = appState.get_patient(et_uid.getText().toString());
-            		if (cursor == null || cursor.getCount() == 0 ){//如果没有就添加
-            			appState.add_patient(et_uid.getText().toString(), 
-                				et_fname.getText().toString(), 
-                				et_lname.getText().toString(), 
-                				et_tel.getText().toString(), 
-                				et_mail.getText().toString(), 
-                				et_note.getText().toString() 
-                				);
-                		clearAll();                		
-            		}else {
-            			cursor.close();
-            		}
-            	}
-            	updateUI(lview);
+            	if ("ADD".equals(btn_add.getText().toString())){
+            		enableAll();//使能编辑区域
+            		btn_add.setText("SAVE");
+            		btn_modify.setEnabled(false);
+            		btn_delete.setEnabled(false);
+            	}else if ("SAVE".equals(btn_add.getText().toString())){
+            		if (!"".equals(et_uid.getText().toString())){
+                		cursor = appState.get_patient(et_uid.getText().toString());
+                		if (cursor == null || cursor.getCount() == 0 ){//如果没有就添加
+                			appState.add_patient(et_uid.getText().toString(), 
+                    				et_fname.getText().toString(), 
+                    				et_lname.getText().toString(), 
+                    				et_tel.getText().toString(), 
+                    				et_mail.getText().toString(), 
+                    				et_note.getText().toString() 
+                    				);
+                    		clearAll();  
+//                    		clearSelected();
+//                    		btn_modify.setEnabled(false);
+//                    		btn_delete.setEnabled(false);
+                		}else {
+                			cursor.close();
+                		}
+                	}
+                	updateUI(lview);
+                	disableAll();//禁用编辑区域
+                	btn_add.setText("ADD");
+                	clearSelected();
+                	btn_modify.setEnabled(false);
+            		btn_delete.setEnabled(false);
+            	}            	
             }            
 		});
 		
 		btn_modify.setOnClickListener(new Button.OnClickListener(){//创建监听    
             public void onClick(View v) {
-            	if (!"".equals(et_uid.getText().toString())){
-            		cursor = appState.get_patient(et_uid.getText().toString());
-            		if (cursor != null && cursor.getCount() > 0){//如果有就修改
-            			appState.Update_patient(et_uid.getText().toString(), 
-                				et_fname.getText().toString(), 
-                				et_lname.getText().toString(), 
-                				et_tel.getText().toString(), 
-                				et_mail.getText().toString(), 
-                				et_note.getText().toString() 
-                				);
-                		clearAll();
-                		cursor.close();
-            		}            		
-            	}
-            	updateUI(lview);
+            	enableAll();//激活编辑区域
+            	if ("MODIFY".equals(btn_modify.getText().toString())){
+            		enableAll();//使能编辑区域
+            		btn_modify.setText("SAVE");
+            		btn_add.setEnabled(false);
+            		btn_delete.setEnabled(false);
+            	}else if ("SAVE".equals(btn_modify.getText().toString())){
+            		if (!"".equals(et_uid.getText().toString())){
+                		cursor = appState.get_patient(et_uid.getText().toString());
+                		if (cursor != null && cursor.getCount() > 0){//如果有就修改
+                			appState.Update_patient(et_uid.getText().toString(), 
+                    				et_fname.getText().toString(), 
+                    				et_lname.getText().toString(), 
+                    				et_tel.getText().toString(), 
+                    				et_mail.getText().toString(), 
+                    				et_note.getText().toString() 
+                    				);
+                    		clearAll();
+                    		cursor.close();
+                		}            		
+                	}
+                	updateUI(lview);
+                	btn_modify.setText("MODIFY");
+                	disableAll();
+                	clearSelected();
+                	btn_add.setEnabled(true);
+                	btn_modify.setEnabled(false);
+            		btn_delete.setEnabled(false);
+            	}            	
             }            
 		});
 		
 		btn_delete.setOnClickListener(new Button.OnClickListener(){//创建监听    
             public void onClick(View v) {
-            	if (sb.length() > 0){
-            		sb.deleteCharAt(sb.length()- 1);
-                	String s = sb.toString();
-                	String [] sa = s.split(",");
-                	for (int i=0; i<sa.length; i++){
-                		appState.del_patient(sa[i]);
-                	}
-                	sb.delete(0, sb.length());
-            	}            	
-            	updateUI(lview);
+            	// 弹框 提示是否提交评分
+				new AlertDialog.Builder(getActivity())
+						.setTitle("Warning")
+						.setMessage("Are you sure to DELETE?")
+						.setNegativeButton("Cancel",
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										//this.s = "Negative";
+									}
+								})
+						.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int whichButton) {
+										if (sb.length() > 0){
+						            		sb.deleteCharAt(sb.length()- 1);
+						                	String s = sb.toString();
+						                	String [] sa = s.split(",");
+						                	for (int i=0; i<sa.length; i++){
+						                		appState.del_patient(sa[i]);
+						                	}
+						                	sb.delete(0, sb.length());
+						            	}          
+						            	clearAll();
+						            	updateUI(lview);
+									}
+						}).show();
+            	
             }            
 		});
 		
@@ -241,6 +304,9 @@ public class FragmentUser extends Fragment {
 						lst.add(i, m);
 						
 						sb.append( m.get("uid") + ",");
+						
+//						btn_modify.setEnabled(false);
+                		btn_delete.setEnabled(true);
 					}
 				} else {
 					for (int i = 0; i < lst.size(); i++) {
@@ -251,6 +317,9 @@ public class FragmentUser extends Fragment {
 						lst.add(i, m);
 					}
 					sb.delete(0, sb.length());
+					
+//					btn_modify.setEnabled(false);
+            		btn_delete.setEnabled(false);
 				}
 				saImageItems.notifyDataSetChanged();
 			}
@@ -324,7 +393,7 @@ public class FragmentUser extends Fragment {
 				int position,// The position of the view in the adapter
 				long id// The row id of the item that was clicked
 		) {
-			Log.i("info", String.valueOf(position));
+			Log.i("info", "click:" + String.valueOf(position));
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			m = lst.get(position);
 			if ((Boolean) m.get("sel")){ //已经选中，变没选中
@@ -338,6 +407,11 @@ public class FragmentUser extends Fragment {
 //            	Log.i("info", sb.toString() + "/" + String.valueOf(start) + "/" + String.valueOf(end));
             	sb.delete(start, end);
             	Log.i("info", sb.toString());
+            	
+            	if (sb.length() == 0){
+            		//删除禁用                	
+                	btn_delete.setEnabled(false);
+            	}
 			}else{ //没选中，变选中
 				m.remove("sel");
 				m.put("sel", true);						
@@ -346,6 +420,10 @@ public class FragmentUser extends Fragment {
 				
 				sb.append( m.get("uid") + ",");
             	Log.i("info", sb.toString());
+            	
+            	//修改和删除使能
+            	btn_modify.setEnabled(true);
+            	btn_delete.setEnabled(true);
 			}
 			saImageItems.notifyDataSetChanged();
 			

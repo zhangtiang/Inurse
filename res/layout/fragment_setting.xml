@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="wrap_content" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/fraghome_botton"
         android:orientation="vertical" >
 
         <CheckBox
@@ -25,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Dailly"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <RadioButton
                 android:id="@+id/autodel1"
@@ -39,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Monthly"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <RadioButton
                 android:id="@+id/autodel3"
@@ -47,14 +48,14 @@
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:text="AfterSend"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <RadioButton
                 android:id="@+id/autodel4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="OFF"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
         </RadioGroup>
 
         <CheckBox
@@ -233,21 +234,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="UserID" />
+                android:text="UserID"
+                android:textSize="12sp" />
 
             <CheckBox
                 android:id="@+id/cb_fieldfname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="FirstName" />
+                android:text="FirstName"
+                android:textSize="12sp" />
 
             <CheckBox
                 android:id="@+id/cb_fieldlname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="LastName" />
+                android:text="LastName"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -260,21 +264,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="36dip"
                 android:checked="true"
-                android:text="Devicetype" />
+                android:text="Devicetype"
+                android:textSize="12sp" />
 
             <CheckBox
                 android:id="@+id/cb_fielddevmac"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="DeviceID" />
+                android:text="DeviceID"
+                android:textSize="12sp" />
 
             <CheckBox
                 android:id="@+id/cb_fieldceliangtime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Date/Time" />
+                android:text="Date/Time"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -287,28 +294,32 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="36dip"
                 android:checked="true"
-                android:text="Value" />
+                android:text="Value"
+                android:textSize="12sp" />
 
             <CheckBox
                 android:id="@+id/cb_fieldmode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Mode" />
+                android:text="Mode"
+                android:textSize="12sp" />
 
             <CheckBox
                 android:id="@+id/cb_fieldunit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Unit" />
+                android:text="Unit"
+                android:textSize="12sp" />
 
             <CheckBox
                 android:id="@+id/cb_fieldnote"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Note" />
+                android:text="Note"
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 

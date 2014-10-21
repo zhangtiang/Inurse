@@ -221,37 +221,37 @@ public class CeliangActivity extends FragmentActivity {
 			switch (arg0) {
 			case 0:
 				iv_celianghome.setBackgroundResource(R.drawable.home1);
-				iv_graph.setBackgroundResource(R.drawable.setting);
-				iv_cloud.setBackgroundResource(R.drawable.setting);
-				iv_celianghelp.setBackgroundResource(R.drawable.setting);
+				iv_graph.setBackgroundResource(R.drawable.graph);
+				iv_cloud.setBackgroundResource(R.drawable.cloud);
+				iv_celianghelp.setBackgroundResource(R.drawable.help);
 				iv_celiangsetting.setBackgroundResource(R.drawable.setting);
 				break;
 			case 1:
-				iv_graph.setBackgroundResource(R.drawable.setting1);
+				iv_graph.setBackgroundResource(R.drawable.graph1);
 				iv_celianghome.setBackgroundResource(R.drawable.home);
-				iv_cloud.setBackgroundResource(R.drawable.setting);
-				iv_celianghelp.setBackgroundResource(R.drawable.setting);
+				iv_cloud.setBackgroundResource(R.drawable.cloud);
+				iv_celianghelp.setBackgroundResource(R.drawable.help);
 				iv_celiangsetting.setBackgroundResource(R.drawable.setting);
 				break;
 			case 2:
-				iv_graph.setBackgroundResource(R.drawable.setting);
+				iv_graph.setBackgroundResource(R.drawable.graph);
 				iv_celianghome.setBackgroundResource(R.drawable.home);
-				iv_cloud.setBackgroundResource(R.drawable.setting1);
-				iv_celianghelp.setBackgroundResource(R.drawable.setting);
+				iv_cloud.setBackgroundResource(R.drawable.cloud1);
+				iv_celianghelp.setBackgroundResource(R.drawable.help);
 				iv_celiangsetting.setBackgroundResource(R.drawable.setting);
 				break;
 			case 3:
-				iv_graph.setBackgroundResource(R.drawable.setting);
+				iv_graph.setBackgroundResource(R.drawable.graph);
 				iv_celianghome.setBackgroundResource(R.drawable.home);
-				iv_cloud.setBackgroundResource(R.drawable.setting);
-				iv_celianghelp.setBackgroundResource(R.drawable.setting1);
+				iv_cloud.setBackgroundResource(R.drawable.cloud);
+				iv_celianghelp.setBackgroundResource(R.drawable.help1);
 				iv_celiangsetting.setBackgroundResource(R.drawable.setting);
 				break;
 			case 4:
-				iv_graph.setBackgroundResource(R.drawable.setting);
+				iv_graph.setBackgroundResource(R.drawable.graph);
 				iv_celianghome.setBackgroundResource(R.drawable.home);
-				iv_cloud.setBackgroundResource(R.drawable.setting);
-				iv_celianghelp.setBackgroundResource(R.drawable.setting);
+				iv_cloud.setBackgroundResource(R.drawable.cloud);
+				iv_celianghelp.setBackgroundResource(R.drawable.help);
 				iv_celiangsetting.setBackgroundResource(R.drawable.setting1);
 				break;
 			}

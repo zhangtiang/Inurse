@@ -205,8 +205,8 @@ public class FragmentThemometer extends Fragment {
 							tv_cewenunit.setText(appState.unit);
 							tv_cewennum.setText("Record Total:" + String.valueOf(cnttotal)
 									+ "\nbody:" + String.valueOf(cntbody) 
-									+ "\nsurface:" + String.valueOf(cntsurface) 
-									+ "\nroom:" + String.valueOf(cntroom));
+									+ "  surface:" + String.valueOf(cntsurface) 
+									+ "  room:" + String.valueOf(cntroom));
 						}
 						
 						

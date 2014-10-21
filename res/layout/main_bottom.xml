@@ -43,7 +43,7 @@
             android:layout_width="64dip"
             android:layout_height="64dip"
             android:layout_gravity="center"
-            android:background="@drawable/setting" />
+            android:background="@drawable/help" />
     </LinearLayout>
     
     <LinearLayout
@@ -57,7 +57,7 @@
             android:layout_width="64dip"
             android:layout_height="64dip"
             android:layout_gravity="center"
-            android:background="@drawable/setting" />
+            android:background="@drawable/user" />
     </LinearLayout>
     
     <LinearLayout
@@ -71,7 +71,7 @@
             android:layout_width="64dip"
             android:layout_height="64dip"
             android:layout_gravity="center"
-            android:background="@drawable/setting" />
+            android:background="@drawable/bluetooth" />
     </LinearLayout>
     
     <LinearLayout
@@ -85,7 +85,7 @@
             android:layout_width="64dip"
             android:layout_height="64dip"
             android:layout_gravity="center"
-            android:background="@drawable/setting" />
+            android:background="@drawable/sound" />
     </LinearLayout>
 
 </LinearLayout>

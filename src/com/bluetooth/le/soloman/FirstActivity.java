@@ -232,26 +232,26 @@ public class FirstActivity extends FragmentActivity {
 			case 0:
 				iv_home.setBackgroundResource(R.drawable.home1);
 				iv_setting.setBackgroundResource(R.drawable.setting);
-				iv_help.setBackgroundResource(R.drawable.setting);
-				iv_user.setBackgroundResource(R.drawable.setting);
+				iv_help.setBackgroundResource(R.drawable.help);
+				iv_user.setBackgroundResource(R.drawable.user);
 				break;
 			case 1:
 				iv_setting.setBackgroundResource(R.drawable.setting1);
 				iv_home.setBackgroundResource(R.drawable.home);
-				iv_help.setBackgroundResource(R.drawable.setting);
-				iv_user.setBackgroundResource(R.drawable.setting);
+				iv_help.setBackgroundResource(R.drawable.help);
+				iv_user.setBackgroundResource(R.drawable.user);
 				break;
 			case 2:
 				iv_home.setBackgroundResource(R.drawable.home);
 				iv_setting.setBackgroundResource(R.drawable.setting);
-				iv_help.setBackgroundResource(R.drawable.setting1);
-				iv_user.setBackgroundResource(R.drawable.setting);
+				iv_help.setBackgroundResource(R.drawable.help1);
+				iv_user.setBackgroundResource(R.drawable.user);
 				break;
 			case 3:
 				iv_home.setBackgroundResource(R.drawable.home);
 				iv_setting.setBackgroundResource(R.drawable.setting);
-				iv_help.setBackgroundResource(R.drawable.setting);
-				iv_user.setBackgroundResource(R.drawable.setting1);
+				iv_help.setBackgroundResource(R.drawable.help);
+				iv_user.setBackgroundResource(R.drawable.user1);
 				break;
 			}
 		}
