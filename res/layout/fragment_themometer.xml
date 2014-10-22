@@ -37,6 +37,19 @@
             android:orientation="vertical" >
 
             <Button
+                android:id="@+id/btn_selectuser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text = "Select User" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <Button
                 android:id="@+id/btn_swichcewenmode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -111,7 +124,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Record Total:0\nbody:0  surface:0  room:0"
+        android:text="Record Total:0  body:0  surface:0  room:0"
         android:textSize="16sp" />
 
     <Button

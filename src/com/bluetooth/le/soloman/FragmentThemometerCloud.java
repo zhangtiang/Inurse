@@ -129,7 +129,7 @@ public class FragmentThemometerCloud extends Fragment {
 	//------------------------------------------------------------------
 		public class ZuJian_themocloud {
 			public LinearLayout list_themocloud;
-			public CheckBox list_themocloud_xuanzhong;
+			public TextView list_themocloud_xuanzhong;
 			public TextView list_themocloud_uid;
 			public TextView list_themocloud_username;
 			public TextView list_themocloud_value;
@@ -239,8 +239,10 @@ public class FragmentThemometerCloud extends Fragment {
 					zuJian = new ZuJian_themocloud();
 					// 获取组件布局
 					convertView = layoutInflater.inflate(R.layout.lv_themometercloud_body, null);
+					
 					zuJian.list_themocloud = (LinearLayout) convertView.findViewById(R.id.list_themocloud);
-					zuJian.list_themocloud_xuanzhong = (CheckBox) convertView.findViewById(R.id.list_themocloud_xuanzhong);
+					
+					zuJian.list_themocloud_xuanzhong = (TextView) convertView.findViewById(R.id.list_themocloud_xuanzhong);
 					zuJian.list_themocloud_uid = (TextView) convertView.findViewById(R.id.list_themocloud_uid);
 					zuJian.list_themocloud_username = (TextView) convertView.findViewById(R.id.list_themocloud_username);
 					zuJian.list_themocloud_value = (TextView) convertView.findViewById(R.id.list_themocloud_value);

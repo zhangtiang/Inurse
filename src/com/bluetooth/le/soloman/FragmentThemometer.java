@@ -1,7 +1,7 @@
 package com.bluetooth.le.soloman;
 
-
 import com.bluetooth.le.soloman.R;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,12 +18,13 @@ import android.widget.TextView;
 public class FragmentThemometer extends Fragment {
 
 	public GlobalVar appState;
-	public Button btn_getTemp, btn_swichcewenmode, btn_swichcewenunit;
+	public Button btn_getTemp, btn_selectuser, btn_swichcewenmode, btn_swichcewenunit;
 	public TextView tv_user1_cewen, tv_user2_cewen, tv_device_cewen, tv_tempre, tv_cewenwendu, tv_cewenunit, tv_cewennum;
 	public byte mode, unit;
 	public int cnttotal, cntbody, cntsurface, cntroom;
 	public int ti, tj;
-	//public sportDataThread st = null;
+	
+	public listenWenduThread t;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {		
@@ -63,7 +64,7 @@ public class FragmentThemometer extends Fragment {
 		cntbody = 0;
 		cntsurface = 0;
 		cntroom = 0;
-		cnttotal = cntbody + cntsurface + cntroom;
+		cnttotal = cntbody + cntsurface + cntroom;			
 		
         return view;       
 	}
@@ -90,15 +91,44 @@ public class FragmentThemometer extends Fragment {
 		public void handleMessage(Message msg) {
 			// 更新UI
 			if (!((String) msg.obj == null)) {
-				if ("sportdata".equals((String) msg.obj)) {
-
+				if ("wendudata".equals((String) msg.obj)) {
+					if (appState.dataArrive){
+						updateWendu();
+					}					
 				}
 
 			}
 		}
 	}
 	
+	@Override
+	public void onStart(){
+		super.onStart();
+		appState.runThread = true;
+		appState.dataArrive = false;
+		t = new listenWenduThread();
+		t.start();
+		
+		tv_user1_cewen.setText("There is no user,please select an user.");
+		tv_user2_cewen.setText("");
+		tv_device_cewen.setText("Device ID:" + appState.deviceAddress);
+	}
 	
+	@Override
+	public void onStop(){
+		super.onStop();
+		appState.runThread = false;
+		try {
+			if (t!=null){
+				t.sleep(1);
+				t.interrupt();
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 	
 	/*
 	@Override
@@ -123,6 +153,7 @@ public class FragmentThemometer extends Fragment {
 	
 	public void findView(View view){
 		btn_getTemp = (Button) view.findViewById(R.id.btn_getTemp);
+		btn_selectuser  = (Button) view.findViewById(R.id.btn_selectuser);
 		btn_swichcewenmode  = (Button) view.findViewById(R.id.btn_swichcewenmode);
 		btn_swichcewenunit = (Button) view.findViewById(R.id.btn_swichcewenunit);
 		tv_tempre = (TextView) view.findViewById(R.id.tv_tempre);
@@ -133,15 +164,19 @@ public class FragmentThemometer extends Fragment {
 		tv_cewenunit = (TextView) view.findViewById(R.id.tv_cewenunit);
 		tv_cewennum = (TextView) view.findViewById(R.id.tv_cewennum);
 		
-		tv_user1_cewen.setText("ID:A10234         User Name: Ken Block");
-		tv_user2_cewen.setText("Note:This is my first patient!");
-		tv_device_cewen.setText("Device ID:" + appState.deviceAddress);
 
 		btn_getTemp.setOnClickListener(new Button.OnClickListener(){//创建监听    
             public void onClick(View v) {    
             	cewen();
             }  
         });    
+		
+		btn_selectuser.setOnClickListener(new Button.OnClickListener(){//创建监听    
+            public void onClick(View v) {    
+            	Intent it = new Intent(getActivity(), gridUser.class);
+    			startActivityForResult(it, 1);	
+            }
+		});
 		
 		//切换模式0body 1surface 2room
 		btn_swichcewenmode.setOnClickListener(new Button.OnClickListener(){//创建监听    
@@ -168,52 +203,106 @@ public class FragmentThemometer extends Fragment {
 						
 	}
 
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		if (resultCode != -1 && resultCode !=0) {
+			String uid = data.getStringExtra("uid");
+			String name = data.getStringExtra("name");
+			String note = data.getStringExtra("note");
+			
+			if (uid != null){
+				if (name == null){
+					name = "";
+				}
+				if (note ==null){
+					note = "";
+				}
+				
+				tv_user1_cewen.setText("ID:" + uid + "    User Name:" + name);
+				tv_user2_cewen.setText("Note:" + note);
+			}			
+		}
+	}
+	
+	public void updateWendu(){
+		appState.dataArrive = false;
+		tv_tempre.setText("表温：" + String.valueOf(appState.surface) +
+    			"，体温：" + String.valueOf(appState.body) +
+    			"，环温："+ String.valueOf(appState.room) +
+    			"，模式："+ appState.mode +
+    			"，单位："+ appState.unit );
+    	
+				if ("body".equals(appState.mode)) {
+					tv_cewenwendu.setText(String.valueOf(appState.body));
+					ti = 0;
+					cntbody++;
+				} else if ("surface".equals(appState.mode)) {
+					tv_cewenwendu.setText(String.valueOf(appState.surface));
+					ti = 1;
+					cntsurface++;
+				} else if ("room".equals(appState.mode)) {
+					tv_cewenwendu.setText(String.valueOf(appState.room));
+					ti = 2;
+					cntroom++;
+				}
+				cnttotal = cntbody + cntsurface + cntroom;
+
+				if (appState.mode != null) {
+					if ("℃".equals(appState.unit)) {
+						tj = 0;
+					}else if ("℉".equals(appState.unit)) {
+						tj = 1;
+					}
+					tv_cewenunit.setText(appState.unit);
+					tv_cewennum.setText("Record Total:" + String.valueOf(cnttotal)
+							+ "  body:" + String.valueOf(cntbody) 
+							+ "  surface:" + String.valueOf(cntsurface) 
+							+ "  room:" + String.valueOf(cntroom));
+				}
+	}
+	
 	public void cewen(){
 		Log.i("info", "点击侧温度");
         appState.getTemp(appState.gattCharacteristic_send);
         Log.i("info", "已调用测温度方法");
-        messageHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-            	tv_tempre.setText("表温：" + String.valueOf(appState.surface) +
-            			"，体温：" + String.valueOf(appState.body) +
-            			"，环温："+ String.valueOf(appState.room) +
-            			"，模式："+ appState.mode +
-            			"，单位："+ appState.unit );
-            	
-						if ("body".equals(appState.mode)) {
-							tv_cewenwendu.setText(String.valueOf(appState.body));
-							ti = 0;
-							cntbody++;
-						} else if ("surface".equals(appState.mode)) {
-							tv_cewenwendu.setText(String.valueOf(appState.surface));
-							ti = 1;
-							cntsurface++;
-						} else if ("room".equals(appState.mode)) {
-							tv_cewenwendu.setText(String.valueOf(appState.room));
-							ti = 2;
-							cntroom++;
-						}
-						cnttotal = cntbody + cntsurface + cntroom;
-
-						if (appState.mode != null) {
-							if ("℃".equals(appState.unit)) {
-								tj = 0;
-							}else if ("℉".equals(appState.unit)) {
-								tj = 1;
-							}
-							tv_cewenunit.setText(appState.unit);
-							tv_cewennum.setText("Record Total:" + String.valueOf(cnttotal)
-									+ "\nbody:" + String.valueOf(cntbody) 
-									+ "  surface:" + String.valueOf(cntsurface) 
-									+ "  room:" + String.valueOf(cntroom));
-						}
-						
-						
-            }
-        }, 2000);
+//        messageHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//            	updateWendu();
+//            }
+//        }, 2000);
 	}
 	
+	
+	// 更新数据进程----------------------------------------
+		public class listenWenduThread extends Thread {
+			public listenWenduThread() {
+				if (!appState.runThread){
+					appState.runThread = true;	
+				}
+				
+			}
+
+			
+			@Override
+			public void run() {
+				while (appState.runThread && !this.isInterrupted()) {
+//					System.out.println("sportDataThread run again");
+					updateHandler("wendudata");
+					
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+
+		}
+		//==================end thread
+		
 }
 
 

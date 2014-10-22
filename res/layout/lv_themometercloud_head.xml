@@ -6,7 +6,7 @@
 
     <CheckBox
         android:id="@+id/cb_themocloud_quanxuan"
-        android:layout_width="wrap_content"
+        android:layout_width="32dip"
         android:layout_height="wrap_content"
         android:text=""
         android:textSize="12sp" />

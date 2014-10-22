@@ -12,7 +12,7 @@ public class GlobalVar extends Application{
 
 	public FileUtils file = new FileUtils();
 	public String deviceAddress;
-	public boolean autoConnect;
+	public boolean autoConnect, dataArrive;
 	
 	 /**读写BLE终端*/
 	public BluetoothLeClass mBLE_send, mBLE_reciv;
