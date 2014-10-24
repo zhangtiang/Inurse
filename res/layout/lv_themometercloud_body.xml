@@ -14,22 +14,14 @@
         android:text="√"
         android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/list_themocloud_uid"
-        android:layout_width="48dip"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dip"
-        android:layout_marginLeft="4dip"
-        android:text="A10103"
-        android:textSize="12sp" />
 
     <TextView
-        android:id="@+id/list_themocloud_username"
+        android:id="@+id/list_themocloud_mode"
         android:layout_width="64dip"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dip"
         android:layout_marginLeft="4dip"
-        android:text="Jonh Smith"
+        android:text="surface"
         android:textSize="12sp" />
 
     <TextView

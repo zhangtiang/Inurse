@@ -13,7 +13,7 @@ import android.text.format.Time;
 public class GlobalVar extends Application{
 
 	public FileUtils file = new FileUtils();
-	public String userID, userName, deviceAddress;
+	public String userID, userName,note, deviceAddress;
 	public boolean autoConnect, dataArrive;
 	
 	 /**读写BLE终端*/
@@ -146,5 +146,9 @@ public class GlobalVar extends Application{
 		
 	public Cursor getRecord(String id, String devicetype, String mode ) {
 		return database.getRecord(id, devicetype, mode );
+	}
+	
+	public long delRecord(String id, String date) {
+		return database.delRecord(id, date);
 	}
 }

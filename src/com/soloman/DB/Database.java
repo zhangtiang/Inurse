@@ -184,7 +184,7 @@ public class Database {
 		try {
 			cursor = SQLdb.query(table_value, // table名
 					new String[] { "id", "mode", "unit", "value", "date","time" }, // 字段
-					"id = '" + id + "'" + "devicetype = '" + devicetype + "'", // 条件
+					"id = '" + id + "' and " + "devicetype = '" + devicetype + "'", // 条件
 					null, null, null, null);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -205,6 +205,11 @@ public class Database {
 			System.out.println(e.toString());
 		}
 		return cursor;
+	}
+	
+	public long delRecord(String id, String date) {
+		return SQLdb.delete(table_value, "id = '" + id + "' and date = '" + date + "'",
+				null);
 	}
 	
 	public void clearThis(String tableid) {

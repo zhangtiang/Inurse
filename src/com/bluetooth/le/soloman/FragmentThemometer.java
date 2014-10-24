@@ -116,12 +116,16 @@ public class FragmentThemometer extends Fragment {
 		t = new listenWenduThread();
 		t.start();
 		
-		tv_user1_cewen.setText("There is no user. If no user selected,");
-		tv_user2_cewen.setText("test result can not be saved.");
+		if (appState.userID == null || "".equals(appState.userID)){
+			tv_user1_cewen.setText("There is no user. If no user selected,");
+			tv_user2_cewen.setText("test result can not be saved.");			
+			
+			tv_user1_cewen.setTextColor(Color.RED);
+			tv_user2_cewen.setTextColor(Color.RED);
+		}else{
+			updateUI();	
+		}
 		tv_device_cewen.setText("Device ID:" + appState.deviceAddress);
-		
-		tv_user1_cewen.setTextColor(Color.RED);
-		tv_user2_cewen.setTextColor(Color.RED);
 	}
 	
 	@Override
@@ -213,53 +217,54 @@ public class FragmentThemometer extends Fragment {
 		
 						
 	}
-
+	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		if (resultCode != -1 && resultCode !=0) {
-			String uid = data.getStringExtra("uid");
-			String name = data.getStringExtra("name");
-			String note = data.getStringExtra("note");
+			appState.userID = data.getStringExtra("uid");
+			appState.userName = data.getStringExtra("name");
+			appState.note = data.getStringExtra("note");
 			
-			if (uid != null){
-				if (name == null){
-					name = "";
-				}
-				if (note ==null){
-					note = "";
-				}
-				
-				tv_user1_cewen.setText("ID:" + uid + "    User Name:" + name);
-				tv_user2_cewen.setText("Note:" + note);
-				
-				appState.userID = uid;
-				appState.userName = name;
-				
-				cntbody = cntsurface = cntroom = 0;
-				//读测量次数
-				cursor = appState.getRecord(uid, "1", "body");
-				if (cursor != null && cursor.getCount() > 0){
-					cntbody = cursor.getCount();
-					cursor.close();
-				}
-				cursor = appState.getRecord(uid, "1", "surface");
-				if (cursor != null && cursor.getCount() > 0){
-					cntsurface = cursor.getCount();
-					cursor.close();
-				}
-				cursor = appState.getRecord(uid, "1", "room");
-				if (cursor != null && cursor.getCount() > 0){
-					cntroom = cursor.getCount();
-					cursor.close();
-				}
-				cnttotal = cntbody + cntsurface + cntroom;
-				tv_cewennum.setText("Record Total:" + String.valueOf(cnttotal)
-						+ "  body:" + String.valueOf(cntbody) 
-						+ "  surface:" + String.valueOf(cntsurface) 
-						+ "  room:" + String.valueOf(cntroom));
-			}			
+			updateUI();		
 		}
+	}
+	
+	public void updateUI(){
+		if (appState.userID != null){
+			if (appState.userName == null){
+				appState.userName = "";
+			}
+			if (appState.note ==null){
+				appState.note = "";
+			}
+			
+			tv_user1_cewen.setText("ID:" + appState.userID + "    User Name:" + appState.userName);
+			tv_user2_cewen.setText("Note:" + appState.note);
+			
+			cntbody = cntsurface = cntroom = 0;
+			//读测量次数
+			cursor = appState.getRecord(appState.userID, "1", "body");
+			if (cursor != null && cursor.getCount() > 0){
+				cntbody = cursor.getCount();
+				cursor.close();
+			}
+			cursor = appState.getRecord(appState.userID, "1", "surface");
+			if (cursor != null && cursor.getCount() > 0){
+				cntsurface = cursor.getCount();
+				cursor.close();
+			}
+			cursor = appState.getRecord(appState.userID, "1", "room");
+			if (cursor != null && cursor.getCount() > 0){
+				cntroom = cursor.getCount();
+				cursor.close();
+			}
+			cnttotal = cntbody + cntsurface + cntroom;
+			tv_cewennum.setText("Record Total:" + String.valueOf(cnttotal)
+					+ "  body:" + String.valueOf(cntbody) 
+					+ "  surface:" + String.valueOf(cntsurface) 
+					+ "  room:" + String.valueOf(cntroom));
+		}	
 	}
 	
 	public void updateWendu(){
