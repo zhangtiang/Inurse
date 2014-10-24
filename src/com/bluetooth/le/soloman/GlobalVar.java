@@ -140,6 +140,10 @@ public class GlobalVar extends Application{
 		return database.add_Record(id, devicetype, mode, unit, value, date, time);
 	}
 	
+	public Cursor getRecord(String id, String devicetype ) {
+		return database.getRecord(id, devicetype );
+	}
+		
 	public Cursor getRecord(String id, String devicetype, String mode ) {
 		return database.getRecord(id, devicetype, mode );
 	}

@@ -5,23 +5,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.bluetooth.le.soloman.R;
-import com.bluetooth.le.soloman.FragmentUser.MyListAdapter;
-import com.bluetooth.le.soloman.FragmentUser.ZuJian_user;
-
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,6 +23,7 @@ import android.widget.TextView;
 public class FragmentThemometerCloud extends Fragment {
 
 	public GlobalVar appState;
+	public Cursor cursor = null;
 	
 	//public sportDataThread st = null;
 	
@@ -69,6 +64,16 @@ public class FragmentThemometerCloud extends Fragment {
         return view;       
 	}
 
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();		
+		appState.getDB();
+	}
+	
+	public void onClose() {
+		appState.dbClose();
+	}
 	
 	
 	
@@ -148,25 +153,22 @@ public class FragmentThemometerCloud extends Fragment {
 			saImageItems = new MyListAdapter(getActivity(), lst);// 没什么解释
 			lv_cloudrecord = (ListView) view.findViewById(R.id.lv_cloudrecord);
 
-			map.put("uid", "A10203");
-			map.put("xinmin", "John Smith");
-			map.put("value", "37.5℃");
-			map.put("time", "2014/10/19");
-			lst.add(map);
-			
-			map = new HashMap<String, Object>();
-			map.put("uid", "A10203");
-			map.put("xinmin", "John Smith");
-			map.put("value", "37.5℃");
-			map.put("time", "2014/10/19");
-			lst.add(map);
-			
-			map = new HashMap<String, Object>();
-			map.put("uid", "A10203");
-			map.put("xinmin", "John Smith");
-			map.put("value", "37.5℃");
-			map.put("time", "2014/10/19");
-			lst.add(map);
+			if (appState.userID != null && !"".equals(appState.userID)){
+				cursor = appState.getRecord(appState.userID, "1");
+				if (cursor != null && cursor.getCount() > 0){			
+					while (cursor.moveToNext()) {
+						map = new HashMap<String, Object>();
+						map.put("uid", cursor.getString(0));
+						map.put("name", cursor.getString(1));
+						map.put("mode", cursor.getString(2));
+						map.put("unit", cursor.getString(3));
+						map.put("value", cursor.getString(4));						
+						map.put("date", cursor.getString(5));
+						lst.add(map);
+					}
+					cursor.close();
+				}
+			}
 
 			// 生成适配器的ImageItem <====> 动态数组的元素，两者一一对应
 			// MyListAdapter saImageItems = new MyListAdapter(this, lst);// 没什么解释
