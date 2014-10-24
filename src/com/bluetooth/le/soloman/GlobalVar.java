@@ -1,17 +1,19 @@
 package com.bluetooth.le.soloman;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.soloman.DB.Database;
 
 import android.app.Application;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.database.Cursor;
+import android.text.format.Time;
 
 public class GlobalVar extends Application{
 
 	public FileUtils file = new FileUtils();
-	public String deviceAddress;
+	public String userID, userName, deviceAddress;
 	public boolean autoConnect, dataArrive;
 	
 	 /**读写BLE终端*/
@@ -132,5 +134,13 @@ public class GlobalVar extends Application{
 	
 	public long del_patient(String id) {
 		return database.del_patient(id);
+	}
+	
+	public long add_Record(String id, String devicetype, String mode, String unit, String value, String date, String time ) {
+		return database.add_Record(id, devicetype, mode, unit, value, date, time);
+	}
+	
+	public Cursor getRecord(String id, String devicetype, String mode ) {
+		return database.getRecord(id, devicetype, mode );
 	}
 }

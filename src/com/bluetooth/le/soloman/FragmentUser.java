@@ -192,6 +192,7 @@ public class FragmentUser extends Fragment {
             public void onClick(View v) {
             	if ("ADD".equals(btn_add.getText().toString())){
             		enableAll();//使能编辑区域
+            		listView_user.setEnabled(false);	//禁用listview
             		btn_add.setText("SAVE");
             		btn_modify.setEnabled(false);
             		btn_delete.setEnabled(false);
@@ -215,6 +216,7 @@ public class FragmentUser extends Fragment {
                 		}
                 	}
                 	updateUI(lview);
+                	listView_user.setEnabled(true);	//使能listview
                 	disableAll();//禁用编辑区域
                 	btn_add.setText("ADD");
                 	clearSelected();
@@ -228,6 +230,7 @@ public class FragmentUser extends Fragment {
             public void onClick(View v) {
             	enableAll();//激活编辑区域
             	if ("MODIFY".equals(btn_modify.getText().toString())){
+            		listView_user.setEnabled(false);	//禁用listview
             		enableAll();//使能编辑区域
             		btn_modify.setText("SAVE");
             		btn_add.setEnabled(false);
@@ -249,6 +252,7 @@ public class FragmentUser extends Fragment {
                 	}
                 	updateUI(lview);
                 	btn_modify.setText("MODIFY");
+                	listView_user.setEnabled(true);	//使能listview
                 	disableAll();
                 	clearSelected();
                 	btn_add.setEnabled(true);

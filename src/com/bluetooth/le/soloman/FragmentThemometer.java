@@ -1,12 +1,17 @@
 package com.bluetooth.le.soloman;
 
+import java.util.Date;
+
 import com.bluetooth.le.soloman.R;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,6 +28,7 @@ public class FragmentThemometer extends Fragment {
 	public byte mode, unit;
 	public int cnttotal, cntbody, cntsurface, cntroom;
 	public int ti, tj;
+	public Cursor cursor = null;
 	
 	public listenWenduThread t;
 	
@@ -104,19 +110,24 @@ public class FragmentThemometer extends Fragment {
 	@Override
 	public void onStart(){
 		super.onStart();
+		appState.getDB();
 		appState.runThread = true;
 		appState.dataArrive = false;
 		t = new listenWenduThread();
 		t.start();
 		
-		tv_user1_cewen.setText("There is no user,please select an user.");
-		tv_user2_cewen.setText("");
+		tv_user1_cewen.setText("There is no user. If no user selected,");
+		tv_user2_cewen.setText("test result can not be saved.");
 		tv_device_cewen.setText("Device ID:" + appState.deviceAddress);
+		
+		tv_user1_cewen.setTextColor(Color.RED);
+		tv_user2_cewen.setTextColor(Color.RED);
 	}
 	
 	@Override
 	public void onStop(){
 		super.onStop();
+		appState.dbClose();
 		appState.runThread = false;
 		try {
 			if (t!=null){
@@ -221,6 +232,32 @@ public class FragmentThemometer extends Fragment {
 				
 				tv_user1_cewen.setText("ID:" + uid + "    User Name:" + name);
 				tv_user2_cewen.setText("Note:" + note);
+				
+				appState.userID = uid;
+				appState.userName = name;
+				
+				cntbody = cntsurface = cntroom = 0;
+				//读测量次数
+				cursor = appState.getRecord(uid, "1", "body");
+				if (cursor != null && cursor.getCount() > 0){
+					cntbody = cursor.getCount();
+					cursor.close();
+				}
+				cursor = appState.getRecord(uid, "1", "surface");
+				if (cursor != null && cursor.getCount() > 0){
+					cntsurface = cursor.getCount();
+					cursor.close();
+				}
+				cursor = appState.getRecord(uid, "1", "room");
+				if (cursor != null && cursor.getCount() > 0){
+					cntroom = cursor.getCount();
+					cursor.close();
+				}
+				cnttotal = cntbody + cntsurface + cntroom;
+				tv_cewennum.setText("Record Total:" + String.valueOf(cnttotal)
+						+ "  body:" + String.valueOf(cntbody) 
+						+ "  surface:" + String.valueOf(cntsurface) 
+						+ "  room:" + String.valueOf(cntroom));
 			}			
 		}
 	}
@@ -260,6 +297,17 @@ public class FragmentThemometer extends Fragment {
 							+ "  surface:" + String.valueOf(cntsurface) 
 							+ "  room:" + String.valueOf(cntroom));
 				}
+				
+				
+				//如果选择了病人（user），写数据库
+				if (appState.userID != null && !"".equals(appState.userID) && appState.mode != null){
+					Date dt = new Date(System.currentTimeMillis());
+					Time tm = new Time ();
+					appState.add_Record(appState.userID, "1", appState.mode, appState.unit, tv_cewenwendu.getText().toString(), dt.toString(), tm.toString());
+					
+					tv_user1_cewen.setTextColor(Color.BLACK);
+					tv_user2_cewen.setTextColor(Color.BLACK);
+				};
 	}
 	
 	public void cewen(){

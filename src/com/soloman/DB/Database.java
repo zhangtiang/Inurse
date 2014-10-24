@@ -63,8 +63,8 @@ public class Database {
 					"mode varchar(10), " + // 模式surface body room
 					"unit varchar(10), " + // 单位℃,℉
 					"value varchar(10), " + // 测量值
-					"date varchar(10), " + // 测量日期
-					"time varchar(10) )");//测量时间
+					"date varchar(50), " + // 测量日期
+					"time varchar(50) )");//测量时间
 			SQLdb = db;
 			System.out.println("DB onCreate --- table_value");			
 			
@@ -198,7 +198,7 @@ public class Database {
 		try {
 			cursor = SQLdb.query(table_value, // table名
 					new String[] { "id", "mode", "unit", "value", "date","time" }, // 字段
-					"id = '" + id + "'" + "devicetype = '" + devicetype + "'" + "mode = '" + mode + "'", // 条件
+					"id = '" + id + "' and " + "devicetype = '" + devicetype + "' and " + "mode = '" + mode + "'", // 条件
 					null, null, null, null);
 		} catch (Exception e) {
 			e.printStackTrace();
