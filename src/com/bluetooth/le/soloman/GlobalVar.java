@@ -1,20 +1,22 @@
 package com.bluetooth.le.soloman;
 
 import java.math.BigDecimal;
-import java.util.Date;
-
 import com.soloman.DB.Database;
-
 import android.app.Application;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.database.Cursor;
-import android.text.format.Time;
 
 public class GlobalVar extends Application{
 
 	public FileUtils file = new FileUtils();
+	public String sdcard;
+	
 	public String userID, userName,note, deviceAddress;
 	public boolean autoConnect, dataArrive;
+	
+	public int autodel, automail, autoupload, autosave;
+	public String whendel, mail1, mail2, whenmail, mailtime1, mailtime2, serverurl,path, ext;
+	public int fielduid, fieldfname,fieldlname, fielddevicetype, fielddeviceid,fielddate, fieldvalue, fieldmode, fieldunit, fieldnote;
 	
 	 /**读写BLE终端*/
 	public BluetoothLeClass mBLE_send, mBLE_reciv;
@@ -105,6 +107,10 @@ public class GlobalVar extends Application{
 	//数据库-----------------------------------
 	private Database database;
 
+	public Boolean isDBOpen(){
+		return database.isOpen();
+	}
+	
 	public Database getDB() {
 		System.out.println("全局getDB");
 		database = new Database(this);
@@ -150,5 +156,25 @@ public class GlobalVar extends Application{
 	
 	public long delRecord(String id, String date) {
 		return database.delRecord(id, date);
+	}
+	
+	public long add_setting(int autodel, String whendel, 
+			int automail, String mail1, String mail2, String whenmail, String mailtime1, String mailtime2,
+			int autoupload, String serverurl, 
+			int autosave, String path, String ext,
+			int userid, int fname, int lname, int devicetype, int deviceid, int date, int value, int mode, int unit, int note) {
+		return database.add_setting(autodel, whendel, automail, mail1, mail2, whenmail, mailtime1, mailtime2, autoupload, serverurl, autosave, path, ext, userid, fname, lname, devicetype, deviceid, date, value, mode, unit, note);
+	}
+	
+	public Cursor getSetting ( ) {
+		return database.getSetting();
+	}
+	
+	public int updateSetting(int autodel, String whendel, 
+			int automail, String mail1, String mail2, String whenmail, String mailtime1, String mailtime2,
+			int autoupload, String serverurl, 
+			int autosave, String path, String ext,
+			int userid, int fname, int lname, int devicetype, int deviceid, int date, int value, int mode, int unit, int note ) {
+		return database.updateSetting(autodel, whendel, automail, mail1, mail2, whenmail, mailtime1, mailtime2, autoupload, serverurl, autosave, path, ext, userid, fname, lname, devicetype, deviceid, date, value, mode, unit, note);
 	}
 }

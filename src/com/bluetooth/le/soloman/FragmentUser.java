@@ -56,13 +56,9 @@ public class FragmentUser extends Fragment {
 		
 		View view = inflater.inflate(R.layout.fragment_user, container, false);
 	
-		appState.getDB();
+		
 		findView(view);
-		updateUI(view);
-		setOnclickListener(view);
-		disableAll();//禁用编辑区域
-		btn_modify.setEnabled(false);
-		btn_delete.setEnabled(false);
+		
 		
 //		view.setOnTouchListener(new View.OnTouchListener() {
 //			@Override
@@ -153,18 +149,27 @@ public class FragmentUser extends Fragment {
 	
 	
 	@Override
-	public void onStart() {
+	public void onResume() {
 		// TODO Auto-generated method stub
-		super.onStart();		
+		super.onResume();		
+		
+		appState.getDB();
+		updateUI();
+		setOnclickListener();
+		disableAll();//禁用编辑区域
+		btn_modify.setEnabled(false);
+		btn_delete.setEnabled(false);
 	}
+	
+//	@Override
+//	protected void finalize() throws Throwable {
+//		// TODO Auto-generated method stub
+//		super.finalize();
+//	}
 	
 	@Override
-	protected void finalize() throws Throwable {
-		// TODO Auto-generated method stub
-		super.finalize();
-	}
-	
-	public void onClose() {
+	public void onPause() {
+		super.onPause();
 		appState.dbClose();
 	}
 
@@ -182,11 +187,12 @@ public class FragmentUser extends Fragment {
 		btn_delete = (Button) view.findViewById(R.id.btn_delete);
 		
 		cb_user_quanxuan = (CheckBox) view.findViewById(R.id.cb_user_quanxuan);
+		
+		listView_user = (ListView) view.findViewById(R.id.lv_user);
 	}
 	
-	private void setOnclickListener(View view) {
-		// TODO Auto-generated method stub
-		final View lview = view;
+	private void setOnclickListener() {
+		// TODO Auto-generated method stub				
 		
 		btn_add.setOnClickListener(new Button.OnClickListener(){//创建监听    
             public void onClick(View v) {
@@ -198,6 +204,9 @@ public class FragmentUser extends Fragment {
             		btn_delete.setEnabled(false);
             	}else if ("SAVE".equals(btn_add.getText().toString())){
             		if (!"".equals(et_uid.getText().toString())){
+            			if (!appState.isDBOpen()){
+            				appState.getDB();
+            			}
                 		cursor = appState.get_patient(et_uid.getText().toString());
                 		if (cursor == null || cursor.getCount() == 0 ){//如果没有就添加
                 			appState.add_patient(et_uid.getText().toString(), 
@@ -215,7 +224,7 @@ public class FragmentUser extends Fragment {
                 			cursor.close();
                 		}
                 	}
-                	updateUI(lview);
+                	updateUI();
                 	listView_user.setEnabled(true);	//使能listview
                 	disableAll();//禁用编辑区域
                 	btn_add.setText("ADD");
@@ -232,11 +241,15 @@ public class FragmentUser extends Fragment {
             	if ("MODIFY".equals(btn_modify.getText().toString())){
             		listView_user.setEnabled(false);	//禁用listview
             		enableAll();//使能编辑区域
+            		et_uid.setEnabled(false);	//用户名不能编辑
             		btn_modify.setText("SAVE");
             		btn_add.setEnabled(false);
             		btn_delete.setEnabled(false);
             	}else if ("SAVE".equals(btn_modify.getText().toString())){
             		if (!"".equals(et_uid.getText().toString())){
+            			if (!appState.isDBOpen()){
+            				appState.getDB();
+            			}
                 		cursor = appState.get_patient(et_uid.getText().toString());
                 		if (cursor != null && cursor.getCount() > 0){//如果有就修改
                 			appState.Update_patient(et_uid.getText().toString(), 
@@ -250,7 +263,7 @@ public class FragmentUser extends Fragment {
                     		cursor.close();
                 		}            		
                 	}
-                	updateUI(lview);
+                	updateUI();
                 	btn_modify.setText("MODIFY");
                 	listView_user.setEnabled(true);	//使能listview
                 	disableAll();
@@ -281,13 +294,18 @@ public class FragmentUser extends Fragment {
 						            		sb.deleteCharAt(sb.length()- 1);
 						                	String s = sb.toString();
 						                	String [] sa = s.split(",");
+						                	
+						                	if (!appState.isDBOpen()){
+						            			appState.getDB();
+						            		}
+						                	
 						                	for (int i=0; i<sa.length; i++){
 						                		appState.del_patient(sa[i]);
 						                	}
 						                	sb.delete(0, sb.length());
 						            	}          
 						            	clearAll();
-						            	updateUI(lview);
+						            	updateUI();
 									}
 						}).show();
             	
@@ -350,11 +368,10 @@ public class FragmentUser extends Fragment {
 	private HashMap<String, Object> map = new HashMap<String, Object>();
 	private Cursor cursor = null;
 
-	private void updateUI(View view) {
+	private void updateUI() {
 		// TODO Auto-generated method stub
 		lst = new ArrayList<HashMap<String, Object>>();
-		saImageItems = new MyListAdapter(getActivity(), lst);// 没什么解释
-		listView_user = (ListView) view.findViewById(R.id.lv_user);
+		saImageItems = new MyListAdapter(getActivity(), lst);// 没什么解释		
 		
 		cursor = appState.get_patient();
 		if (cursor != null && cursor.getCount() > 0){			

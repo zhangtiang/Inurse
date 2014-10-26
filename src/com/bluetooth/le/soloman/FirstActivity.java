@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -46,6 +47,7 @@ public class FirstActivity extends FragmentActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE); 	//去掉title
 		setContentView(R.layout.first_activity);
 
+		appState.sdcard = Environment.getExternalStorageDirectory().toString();
 		
 		findView();
 		setOnClickListener();

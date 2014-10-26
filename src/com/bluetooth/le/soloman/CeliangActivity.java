@@ -28,7 +28,8 @@ public class CeliangActivity extends FragmentActivity {
 	public FragmentThemometerGraph fragmentThemometerGraph;
 	public FragmentThemometerCloud fragmentThemometerCloud;
 	public FragmentThemometerHelp fragmentThemometerHelp;
-	public FragmentThemometerSetting fragmentThemometerSetting;
+//	public FragmentThemometerSetting fragmentThemometerSetting;
+	public FragmentSetting fragmentThemometerSetting;
 
 
 	public MediaRecorder recorder;	
@@ -198,7 +199,8 @@ public class CeliangActivity extends FragmentActivity {
 		fragmentThemometerGraph = new FragmentThemometerGraph();
 		fragmentThemometerCloud = new FragmentThemometerCloud();
 		fragmentThemometerHelp = new FragmentThemometerHelp();
-		fragmentThemometerSetting = new FragmentThemometerSetting();
+//		fragmentThemometerSetting = new FragmentThemometerSetting();
+		fragmentThemometerSetting = new FragmentSetting();
         
 		fragmentArryList.add(fragmentThemometer);  
 		fragmentArryList.add(fragmentThemometerGraph);

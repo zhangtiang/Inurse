@@ -21,6 +21,7 @@ public class Database {
 	private String db_name = "inurse.db";
 	private String table_patient = "binren";// 病人表
 	private String table_value = "celiangjieguo";// 测量结果表
+	private String table_setting = "setting";// 配置表
 	private Context mCtx = null;
 	private DatabaseHelper dbHelper;
 	private SQLiteDatabase SQLdb;
@@ -68,6 +69,37 @@ public class Database {
 			SQLdb = db;
 			System.out.println("DB onCreate --- table_value");			
 			
+			db.execSQL("create table IF NOT EXISTS " + table_setting + 
+					"(id varchar(1), " + //序号，永远只有一条记录"1"					
+					"autodel int ," + //自动删除0 1
+					"whendel varchar(10), " + // 何时自动删除dailly,weekly,monthly,aftersend,off
+					
+					"automail int, " + // 自动mail 0 1
+					"mail1 varchar(50), " + // 
+					"mail2 varchar(50), " + // 
+					"whenmail varchar(10), " + // 何时自动发邮件dailly,weekly,monthly
+					"mailtime1 varchar(2), " + // 自动发邮件时间小时 00-23
+					"mailtime2 varchar(2), " + // 自动发邮件时间分钟 00-59
+					
+					"autoupload int, " + // 自动upload 0 1
+					"serverurl varchar(100), " + // 上传链接
+					
+					"autosave int, " + // 自动save 0 1
+					"path varchar(50), " + // 本地路径
+					"ext varchar(5), " + // 后缀 .txt .xls
+					
+					"userid int, " + // 显示字段 userid 0 1
+					"fname int, " + // 显示字段 firstname 0 1
+					"lname int, " + // 显示字段 lastname 0 1
+					"devicetype int, " + // 显示字段devicetype 0 1
+					"deviceid int, " + // 显示字段deviceid 0 1
+					"date int, " + // 显示字段date 0 1
+					"value int, " + // 显示字段value 0 1
+					"mode int, " + // 显示字段mode 0 1
+					"unit int, " + // 显示字段unit 0 1
+					"note int )");//显示字段note 0 1
+			SQLdb = db;
+			System.out.println("DB onCreate --- table_setting");			
 		}
 
 		@Override
@@ -89,6 +121,10 @@ public class Database {
 		// 只有调用getReadableDatabase或者getWriteableDatabase方法，才会创建数据库对象
 		SQLdb = dbHelper.getWritableDatabase();
 		return this;
+	}
+	
+	public Boolean isOpen(){
+		return SQLdb.isOpen();
 	}
 
 	public void close() {
@@ -212,6 +248,106 @@ public class Database {
 				null);
 	}
 	
+	//--------------------------------------------------------------------------------------------
+	public long add_setting(int autodel, String whendel, 
+			int automail, String mail1, String mail2, String whenmail, String mailtime1, String mailtime2,
+			int autoupload, String serverurl, 
+			int autosave, String path, String ext,
+			int userid, int fname, int lname, int devicetype, int deviceid, int date, int value, int mode, int unit, int note) {
+		ContentValues cv = new ContentValues();
+
+		cv.put("id", "1");
+		
+		cv.put("autodel", autodel);
+		cv.put("whendel", whendel);
+		
+		cv.put("automail", automail);
+		cv.put("mail1", mail1);
+		cv.put("mail2", mail2);
+		cv.put("whenmail", whenmail);
+		cv.put("mailtime1", mailtime1);
+		cv.put("mailtime2", mailtime2);
+		
+		cv.put("autoupload", autoupload);
+		cv.put("serverurl", serverurl);
+		
+		cv.put("autosave", autosave);
+		cv.put("path", path);
+		cv.put("ext", ext);
+		
+		cv.put("userid", userid);
+		cv.put("fname", fname);
+		cv.put("lname", lname);
+		cv.put("devicetype", devicetype);
+		cv.put("deviceid", deviceid);
+		cv.put("date", date);
+		cv.put("value", value);
+		cv.put("mode", mode);
+		cv.put("unit", unit);
+		cv.put("note", note);		
+
+		System.out.println("DB.add_setting " + table_setting);
+		return SQLdb.insert(table_setting, null, cv);
+	}
+	
+	public Cursor getSetting ( ) {
+		Cursor cursor = null;
+		try {
+			cursor = SQLdb.query(table_setting, // table名
+					new String[] { "autodel", "whendel", 
+						"automail", "mail1", "mail2","whenmail","mailtime1","mailtime2",
+						"autoupload", "serverurl", 
+						"autosave","path","ext",
+						"userid","fname","lname","devicetype","deviceid","date","value","mode","unit","note"}, // 字段
+					null, // 条件
+					null, null, null, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e.toString());
+		}
+		return cursor;
+	}	
+	
+	public int updateSetting(int autodel, String whendel, 
+			int automail, String mail1, String mail2, String whenmail, String mailtime1, String mailtime2,
+			int autoupload, String serverurl, 
+			int autosave, String path, String ext,
+			int userid, int fname, int lname, int devicetype, int deviceid, int date, int value, int mode, int unit, int note ) {
+		ContentValues cv = new ContentValues();
+		
+		cv.put("autodel", autodel);
+		cv.put("whendel", whendel);
+		
+		cv.put("automail", automail);
+		cv.put("mail1", mail1);
+		cv.put("mail2", mail2);
+		cv.put("whenmail", whenmail);
+		cv.put("mailtime1", mailtime1);
+		cv.put("mailtime2", mailtime2);
+		
+		cv.put("autoupload", autoupload);
+		cv.put("serverurl", serverurl);
+		
+		cv.put("autosave", autosave);
+		cv.put("path", path);
+		cv.put("ext", ext);
+		
+		cv.put("userid", userid);
+		cv.put("fname", fname);
+		cv.put("lname", lname);
+		cv.put("devicetype", devicetype);
+		cv.put("deviceid", deviceid);
+		cv.put("date", date);
+		cv.put("value", value);
+		cv.put("mode", mode);
+		cv.put("unit", unit);
+		cv.put("note", note);
+		
+		String[] args = { "1" };
+		return SQLdb.update(table_setting, cv, "id=?", args);
+	}
+	
+	//-------------------------------------------------------------------------------------
 	public void clearThis(String tableid) {
 		SQLdb.delete(tableid, null, null);
 	}
