@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -33,11 +34,12 @@ public class FragmentThemometerCloud extends Fragment {
 
 	public GlobalVar appState;
 	public Cursor cursor = null;
-	public Button btn_cloudselect, btn_clouddelete;
+	public Button btn_cloudselect, btn_clouddelete, btn_cloudmail;
 	public TextView tv_clouduser;
 	public CheckBox cb_themocloud_quanxuan;
 	
 	public StringBuilder sb = new StringBuilder(); 
+	public StringBuilder mailcontent = new StringBuilder();
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {		
@@ -144,6 +146,7 @@ public class FragmentThemometerCloud extends Fragment {
 	public void findView(View view){
 		btn_cloudselect = (Button) view.findViewById(R.id.btn_cloudselect);
 		btn_clouddelete = (Button) view.findViewById(R.id.btn_clouddelete);
+		btn_cloudmail = (Button) view.findViewById(R.id.btn_cloudmail);
 		tv_clouduser = (TextView) view.findViewById(R.id.tv_clouduser);
 		lv_cloudrecord = (ListView) view.findViewById(R.id.lv_cloudrecord);
 		cb_themocloud_quanxuan = (CheckBox) view.findViewById(R.id.cb_themocloud_quanxuan);
@@ -218,6 +221,35 @@ public class FragmentThemometerCloud extends Fragment {
 				}
 				saImageItems.notifyDataSetChanged();
 			}
+		});
+		
+		btn_cloudmail.setOnClickListener(new Button.OnClickListener(){//创建监听    
+            public void onClick(View v) {  
+            	cursor = appState.getRecord(appState.userID, "1");
+				if (cursor != null && cursor.getCount() > 0){			
+					while (cursor.moveToNext()) {
+						mailcontent.append("PatientID:" + appState.userID + ",");
+						mailcontent.append("Name:" + appState.userName + ",");
+						mailcontent.append("Device:Themometer,");
+						mailcontent.append("Mode:" + cursor.getString(1) + ",");
+						mailcontent.append("Unit:" + cursor.getString(2) + ",");
+						mailcontent.append("Value:" + cursor.getString(3) + ",");
+						mailcontent.append("Date:" + cursor.getString(4) + "\n");
+					}
+					cursor.close();
+				}
+				
+            	try{
+            		Intent data=new Intent(Intent.ACTION_SENDTO); 
+                	data.setData(Uri.parse("mailto:" + appState.mail1)); 	//收件人
+                	data.putExtra(Intent.EXTRA_SUBJECT, "Inurse " + appState.deviceAddress); //标题
+                	data.putExtra(Intent.EXTRA_TEXT, mailcontent.toString()); //内容
+                	startActivity(data);
+            	}catch (Exception e){
+            		e.printStackTrace();
+            	}
+            	 
+            }
 		});
 	}
 	
