@@ -191,18 +191,21 @@ public class FragmentUser extends Fragment {
 		listView_user = (ListView) view.findViewById(R.id.lv_user);
 	}
 	
+	private String addState = "add";
+	private String modifyState = "modi";
 	private void setOnclickListener() {
 		// TODO Auto-generated method stub				
 		
 		btn_add.setOnClickListener(new Button.OnClickListener(){//创建监听    
             public void onClick(View v) {
-            	if ("ADD".equals(btn_add.getText().toString())){
+            	if ("add".equals(addState)){
             		enableAll();//使能编辑区域
             		listView_user.setEnabled(false);	//禁用listview
-            		btn_add.setText("SAVE");
+            		addState = "save";
+            		btn_add.setBackgroundResource(R.drawable.save_selector);
             		btn_modify.setEnabled(false);
             		btn_delete.setEnabled(false);
-            	}else if ("SAVE".equals(btn_add.getText().toString())){
+            	}else if ("save".equals(addState)){
             		if (!"".equals(et_uid.getText().toString())){
             			if (!appState.isDBOpen()){
             				appState.getDB();
@@ -227,7 +230,8 @@ public class FragmentUser extends Fragment {
                 	updateUI();
                 	listView_user.setEnabled(true);	//使能listview
                 	disableAll();//禁用编辑区域
-                	btn_add.setText("ADD");
+                	addState = "add";
+                	btn_add.setBackgroundResource(R.drawable.add_selector);
                 	clearSelected();
                 	btn_modify.setEnabled(false);
             		btn_delete.setEnabled(false);
@@ -238,14 +242,15 @@ public class FragmentUser extends Fragment {
 		btn_modify.setOnClickListener(new Button.OnClickListener(){//创建监听    
             public void onClick(View v) {
             	enableAll();//激活编辑区域
-            	if ("MODIFY".equals(btn_modify.getText().toString())){
+            	if ("modi".equals(modifyState)){
             		listView_user.setEnabled(false);	//禁用listview
             		enableAll();//使能编辑区域
             		et_uid.setEnabled(false);	//用户名不能编辑
-            		btn_modify.setText("SAVE");
+            		modifyState = "save";
+            		btn_modify.setBackgroundResource(R.drawable.save_selector);
             		btn_add.setEnabled(false);
             		btn_delete.setEnabled(false);
-            	}else if ("SAVE".equals(btn_modify.getText().toString())){
+            	}else if ("save".equals(modifyState)){
             		if (!"".equals(et_uid.getText().toString())){
             			if (!appState.isDBOpen()){
             				appState.getDB();
@@ -264,7 +269,8 @@ public class FragmentUser extends Fragment {
                 		}            		
                 	}
                 	updateUI();
-                	btn_modify.setText("MODIFY");
+                	modifyState = "modi";
+                	btn_modify.setBackgroundResource(R.drawable.modify_selector);
                 	listView_user.setEnabled(true);	//使能listview
                 	disableAll();
                 	clearSelected();

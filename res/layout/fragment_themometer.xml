@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text = "Select User" />
+                android:background="@drawable/selectuser_selector" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"

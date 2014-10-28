@@ -24,19 +24,22 @@
                 android:id="@+id/btn_cloudselect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Select User" />
+                android:layout_marginRight="16dip"
+                android:background="@drawable/selectuser_selector" />
 
             <Button
                 android:id="@+id/btn_clouddelete"
                 android:layout_width="wrap_content"
+                android:layout_marginLeft="16dip"
                 android:layout_height="wrap_content"
-                android:text="Delete" />
-
+                android:background="@drawable/delete_selector" />
+<!-- 
             <Button
                 android:id="@+id/btn_cloudsend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Send" />
+                 -->
         </LinearLayout>
 
         <TextView

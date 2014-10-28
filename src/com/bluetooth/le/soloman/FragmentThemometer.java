@@ -226,6 +226,9 @@ public class FragmentThemometer extends Fragment {
 			appState.userName = data.getStringExtra("name");
 			appState.note = data.getStringExtra("note");
 			
+			tv_user1_cewen.setTextColor(Color.BLACK);
+			tv_user2_cewen.setTextColor(Color.BLACK);
+			
 			updateUI();		
 		}
 	}
