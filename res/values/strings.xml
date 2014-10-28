@@ -40,4 +40,15 @@
         <item>.txt</item>
         <item>.xls</item>
     </string-array> 
+    
+    <string-array name="separate">
+        <item>,</item>
+        <item>;</item>
+        <item> </item>
+        <item>/</item>
+        <item>|</item>
+        <item>$</item>
+        <item>#</item>
+        <item>*</item>
+    </string-array> 
 </resources>

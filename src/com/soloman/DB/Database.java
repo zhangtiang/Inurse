@@ -87,6 +87,7 @@ public class Database {
 					"autosave int, " + // 自动save 0 1
 					"path varchar(50), " + // 本地路径
 					"ext varchar(5), " + // 后缀 .txt .xls
+					"separate varchar(1), " + // 分隔符,; ?|$#* 共8个
 					
 					"userid int, " + // 显示字段 userid 0 1
 					"fname int, " + // 显示字段 firstname 0 1
@@ -215,6 +216,20 @@ public class Database {
 		return SQLdb.insert(table_value, null, cv);
 	}
 	
+	public Cursor getRecord(String devicetype ) {
+		Cursor cursor = null;
+		try {
+			cursor = SQLdb.query(table_value, // table名
+					new String[] { "id", "mode", "unit", "value", "date","time" }, // 字段
+					"devicetype = '" + devicetype + "'", // 条件
+					null, null, null, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e.toString());
+		}
+		return cursor;
+	}	
+	
 	public Cursor getRecord(String id, String devicetype ) {
 		Cursor cursor = null;
 		try {
@@ -252,7 +267,7 @@ public class Database {
 	public long add_setting(int autodel, String whendel, 
 			int automail, String mail1, String mail2, String whenmail, String mailtime1, String mailtime2,
 			int autoupload, String serverurl, 
-			int autosave, String path, String ext,
+			int autosave, String path, String ext, String separate,
 			int userid, int fname, int lname, int devicetype, int deviceid, int date, int value, int mode, int unit, int note) {
 		ContentValues cv = new ContentValues();
 
@@ -274,6 +289,7 @@ public class Database {
 		cv.put("autosave", autosave);
 		cv.put("path", path);
 		cv.put("ext", ext);
+		cv.put("separate", separate);
 		
 		cv.put("userid", userid);
 		cv.put("fname", fname);
@@ -297,7 +313,7 @@ public class Database {
 					new String[] { "autodel", "whendel", 
 						"automail", "mail1", "mail2","whenmail","mailtime1","mailtime2",
 						"autoupload", "serverurl", 
-						"autosave","path","ext",
+						"autosave","path","ext", "separate",
 						"userid","fname","lname","devicetype","deviceid","date","value","mode","unit","note"}, // 字段
 					null, // 条件
 					null, null, null, null);
@@ -311,7 +327,7 @@ public class Database {
 	public int updateSetting(int autodel, String whendel, 
 			int automail, String mail1, String mail2, String whenmail, String mailtime1, String mailtime2,
 			int autoupload, String serverurl, 
-			int autosave, String path, String ext,
+			int autosave, String path, String ext, String separate,
 			int userid, int fname, int lname, int devicetype, int deviceid, int date, int value, int mode, int unit, int note ) {
 		ContentValues cv = new ContentValues();
 		
@@ -331,6 +347,7 @@ public class Database {
 		cv.put("autosave", autosave);
 		cv.put("path", path);
 		cv.put("ext", ext);
+		cv.put("separate", separate);
 		
 		cv.put("userid", userid);
 		cv.put("fname", fname);

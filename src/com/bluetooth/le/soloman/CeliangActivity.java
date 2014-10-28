@@ -26,7 +26,7 @@ public class CeliangActivity extends FragmentActivity {
 	public android.support.v4.app.FragmentTransaction ft;
 	public FragmentThemometer fragmentThemometer;
 	public FragmentThemometerGraph fragmentThemometerGraph;
-	public FragmentThemometerCloud fragmentThemometerCloud;
+	public FragmentThemometerData fragmentThemometerCloud;
 	public FragmentThemometerHelp fragmentThemometerHelp;
 //	public FragmentThemometerSetting fragmentThemometerSetting;
 	public FragmentSetting fragmentThemometerSetting;
@@ -197,7 +197,7 @@ public class CeliangActivity extends FragmentActivity {
  
 		fragmentThemometer = new FragmentThemometer();
 		fragmentThemometerGraph = new FragmentThemometerGraph();
-		fragmentThemometerCloud = new FragmentThemometerCloud();
+		fragmentThemometerCloud = new FragmentThemometerData();
 		fragmentThemometerHelp = new FragmentThemometerHelp();
 //		fragmentThemometerSetting = new FragmentThemometerSetting();
 		fragmentThemometerSetting = new FragmentSetting();

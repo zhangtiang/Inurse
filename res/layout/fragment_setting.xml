@@ -208,7 +208,7 @@
                 android:id="@+id/tv_fileformat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="112dip"
+                android:layout_marginLeft="32dip"
                 android:text="File Format:" />
 
             <Spinner
@@ -216,6 +216,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:entries="@array/fileformat" />
+            
+            <TextView
+                android:id="@+id/tv_separate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dip"
+                android:text="Separate By:" />
+
+            <Spinner
+                android:id="@+id/sp_separate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/separate" />
         </LinearLayout>
 
         <LinearLayout

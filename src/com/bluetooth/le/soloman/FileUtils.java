@@ -222,6 +222,30 @@ public class FileUtils {
 		}
 		return file;
 	}
+	
+	public File writeFromInput(String path, String fileName, String input) {
+		File file = null;
+		OutputStream output = null;
+		try {
+			createDir(path);// 建立文件夹
+			file = createFile(path + fileName);// 建文件
+			output = new FileOutputStream(file);
+			byte [] bytes = input.getBytes();   
+			output.write(bytes);
+			output.close();
+			output.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				// input.close();
+				output.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return file;
+	}
 
 	public String readFile(String filePath) {
 		//String rtn = "";

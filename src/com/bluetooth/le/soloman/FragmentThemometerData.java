@@ -2,6 +2,7 @@ package com.bluetooth.le.soloman;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import com.bluetooth.le.soloman.R;
@@ -29,17 +30,19 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
-public class FragmentThemometerCloud extends Fragment {
+public class FragmentThemometerData extends Fragment {
 
 	public GlobalVar appState;
 	public Cursor cursor = null;
-	public Button btn_cloudselect, btn_clouddelete, btn_cloudmail;
+	public Button btn_cloudselect, btn_cloudselectall, btn_clouddelete, btn_cloudmail, btn_cloudsave, btn_cloudupload, btn_cloudprint, btn_cloudshare;
 	public TextView tv_clouduser;
 	public CheckBox cb_themocloud_quanxuan;
 	
 	public StringBuilder sb = new StringBuilder(); 
 	public StringBuilder mailcontent = new StringBuilder();
+	public StringBuilder saveascontent = new StringBuilder();
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {		
@@ -55,7 +58,7 @@ public class FragmentThemometerCloud extends Fragment {
 		// TODO Auto-generated method stub
 		//return inflater.inflate(R.layout.fragment_sleep, container, false);	
 		
-		View view = inflater.inflate(R.layout.fragment_themometercloud, container, false);
+		View view = inflater.inflate(R.layout.fragment_themometerdata, container, false);
 	
 		findView(view);
 		
@@ -145,16 +148,29 @@ public class FragmentThemometerCloud extends Fragment {
 	
 	public void findView(View view){
 		btn_cloudselect = (Button) view.findViewById(R.id.btn_cloudselect);
+		btn_cloudselectall = (Button) view.findViewById(R.id.btn_cloudselectall);
 		btn_clouddelete = (Button) view.findViewById(R.id.btn_clouddelete);
-		btn_cloudmail = (Button) view.findViewById(R.id.btn_cloudmail);
+		btn_cloudmail = (Button) view.findViewById(R.id.btn_cloudmail);		
+		btn_cloudsave = (Button) view.findViewById(R.id.btn_cloudsave);
+		btn_cloudupload = (Button) view.findViewById(R.id.btn_cloudupload);
+		btn_cloudprint = (Button) view.findViewById(R.id.btn_cloudprint);
+		btn_cloudshare = (Button) view.findViewById(R.id.btn_cloudshare);
 		tv_clouduser = (TextView) view.findViewById(R.id.tv_clouduser);
-		lv_cloudrecord = (ListView) view.findViewById(R.id.lv_cloudrecord);
+		lv_datarecord = (ListView) view.findViewById(R.id.lv_datarecord);
 		cb_themocloud_quanxuan = (CheckBox) view.findViewById(R.id.cb_themocloud_quanxuan);
 		
 		btn_cloudselect.setOnClickListener(new Button.OnClickListener(){//创建监听    
             public void onClick(View v) {    
             	Intent it = new Intent(getActivity(), gridUser.class);
     			startActivityForResult(it, 1);	
+            }
+		});
+		
+		btn_cloudselectall.setOnClickListener(new Button.OnClickListener(){//创建监听    
+            public void onClick(View v) {   
+            	appState.userID = "";
+            	appState.userName = "";
+            	updateUI();
             }
 		});
 		
@@ -225,15 +241,33 @@ public class FragmentThemometerCloud extends Fragment {
 		
 		btn_cloudmail.setOnClickListener(new Button.OnClickListener(){//创建监听    
             public void onClick(View v) {  
-            	cursor = appState.getRecord(appState.userID, "1");
+            	if (!appState.isDBOpen()){
+    				appState.getDB();
+    			}
+            	
+            	if ("".equals(appState.userID) || appState.userID == null){
+            		cursor = appState.getRecord("1");
+            	}else{
+            		cursor = appState.getRecord(appState.userID, "1");
+            	} 
+            	
+            	saveascontent = new StringBuilder();
+            	Cursor c1 = null;
+            	String name = "";
 				if (cursor != null && cursor.getCount() > 0){			
 					while (cursor.moveToNext()) {
-						mailcontent.append("PatientID:" + appState.userID + ",");
-						mailcontent.append("Name:" + appState.userName + ",");
-						mailcontent.append("Device:Themometer,");
-						mailcontent.append("Mode:" + cursor.getString(1) + ",");
-						mailcontent.append("Unit:" + cursor.getString(2) + ",");
-						mailcontent.append("Value:" + cursor.getString(3) + ",");
+						c1 = appState.get_patient(cursor.getString(0));
+						if (c1!=null && c1.getCount()>0){
+							c1.moveToNext();
+							name = c1.getString(1) + c1.getString(2);
+							c1.close();
+						}
+						mailcontent.append("PatientID:" + cursor.getString(0) + appState.separate);
+						mailcontent.append("Name:" + name + appState.separate);
+						mailcontent.append("Device:Themometer" + appState.separate);
+						mailcontent.append("Mode:" + cursor.getString(1) + appState.separate);
+						mailcontent.append("Unit:" + cursor.getString(2) + appState.separate);
+						mailcontent.append("Value:" + cursor.getString(3) + appState.separate);
 						mailcontent.append("Date:" + cursor.getString(4) + "\n");
 					}
 					cursor.close();
@@ -249,6 +283,68 @@ public class FragmentThemometerCloud extends Fragment {
             		e.printStackTrace();
             	}
             	 
+            }
+		});
+		
+		btn_cloudsave.setOnClickListener(new Button.OnClickListener(){//创建监听    
+            public void onClick(View v) {    
+            	if (!appState.isDBOpen()){
+    				appState.getDB();
+    			}
+            	
+            	if ("".equals(appState.userID) || appState.userID == null){
+            		cursor = appState.getRecord("1");
+            	}else{
+            		cursor = appState.getRecord(appState.userID, "1");
+            	}  
+            	
+            	saveascontent = new StringBuilder();
+            	Cursor c1 = null;
+            	String name = "";
+				if (cursor != null && cursor.getCount() > 0){			
+					while (cursor.moveToNext()) {
+						c1 = appState.get_patient(cursor.getString(0));
+						if (c1!=null && c1.getCount()>0){
+							c1.moveToNext();
+							name = c1.getString(1) + c1.getString(2);
+							c1.close();
+						}
+						saveascontent.append("PatientID:" + cursor.getString(0) + appState.separate);
+						saveascontent.append("Name:" + name + appState.separate);
+						saveascontent.append("Device:Themometer" + appState.separate);
+						saveascontent.append("Mode:" + cursor.getString(1) + appState.separate);
+						saveascontent.append("Unit:" + cursor.getString(2) + appState.separate);
+						saveascontent.append("Value:" + cursor.getString(3) + appState.separate);
+						saveascontent.append("Date:" + cursor.getString(4) + "\n");
+					}
+					cursor.close();
+				}
+            	try{
+            		Date dt = new Date(System.currentTimeMillis());
+            		String year = String.valueOf(dt.getYear() + 1900);
+            		String mounth = String.valueOf(dt.getMonth() + 1);
+            		String day = String.valueOf(dt.getDate());
+            		String hour = String.valueOf(dt.getHours());
+            		String minite = String.valueOf(dt.getMinutes());
+            		String second = String.valueOf(dt.getSeconds());
+            		String filename = "inurse" + appState.userID + year + mounth + day + hour + minite + second;
+            		if (".txt".equals(appState.ext)){
+            			filename = filename + ".txt";
+            		}else if (".xls".equals(appState.ext)){
+            			filename = filename + ".xls";
+            		}
+            		FileUtils file = new FileUtils();
+            		file.writeFromInput(appState.path, filename, saveascontent.toString());
+            		
+            		Toast.makeText(getActivity().getApplicationContext(), 
+            				"Save to " + appState.path + filename + " successful!", 
+            				Toast.LENGTH_LONG).show();
+            	}catch (Exception e){
+            		e.printStackTrace();
+            		Toast.makeText(getActivity().getApplicationContext(), 
+            				"Save file failed!", 
+            				Toast.LENGTH_LONG).show();
+            	}            	
             }
 		});
 	}
@@ -299,6 +395,7 @@ public class FragmentThemometerCloud extends Fragment {
 		public class ZuJian_themocloud {
 			public LinearLayout list_themocloud;
 			public TextView list_themocloud_xuanzhong;
+			public TextView list_themocloud_id;
 			public TextView list_themocloud_mode;
 			public TextView list_themocloud_value;
 			public TextView list_themocloud_time;
@@ -307,7 +404,7 @@ public class FragmentThemometerCloud extends Fragment {
 		private ArrayList<HashMap<String, Object>> lst;
 		// 生成适配器的ImageItem <====> 动态数组的元素，两者一一对应
 		private MyListAdapter saImageItems;
-		private ListView lv_cloudrecord;
+		private ListView lv_datarecord;
 		private HashMap<String, Object> map = new HashMap<String, Object>();
 
 		private void updateUI( ) {
@@ -317,14 +414,36 @@ public class FragmentThemometerCloud extends Fragment {
 			
 
 			if (appState.userID != null && !"".equals(appState.userID)){
-				tv_clouduser.setText("User:" + appState.userID + "," + appState.userName);
+//				tv_clouduser.setText("User:" + appState.userID + "," + appState.userName);
+				if (!appState.isDBOpen()){
+    				appState.getDB();
+    			}
 				cursor = appState.getRecord(appState.userID, "1");
 				if (cursor != null && cursor.getCount() > 0){			
 					while (cursor.moveToNext()) {
 						map = new HashMap<String, Object>();
 						map.put("sel", false);
-						map.put("uid", appState.userID);
+						map.put("uid", cursor.getString(0));
 						map.put("name", appState.userName );
+						map.put("mode", cursor.getString(1));
+						map.put("unit", cursor.getString(2));
+						map.put("value", cursor.getString(3));						
+						map.put("date", cursor.getString(4));
+						lst.add(map);
+					}
+					cursor.close();
+				}
+			}else{
+				if (!appState.isDBOpen()){
+    				appState.getDB();
+    			}
+				cursor = appState.getRecord("1");
+				if (cursor != null && cursor.getCount() > 0){			
+					while (cursor.moveToNext()) {
+						map = new HashMap<String, Object>();
+						map.put("sel", false);
+						map.put("uid", cursor.getString(0));
+						map.put("name", appState.userName );	//列出全部用户数据时，这个地方是空值
 						map.put("mode", cursor.getString(1));
 						map.put("unit", cursor.getString(2));
 						map.put("value", cursor.getString(3));						
@@ -347,10 +466,10 @@ public class FragmentThemometerCloud extends Fragment {
 			// ListView listView_cart = (ListView)
 			// findViewById(R.id.listView_chakan);
 			// 添加并且显示
-			lv_cloudrecord.setAdapter(saImageItems);
+			lv_datarecord.setAdapter(saImageItems);
 			saImageItems.notifyDataSetChanged();			
 			// 点击控件监听器
-			lv_cloudrecord.setOnItemClickListener(new ItemClickListener());
+			lv_datarecord.setOnItemClickListener(new ItemClickListener());
 		}
 	    
 		class ItemClickListener implements OnItemClickListener {
@@ -449,11 +568,12 @@ public class FragmentThemometerCloud extends Fragment {
 				if (convertView == null) {
 					zuJian = new ZuJian_themocloud();
 					// 获取组件布局
-					convertView = layoutInflater.inflate(R.layout.lv_themometercloud_body, null);
+					convertView = layoutInflater.inflate(R.layout.lv_themometerdata_body, null);
 					
 					zuJian.list_themocloud = (LinearLayout) convertView.findViewById(R.id.list_themocloud);
 					
 					zuJian.list_themocloud_xuanzhong = (TextView) convertView.findViewById(R.id.list_themocloud_xuanzhong);
+					zuJian.list_themocloud_id = (TextView) convertView.findViewById(R.id.list_themocloud_id);					
 					zuJian.list_themocloud_mode = (TextView) convertView.findViewById(R.id.list_themocloud_mode);
 					zuJian.list_themocloud_value = (TextView) convertView.findViewById(R.id.list_themocloud_value);
 					zuJian.list_themocloud_time = (TextView) convertView.findViewById(R.id.list_themocloud_time);
@@ -471,6 +591,7 @@ public class FragmentThemometerCloud extends Fragment {
 				}else{
 					zuJian.list_themocloud_xuanzhong.setText("");
 				}
+				zuJian.list_themocloud_id.setText((String) data.get(position).get("uid"));
 				zuJian.list_themocloud_mode.setText((String) data.get(position).get("mode"));
 				zuJian.list_themocloud_value.setText((String) data.get(position).get("value") + (String) data.get(position).get("unit"));
 				zuJian.list_themocloud_time.setText((String) data.get(position).get("date"));

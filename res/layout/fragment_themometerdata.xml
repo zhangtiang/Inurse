@@ -24,13 +24,20 @@
                 android:id="@+id/btn_cloudselect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="16dip"
+                android:layout_marginRight="8dip"
                 android:background="@drawable/selectuser_selector" />
+            
+            <Button
+                android:id="@+id/btn_cloudselectall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dip"
+                android:text ="select all" />
 
             <Button
                 android:id="@+id/btn_clouddelete"
                 android:layout_width="wrap_content"
-                android:layout_marginLeft="16dip"
+
                 android:layout_height="wrap_content"
                 android:background="@drawable/delete_selector" />
 <!-- 
@@ -50,10 +57,10 @@
         <include
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/lv_themometercloud_head" />
+            layout="@layout/lv_themometerdata_head" />
 
         <ListView
-            android:id="@+id/lv_cloudrecord"
+            android:id="@+id/lv_datarecord"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
         </ListView>

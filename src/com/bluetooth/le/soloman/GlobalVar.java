@@ -15,7 +15,7 @@ public class GlobalVar extends Application{
 	public boolean autoConnect, dataArrive;
 	
 	public int autodel, automail, autoupload, autosave;
-	public String whendel, mail1, mail2, whenmail, mailtime1, mailtime2, serverurl,path, ext;
+	public String whendel, mail1, mail2, whenmail, mailtime1, mailtime2, serverurl,path, ext, separate;
 	public int fielduid, fieldfname,fieldlname, fielddevicetype, fielddeviceid,fielddate, fieldvalue, fieldmode, fieldunit, fieldnote;
 	
 	 /**读写BLE终端*/
@@ -146,6 +146,10 @@ public class GlobalVar extends Application{
 		return database.add_Record(id, devicetype, mode, unit, value, date, time);
 	}
 	
+	public Cursor getRecord(String devicetype ) {
+		return database.getRecord(devicetype );
+	}
+	
 	public Cursor getRecord(String id, String devicetype ) {
 		return database.getRecord(id, devicetype );
 	}
@@ -161,9 +165,9 @@ public class GlobalVar extends Application{
 	public long add_setting(int autodel, String whendel, 
 			int automail, String mail1, String mail2, String whenmail, String mailtime1, String mailtime2,
 			int autoupload, String serverurl, 
-			int autosave, String path, String ext,
+			int autosave, String path, String ext, String separate,
 			int userid, int fname, int lname, int devicetype, int deviceid, int date, int value, int mode, int unit, int note) {
-		return database.add_setting(autodel, whendel, automail, mail1, mail2, whenmail, mailtime1, mailtime2, autoupload, serverurl, autosave, path, ext, userid, fname, lname, devicetype, deviceid, date, value, mode, unit, note);
+		return database.add_setting(autodel, whendel, automail, mail1, mail2, whenmail, mailtime1, mailtime2, autoupload, serverurl, autosave, path, ext, separate, userid, fname, lname, devicetype, deviceid, date, value, mode, unit, note);
 	}
 	
 	public Cursor getSetting ( ) {
@@ -173,8 +177,8 @@ public class GlobalVar extends Application{
 	public int updateSetting(int autodel, String whendel, 
 			int automail, String mail1, String mail2, String whenmail, String mailtime1, String mailtime2,
 			int autoupload, String serverurl, 
-			int autosave, String path, String ext,
+			int autosave, String path, String ext, String separate,
 			int userid, int fname, int lname, int devicetype, int deviceid, int date, int value, int mode, int unit, int note ) {
-		return database.updateSetting(autodel, whendel, automail, mail1, mail2, whenmail, mailtime1, mailtime2, autoupload, serverurl, autosave, path, ext, userid, fname, lname, devicetype, deviceid, date, value, mode, unit, note);
+		return database.updateSetting(autodel, whendel, automail, mail1, mail2, whenmail, mailtime1, mailtime2, autoupload, serverurl, autosave, path, ext, separate, userid, fname, lname, devicetype, deviceid, date, value, mode, unit, note);
 	}
 }

@@ -29,7 +29,7 @@ public class FragmentSetting extends Fragment {
 	public RadioButton autodel0, autodel1, autodel2,autodel3, autodel4, automail0, automail1, automail2;
 	public EditText et_mail1, et_mail2, et_mailtime1, et_mailtime2, et_autoupload;
 	public TextView tv_autosave;
-	public Spinner sp_fileformat;
+	public Spinner sp_fileformat, sp_separate;
 	
 
 	@Override
@@ -146,7 +146,7 @@ public class FragmentSetting extends Fragment {
 		appState.updateSetting(appState.autodel, appState.whendel, 
 				appState.automail, appState.mail1, appState.mail2, appState.whenmail, appState.mailtime1, appState.mailtime2, 
 				appState.autoupload, appState.serverurl, 
-				appState.autosave, appState.path, appState.ext, 
+				appState.autosave, appState.path, appState.ext, appState.separate,
 				appState.fielduid, appState.fieldfname, appState.fieldlname, appState.fielddevicetype, appState.fielddeviceid, appState.fielddate, appState.fieldvalue, appState.fieldmode, appState.fieldunit, appState.fieldnote);
 		
 		appState.dbClose();		
@@ -189,6 +189,7 @@ public class FragmentSetting extends Fragment {
 		tv_autosave = (TextView) view.findViewById(R.id.tv_autosave);
 		
 		sp_fileformat = (Spinner) view.findViewById(R.id.sp_fileformat);
+		sp_separate = (Spinner) view.findViewById(R.id.sp_separate);
 	}
 
 	private void updateUI() {
@@ -213,6 +214,7 @@ public class FragmentSetting extends Fragment {
 			appState.autosave = 1;
 			appState.path = appState.sdcard + "/inurse/record/";
 			appState.ext = ".txt";
+			appState.separate = ",";
 			
 			appState.fielduid = 1;
 			appState.fieldfname = 1;
@@ -228,7 +230,7 @@ public class FragmentSetting extends Fragment {
 			appState.add_setting(appState.autodel, appState.whendel, 
 					appState.automail, appState.mail1, appState.mail2, appState.whenmail, appState.mailtime1, appState.mailtime2, 
 					appState.autoupload, appState.serverurl, 
-					appState.autosave, appState.path, appState.ext, 
+					appState.autosave, appState.path, appState.ext, appState.separate,
 					appState.fielduid, appState.fieldfname, appState.fieldlname, appState.fielddevicetype, appState.fielddeviceid, appState.fielddate, appState.fieldvalue, appState.fieldmode, appState.fieldunit, appState.fieldnote);
 			
 			autoDelEnable();
@@ -247,6 +249,7 @@ public class FragmentSetting extends Fragment {
 			cb_autosave.setChecked(true);
 			tv_autosave.setText(appState.sdcard + "/inurse/record/");
 			sp_fileformat.setSelection(0);	//.txt
+			sp_separate.setSelection(0);	//,
 			cb_fieldfname.setChecked(true);
 			cb_fieldlname.setChecked(true);
 			cb_fielddevtype.setChecked(true);
@@ -275,17 +278,18 @@ public class FragmentSetting extends Fragment {
 			appState.autosave = cursor.getInt(10);
 			appState.path = cursor.getString(11);
 			appState.ext = cursor.getString(12);
+			appState.separate = cursor.getString(13);
 			
-			appState.fielduid = cursor.getInt(13);
-			appState.fieldfname = cursor.getInt(14);
-			appState.fieldlname = cursor.getInt(15);
-			appState.fielddevicetype = cursor.getInt(16);
-			appState.fielddeviceid = cursor.getInt(17);
-			appState.fielddate = cursor.getInt(18);
-			appState.fieldvalue = cursor.getInt(19);
-			appState.fieldmode = cursor.getInt(20);
-			appState.fieldunit = cursor.getInt(21);
-			appState.fieldnote = cursor.getInt(22);
+			appState.fielduid = cursor.getInt(14);
+			appState.fieldfname = cursor.getInt(15);
+			appState.fieldlname = cursor.getInt(16);
+			appState.fielddevicetype = cursor.getInt(17);
+			appState.fielddeviceid = cursor.getInt(18);
+			appState.fielddate = cursor.getInt(19);
+			appState.fieldvalue = cursor.getInt(20);
+			appState.fieldmode = cursor.getInt(21);
+			appState.fieldunit = cursor.getInt(22);
+			appState.fieldnote = cursor.getInt(23);
 			
 			if (appState.autodel == 1){
 				autoDelEnable();
@@ -342,7 +346,26 @@ public class FragmentSetting extends Fragment {
 					sp_fileformat.setSelection(0);
 				}else if(".xls".equals(appState.ext)){
 					sp_fileformat.setSelection(1);
-				}				
+				}		
+				
+				if(",".equals(appState.separate)){
+					sp_separate.setSelection(0);
+				}else if(";".equals(appState.separate)){
+					sp_separate.setSelection(1);
+				}
+				else if(" ".equals(appState.separate)){
+					sp_separate.setSelection(2);
+				}else if("/".equals(appState.separate)){
+					sp_separate.setSelection(3);
+				}else if("|".equals(appState.separate)){
+					sp_separate.setSelection(4);
+				}else if("$".equals(appState.separate)){
+					sp_separate.setSelection(5);
+				}else if("#".equals(appState.separate)){
+					sp_separate.setSelection(6);
+				}else if("*".equals(appState.separate)){
+					sp_separate.setSelection(7);
+				}
 			}else{
 				cb_autosave.setChecked(false);
 				autoSaveDisable();
@@ -512,6 +535,32 @@ public class FragmentSetting extends Fragment {
 					appState.ext = ".txt";
 				}else if (position == 1){
 					appState.ext = ".xls";
+				}
+			}
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+			}
+		});
+		
+		sp_separate.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				if (position == 0){
+					appState.separate = ",";
+				}else if (position == 1){
+					appState.separate = ";";
+				}else if (position == 2){
+					appState.separate = " ";
+				}else if (position == 3){
+					appState.separate = "/";
+				}else if (position == 4){
+					appState.separate = "|";
+				}else if (position == 5){
+					appState.separate = "$";
+				}else if (position == 6){
+					appState.separate = "#";
+				}else if (position == 7){
+					appState.separate = "*";
 				}
 			}
 			@Override
@@ -712,11 +761,13 @@ public class FragmentSetting extends Fragment {
 	public void autoSaveEnable(){
 		tv_autosave.setEnabled(true);
 		sp_fileformat.setEnabled(true);
+		sp_separate.setEnabled(true);
 	}
 	
 	public void autoSaveDisable(){
 		tv_autosave.setEnabled(false);
 		sp_fileformat.setEnabled(false);
+		sp_separate.setEnabled(false);
 	}
 	
 }
