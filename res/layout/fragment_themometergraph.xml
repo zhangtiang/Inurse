@@ -2,13 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fraghome_botton"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="#ff000000" >
+
+    <LinearLayout
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_height="400dip"
+        android:orientation="vertical" >
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/tv_graphdata"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Graph" />
+        android:text="TextView"
+        android:textColor="#ffff0000" />
 
 </LinearLayout>

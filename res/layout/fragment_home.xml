@@ -75,7 +75,7 @@
             android:layout_height="96dip"
             android:layout_gravity="left"
             android:layout_marginRight="16dip"
-            android:background="@drawable/delete_selector"
+            android:background="@drawable/dianzichen_selector"
             android:enabled="false" />
     </LinearLayout>
 
