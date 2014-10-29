@@ -26,7 +26,7 @@ public class CeliangActivity extends FragmentActivity {
 	public android.support.v4.app.FragmentTransaction ft;
 	public FragmentThemometer fragmentThemometer;
 	public FragmentThemometerGraph fragmentThemometerGraph;
-	public FragmentThemometerData fragmentThemometerCloud;
+	public FragmentThemometerData fragmentThemometerData;
 	public FragmentThemometerHelp fragmentThemometerHelp;
 //	public FragmentThemometerSetting fragmentThemometerSetting;
 	public FragmentSetting fragmentThemometerSetting;
@@ -34,7 +34,7 @@ public class CeliangActivity extends FragmentActivity {
 
 	public MediaRecorder recorder;	
 	public ViewPager viewPager;	
-	public ImageView iv_fanhui, iv_celianghome, iv_graph, iv_cloud, iv_celianghelp, iv_celiangsetting;
+	public ImageView iv_fanhui, iv_celianghome, iv_graph, iv_data, iv_celianghelp, iv_celiangsetting;
 
 	
 	@Override
@@ -99,11 +99,11 @@ public class CeliangActivity extends FragmentActivity {
 			}
 		});
 		
-		iv_cloud.setOnClickListener(new View.OnClickListener() {
+		iv_data.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				Log.i("info", "iv_cloud onClicked");
+				Log.i("info", "iv_data onClicked");
 				viewPager.setCurrentItem(2);
 			}
 		});
@@ -184,7 +184,7 @@ public class CeliangActivity extends FragmentActivity {
 		iv_fanhui = (ImageView) findViewById(R.id.iv_fanhui);				
 		iv_celianghome = (ImageView) findViewById(R.id.iv_celianghome);
 		iv_graph = (ImageView) findViewById(R.id.iv_graph);
-		iv_cloud = (ImageView) findViewById(R.id.iv_cloud);
+		iv_data = (ImageView) findViewById(R.id.iv_data);
 		iv_celianghelp = (ImageView) findViewById(R.id.iv_celianghelp);
 		iv_celiangsetting = (ImageView) findViewById(R.id.iv_celiangsetting);
 	}
@@ -197,14 +197,14 @@ public class CeliangActivity extends FragmentActivity {
  
 		fragmentThemometer = new FragmentThemometer();
 		fragmentThemometerGraph = new FragmentThemometerGraph();
-		fragmentThemometerCloud = new FragmentThemometerData();
+		fragmentThemometerData = new FragmentThemometerData();
 		fragmentThemometerHelp = new FragmentThemometerHelp();
 //		fragmentThemometerSetting = new FragmentThemometerSetting();
 		fragmentThemometerSetting = new FragmentSetting();
         
 		fragmentArryList.add(fragmentThemometer);  
 		fragmentArryList.add(fragmentThemometerGraph);
-		fragmentArryList.add(fragmentThemometerCloud);
+		fragmentArryList.add(fragmentThemometerData);
 		fragmentArryList.add(fragmentThemometerHelp);
 		fragmentArryList.add(fragmentThemometerSetting);
           
@@ -224,35 +224,35 @@ public class CeliangActivity extends FragmentActivity {
 			case 0:
 				iv_celianghome.setBackgroundResource(R.drawable.home1);
 				iv_graph.setBackgroundResource(R.drawable.graph);
-				iv_cloud.setBackgroundResource(R.drawable.cloud);
+				iv_data.setBackgroundResource(R.drawable.data);
 				iv_celianghelp.setBackgroundResource(R.drawable.help);
 				iv_celiangsetting.setBackgroundResource(R.drawable.setting);
 				break;
 			case 1:
 				iv_graph.setBackgroundResource(R.drawable.graph1);
 				iv_celianghome.setBackgroundResource(R.drawable.home);
-				iv_cloud.setBackgroundResource(R.drawable.cloud);
+				iv_data.setBackgroundResource(R.drawable.data);
 				iv_celianghelp.setBackgroundResource(R.drawable.help);
 				iv_celiangsetting.setBackgroundResource(R.drawable.setting);
 				break;
 			case 2:
 				iv_graph.setBackgroundResource(R.drawable.graph);
 				iv_celianghome.setBackgroundResource(R.drawable.home);
-				iv_cloud.setBackgroundResource(R.drawable.cloud1);
+				iv_data.setBackgroundResource(R.drawable.data1);
 				iv_celianghelp.setBackgroundResource(R.drawable.help);
 				iv_celiangsetting.setBackgroundResource(R.drawable.setting);
 				break;
 			case 3:
 				iv_graph.setBackgroundResource(R.drawable.graph);
 				iv_celianghome.setBackgroundResource(R.drawable.home);
-				iv_cloud.setBackgroundResource(R.drawable.cloud);
+				iv_data.setBackgroundResource(R.drawable.data);
 				iv_celianghelp.setBackgroundResource(R.drawable.help1);
 				iv_celiangsetting.setBackgroundResource(R.drawable.setting);
 				break;
 			case 4:
 				iv_graph.setBackgroundResource(R.drawable.graph);
 				iv_celianghome.setBackgroundResource(R.drawable.home);
-				iv_cloud.setBackgroundResource(R.drawable.cloud);
+				iv_data.setBackgroundResource(R.drawable.data);
 				iv_celianghelp.setBackgroundResource(R.drawable.help);
 				iv_celiangsetting.setBackgroundResource(R.drawable.setting1);
 				break;
