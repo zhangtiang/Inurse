@@ -264,7 +264,7 @@ public class FragmentThemometerData extends Fragment {
 						}
 						mailcontent.append("PatientID:" + cursor.getString(0) + appState.separate);
 						mailcontent.append("Name:" + name + appState.separate);
-						mailcontent.append("Device:Themometer" + appState.separate);
+						mailcontent.append("Device:Themometer" + appState.deviceAddress + appState.separate);
 						mailcontent.append("Mode:" + cursor.getString(1) + appState.separate);
 						mailcontent.append("Unit:" + cursor.getString(2) + appState.separate);
 						mailcontent.append("Value:" + cursor.getString(3) + appState.separate);
@@ -311,7 +311,7 @@ public class FragmentThemometerData extends Fragment {
 						}
 						saveascontent.append("PatientID:" + cursor.getString(0) + appState.separate);
 						saveascontent.append("Name:" + name + appState.separate);
-						saveascontent.append("Device:Themometer" + appState.separate);
+						saveascontent.append("Device:Themometer" + appState.deviceAddress + appState.separate);
 						saveascontent.append("Mode:" + cursor.getString(1) + appState.separate);
 						saveascontent.append("Unit:" + cursor.getString(2) + appState.separate);
 						saveascontent.append("Value:" + cursor.getString(3) + appState.separate);

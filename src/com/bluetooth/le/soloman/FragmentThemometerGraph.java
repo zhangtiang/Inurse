@@ -1,6 +1,8 @@
 package com.bluetooth.le.soloman;
 
 
+import java.math.BigDecimal;
+
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
 import org.achartengine.chart.PointStyle;
@@ -15,6 +17,7 @@ import org.achartengine.tools.ZoomListener;
 
 import com.bluetooth.le.soloman.R;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -53,6 +56,10 @@ public class FragmentThemometerGraph extends Fragment {
 		
 	}
 	
+	public String [] value;	//   value
+	public String [] unit;	//   unit 
+	public String [] date;	//  date
+	
 	public void addPoint(String mode ){
 		double x = 0;
 		double y = 0;
@@ -66,10 +73,21 @@ public class FragmentThemometerGraph extends Fragment {
 			cursor = appState.getRecord(appState.userID, "1", mode);	//体温计 body surface
 			if (cursor!=null && cursor.getCount() > 0){
 				cursor.moveToFirst();
+				value = new String [cursor.getCount()];
+				unit = new String [cursor.getCount()];
+				date = new String [cursor.getCount()];
 				while (!cursor.isAfterLast()){					
 					x++;
 					y = cursor.getFloat(3);
-					mCurrentSeries.add(x, y);
+					BigDecimal bd = new BigDecimal(y);
+					bd = bd.setScale(1,BigDecimal.ROUND_HALF_UP);  
+//					y = bd.floatValue();
+					mCurrentSeries.add(x,  bd.floatValue());
+					
+					value[(int) (x -1)] = String.valueOf( bd.floatValue());
+					unit[(int) (x -1)] = cursor.getString(2);
+					date[(int) (x -1)] = cursor.getString(4);
+					
 					cursor.moveToNext();
 				}
 				cursor.close();
@@ -221,6 +239,7 @@ public class FragmentThemometerGraph extends Fragment {
 	    mRenderer.setAxesColor(Color.BLACK);//坐标轴颜色
 	    
 	    mRenderer.setChartTitleTextSize(32);//?设置整个图表标题文字大小  
+	    mRenderer.setChartTitle(appState.userID);
 	    
 	    mRenderer.setXLabelsColor(Color.BLACK);//设置X轴刻度颜色
 	    mRenderer.setYLabelsColor(0, Color.BLACK);//设置Y轴刻度颜色	    
@@ -293,8 +312,13 @@ public class FragmentThemometerGraph extends Fragment {
 //	                      + " closest point value X=" + seriesSelection.getXValue() + ", Y=" + seriesSelection.getValue()  
 //	                      + " clicked point value X=" + (float) xy[0] + ", Y=" + (float) xy[1], Toast.LENGTH_SHORT).show();  
 	              
-	              tv_graphdata.setText("X = " + String.valueOf(seriesSelection.getXValue()) +
-	            		  " Y = " + String.valueOf(seriesSelection.getValue()));
+//	              tv_graphdata.setText("X = " + String.valueOf(seriesSelection.getXValue()) +
+//	            		  " Y = " + String.valueOf(seriesSelection.getValue()));
+	              tv_graphdata.setText(appState.userID + "  " 
+	            		  + appState.userName + "  "
+	            		  + value[(int) seriesSelection.getXValue() - 1] + unit[(int) seriesSelection.getXValue() - 1]  + "\n"
+	            		  + date[(int) seriesSelection.getXValue() - 1]);
+	              
 	            }  
 	            //-->end  
 	          }  
@@ -358,6 +382,13 @@ public class FragmentThemometerGraph extends Fragment {
             }
 		});
 		
+		btn_graphseluser.setOnClickListener(new Button.OnClickListener(){//创建监听    
+            public void onClick(View v) {    
+            	Intent it = new Intent(getActivity(), gridUser.class);
+    			startActivityForResult(it, 1);	
+            }
+		});
+		
 		btn_graphswitch.setOnClickListener(new Button.OnClickListener(){//创建监听    
             public void onClick(View v) {    
             	if ("body".equals(mode)){
@@ -370,7 +401,30 @@ public class FragmentThemometerGraph extends Fragment {
 		});
 	}
 
-	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		if (resultCode != -1 && resultCode !=0) {
+			String uid = data.getStringExtra("uid");
+			String name = data.getStringExtra("name");
+			String note = data.getStringExtra("note");
+			
+			if (uid != null){
+				if (name == null){
+					name = "";
+				}
+				if (note ==null){
+					note = "";
+				}
+				
+				appState.userID = uid;
+				appState.userName = name;			
+				
+				AChart();
+
+			}			
+		}
+	}
 	
 }
 
