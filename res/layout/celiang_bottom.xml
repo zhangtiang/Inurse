@@ -31,7 +31,7 @@
             android:layout_gravity="center"
             android:background="@drawable/home" />
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -45,7 +45,7 @@
             android:layout_gravity="center"
             android:background="@drawable/graph" />
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -57,9 +57,9 @@
             android:layout_width="64dip"
             android:layout_height="64dip"
             android:layout_gravity="center"
-            android:background="@drawable/cloud" />
+            android:background="@drawable/data" />
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -73,7 +73,7 @@
             android:layout_gravity="center"
             android:background="@drawable/help" />
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
