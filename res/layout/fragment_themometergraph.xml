@@ -2,21 +2,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#ff000000" >
+    android:background="#ffd6f1ff"
+    android:orientation="vertical" >
 
     <LinearLayout
         android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_height="400dip"
+        android:background="#ffd6f1ff"
         android:orientation="vertical" >
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_graphdata"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textColor="#ffff0000" />
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tv_graphdata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btn_graphseluser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="select user" />
+
+            <Button
+                android:id="@+id/btn_refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="refresh" />
+            
+            <Button
+                android:id="@+id/btn_graphswitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="switch mode" />
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

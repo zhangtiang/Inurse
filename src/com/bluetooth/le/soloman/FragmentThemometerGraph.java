@@ -25,6 +25,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
@@ -34,13 +35,9 @@ public class FragmentThemometerGraph extends Fragment {
 
 	public GlobalVar appState;
 	public static final String TYPE = "type";  
+	public Button btn_refresh ,btn_graphseluser, btn_graphswitch;
 	  
-	  private XYMultipleSeriesDataset mDataset ;  	  
-	  private XYMultipleSeriesRenderer mRenderer;  	  
-	  private XYSeries mCurrentSeries;  	  
-	  private XYSeriesRenderer mCurrentRenderer;  	  
-	  private String mDateFormat;  
-	  private GraphicalView mChartView;  
+	  
 	    
 	  private int index = 0;  
 	  
@@ -56,7 +53,7 @@ public class FragmentThemometerGraph extends Fragment {
 		
 	}
 	
-	public void addPoint(){
+	public void addPoint(String mode ){
 		double x = 0;
 		double y = 0;
 		Cursor cursor = null;
@@ -66,7 +63,7 @@ public class FragmentThemometerGraph extends Fragment {
 		}
 		
 		if (!"".equals(appState.userID)){
-			cursor = appState.getRecord(appState.userID, "1", "body");	//体温计 body
+			cursor = appState.getRecord(appState.userID, "1", mode);	//体温计 body surface
 			if (cursor!=null && cursor.getCount() > 0){
 				cursor.moveToFirst();
 				while (!cursor.isAfterLast()){					
@@ -77,6 +74,7 @@ public class FragmentThemometerGraph extends Fragment {
 				}
 				cursor.close();
 			}
+
 		}
           
  
@@ -201,39 +199,81 @@ public class FragmentThemometerGraph extends Fragment {
         }
 	}
 	*/
-	
+	private String mode = "body";
+	private XYMultipleSeriesDataset mDataset = new XYMultipleSeriesDataset();  	   	  
+	  private XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();;  	  
+	  private XYSeries mCurrentSeries, mCurrentSeriesSurface;  	  
+	  private XYSeriesRenderer mCurrentRenderer;  	  
+	  private String mDateFormat;  
+	  private GraphicalView mChartView;  
+	  private LinearLayout layout = null;
+	  
 	public void AChart(){
-		mDataset = new XYMultipleSeriesDataset();  	  
-		mRenderer = new XYMultipleSeriesRenderer();
+//		mDataset = new XYMultipleSeriesDataset();  	  
+//		mRenderer = new XYMultipleSeriesRenderer();
+//		mCurrentRenderer = new XYSeriesRenderer();
+		
 		  
 	    mRenderer.setApplyBackgroundColor(true);//设置是否显示背景色  
-	    mRenderer.setBackgroundColor(Color.argb(0, 50, 50, 50));//设置背景色  
+	    mRenderer.setBackgroundColor(Color.argb(50, 214, 241, 255));//设置背景色  
+	    
 	    mRenderer.setAxisTitleTextSize(32); //设置轴标题文字的大小  
+	    mRenderer.setAxesColor(Color.BLACK);//坐标轴颜色
+	    
 	    mRenderer.setChartTitleTextSize(32);//?设置整个图表标题文字大小  
+	    
+	    mRenderer.setXLabelsColor(Color.BLACK);//设置X轴刻度颜色
+	    mRenderer.setYLabelsColor(0, Color.BLACK);//设置Y轴刻度颜色	    
 	    mRenderer.setLabelsTextSize(32);//设置刻度显示文字的大小(XY轴都会被设置)  
+	    
 	    mRenderer.setLegendTextSize(32);//图例文字大小  
-	    mRenderer.setMargins(new int[] { 30, 30, 0, 10 });//设置图表的外边框(上/左/下/右)  
+	    
+	    mRenderer.setMargins(new int[] { 30, 30, 50, 10 });//设置图表的外边框(上/左/下/右)  
+	    mRenderer.setMarginsColor(Color.argb(50, 214, 241, 255));//边框颜色
+	    
 	    mRenderer.setZoomButtonsVisible(false);//是否显示放大缩小按钮  
+	    
+	    mRenderer.setShowGrid(true); //显示网格
+	    
 	    mRenderer.setPointSize(10);//设置点的大小(图上显示的点的大小和图例中点的大小都会被设置)  
 
-	    String seriesTitle = "Body Series ";// + (mDataset.getSeriesCount() + 1);//图例   
-//	    if (mDataset.getSeriesCount() > 0){	    	 
-//	    	mDataset.removeSeries(0); 
-//	    	mRenderer.removeAllRenderers();
-//	    }
+	    String seriesTitle = "";
+	    if ("body".equals(mode)){
+	    	seriesTitle = "Body Series ";// + (mDataset.getSeriesCount() + 1);//图例  
+	    }else if("surface".equals(mode)){
+	    	seriesTitle = "Surface Series ";// + (mDataset.getSeriesCount() + 1);//图例  
+	    }
+	     
+	    if (mDataset.getSeriesCount() > 0){	    	 
+	    	mDataset.removeSeries(0); 
+	    	mRenderer.removeAllRenderers();
+	    }
+	    
 	    XYSeries series = new XYSeries(seriesTitle);//定义XYSeries
 	    mDataset.addSeries(series);//在XYMultipleSeriesDataset中添加XYSeries  
-        mCurrentSeries = series;//设置当前需要操作的XYSeries  
+	    mCurrentSeries = series;//设置当前需要操作的XYSeries  \	    
+        
+        addPoint(mode);
+        
         XYSeriesRenderer renderer = new XYSeriesRenderer();//定义XYSeriesRenderer  
         mRenderer.addSeriesRenderer(renderer);//将单个XYSeriesRenderer增加到XYMultipleSeriesRenderer  
         renderer.setPointStyle(PointStyle.CIRCLE);//点的类型是圆形  
         renderer.setFillPoints(true);//设置点是否实心  
+        if ("body".equals(mode)){
+        	renderer.setColor(Color.BLUE); //折线颜色
+	    }else if("surface".equals(mode)){
+	    	renderer.setColor(Color.RED); //折线颜色
+	    }
+        
         mCurrentRenderer = renderer;  
 
-	    addPoint();
+	   
 	    
 //	    if (mChartView == null) {  
-	        LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.chart);  
+        if (layout != null){
+        	layout.removeAllViews();
+        }
+	        layout = (LinearLayout) getActivity().findViewById(R.id.chart);  
 	        mChartView = ChartFactory.getLineChartView(getActivity().getApplicationContext(), mDataset, mRenderer);  
 	        mRenderer.setClickEnabled(true);//设置图表是否允许点击  
 	        mRenderer.setSelectableBuffer(100);//设置点的缓冲半径值(在某点附件点击时,多大范围内都算点击这个点)  
@@ -245,7 +285,7 @@ public class FragmentThemometerGraph extends Fragment {
 	            SeriesSelection seriesSelection = mChartView.getCurrentSeriesAndPoint();  
 	            double[] xy = mChartView.toRealPoint(0);  
 	            if (seriesSelection == null) {  
-	              Toast.makeText(getActivity().getApplicationContext(), "No chart element was clicked", Toast.LENGTH_SHORT).show();  
+//	              Toast.makeText(getActivity().getApplicationContext(), "No chart element was clicked", Toast.LENGTH_SHORT).show();  
 	            } else {  
 //	              Toast.makeText(getActivity().getApplicationContext(),  
 //	                  "Chart element in series index " + seriesSelection.getSeriesIndex()  
@@ -308,6 +348,26 @@ public class FragmentThemometerGraph extends Fragment {
 	
 	public void findView(View view){
 		tv_graphdata = (TextView) view.findViewById(R.id.tv_graphdata);
+		btn_refresh =  (Button) view.findViewById(R.id.btn_refresh);
+		btn_graphseluser =  (Button) view.findViewById(R.id.btn_graphseluser);
+		btn_graphswitch =  (Button) view.findViewById(R.id.btn_graphswitch);
+		
+		btn_refresh.setOnClickListener(new Button.OnClickListener(){//创建监听    
+            public void onClick(View v) {    
+            	 AChart();
+            }
+		});
+		
+		btn_graphswitch.setOnClickListener(new Button.OnClickListener(){//创建监听    
+            public void onClick(View v) {    
+            	if ("body".equals(mode)){
+            		mode = "surface";
+            	}else if ("surface".equals(mode)){
+            		mode = "body";
+            	}
+            	 AChart();
+            }
+		});
 	}
 
 	
