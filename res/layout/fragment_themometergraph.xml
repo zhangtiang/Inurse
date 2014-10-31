@@ -39,8 +39,8 @@
 
                 <Button
                     android:id="@+id/btn_graphseluser"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="100dip"
+                    android:layout_height="48dip"
                     android:background="@drawable/selectuser_selector" />
             </LinearLayout>
 
@@ -53,8 +53,8 @@
 
                 <Button
                     android:id="@+id/btn_refresh"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="100dip"
+                    android:layout_height="48dip"
                     android:background="@drawable/refresh_selector" />
             </LinearLayout>
 
@@ -67,8 +67,8 @@
 
                 <Button
                     android:id="@+id/btn_graphswitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="100dip"
+                    android:layout_height="48dip"
                     android:background="@drawable/mode_selector" />
             </LinearLayout>
         </LinearLayout>

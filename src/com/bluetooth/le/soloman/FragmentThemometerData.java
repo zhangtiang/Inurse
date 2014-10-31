@@ -4,7 +4,6 @@ package com.bluetooth.le.soloman;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-
 import com.bluetooth.le.soloman.R;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -268,7 +267,8 @@ public class FragmentThemometerData extends Fragment {
 						mailcontent.append("Mode:" + cursor.getString(1) + appState.separate);
 						mailcontent.append("Unit:" + cursor.getString(2) + appState.separate);
 						mailcontent.append("Value:" + cursor.getString(3) + appState.separate);
-						mailcontent.append("Date:" + cursor.getString(4) + "\n");
+						mailcontent.append("Date:" + cursor.getString(4)  + appState.separate);
+						mailcontent.append("Note:" + cursor.getString(6) + "\n");
 					}
 					cursor.close();
 				}
@@ -315,7 +315,8 @@ public class FragmentThemometerData extends Fragment {
 						saveascontent.append("Mode:" + cursor.getString(1) + appState.separate);
 						saveascontent.append("Unit:" + cursor.getString(2) + appState.separate);
 						saveascontent.append("Value:" + cursor.getString(3) + appState.separate);
-						saveascontent.append("Date:" + cursor.getString(4) + "\n");
+						saveascontent.append("Date:" + cursor.getString(4)  + appState.separate);
+						saveascontent.append("Note:" + cursor.getString(6) + "\n");
 					}
 					cursor.close();
 				}
@@ -371,23 +372,9 @@ public class FragmentThemometerData extends Fragment {
 			String uid = data.getStringExtra("uid");
 			String name = data.getStringExtra("name");
 			String note = data.getStringExtra("note");
-			
-			if (uid != null){
-				if (name == null){
-					name = "";
-				}
-				if (note ==null){
-					note = "";
-				}
-				
-				appState.userID = uid;
-				appState.userName = name;	
-				
-				btn_clouddelete.setEnabled(false);
-				sb.delete(0, sb.length());
-				
+
 				updateUI();
-			}			
+	
 		}
 	}
 
@@ -399,6 +386,7 @@ public class FragmentThemometerData extends Fragment {
 			public TextView list_themocloud_mode;
 			public TextView list_themocloud_value;
 			public TextView list_themocloud_time;
+			public Button btn_datanote;
 		}
 		
 		private ArrayList<HashMap<String, Object>> lst;
@@ -429,6 +417,7 @@ public class FragmentThemometerData extends Fragment {
 						map.put("unit", cursor.getString(2));
 						map.put("value", cursor.getString(3));						
 						map.put("date", cursor.getString(4));
+						map.put("note", cursor.getString(6));
 						lst.add(map);
 					}
 					cursor.close();
@@ -448,6 +437,7 @@ public class FragmentThemometerData extends Fragment {
 						map.put("unit", cursor.getString(2));
 						map.put("value", cursor.getString(3));						
 						map.put("date", cursor.getString(4));
+						map.put("note", cursor.getString(6));
 						lst.add(map);
 					}
 					cursor.close();
@@ -577,6 +567,7 @@ public class FragmentThemometerData extends Fragment {
 					zuJian.list_themocloud_mode = (TextView) convertView.findViewById(R.id.list_themocloud_mode);
 					zuJian.list_themocloud_value = (TextView) convertView.findViewById(R.id.list_themocloud_value);
 					zuJian.list_themocloud_time = (TextView) convertView.findViewById(R.id.list_themocloud_time);
+					zuJian.btn_datanote = (Button) convertView.findViewById(R.id.btn_datanote);
 
 					// 这里要注意，是使用的tag来存储数据的。
 					convertView.setTag(zuJian);
@@ -595,6 +586,29 @@ public class FragmentThemometerData extends Fragment {
 				zuJian.list_themocloud_mode.setText((String) data.get(position).get("mode"));
 				zuJian.list_themocloud_value.setText((String) data.get(position).get("value") + (String) data.get(position).get("unit"));
 				zuJian.list_themocloud_time.setText((String) data.get(position).get("date"));
+				
+				if (!"".equals((String) data.get(position).get("note")) && (String) data.get(position).get("note") !=null){
+					zuJian.btn_datanote.setBackgroundResource(R.drawable.note_button2);
+				}else {
+					zuJian.btn_datanote.setBackgroundResource(R.drawable.note_button1);
+				}
+				
+				
+				zuJian.btn_datanote.setOnClickListener(new Button.OnClickListener(){//创建监听    
+		            public void onClick(View v) {   
+		            	//弹窗写note
+		            	Intent intent = new Intent();
+		        		intent.setClass(getActivity(), Note.class);
+		        		
+		        		Bundle bundle = new Bundle();
+		        		bundle.putString("uid",(String) data.get(position).get("uid"));
+		        		bundle.putString("date",(String) data.get(position).get("date"));
+		        		bundle.putString("note",(String) data.get(position).get("note"));
+		        		intent.putExtras(bundle);
+
+		        		startActivityForResult(intent, 1);// 需要下一个Activity返回数据,在onActivityResult()中接收			
+		            }
+				});
 
 				return convertView;
 			}

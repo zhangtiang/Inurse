@@ -65,7 +65,8 @@ public class Database {
 					"unit varchar(10), " + // 单位℃,℉
 					"value varchar(10), " + // 测量值
 					"date varchar(50), " + // 测量日期
-					"time varchar(50) )");//测量时间
+					"time varchar(50), " + //测量时间
+					"note varchar(100) )"); //每条记录的note，医嘱
 			SQLdb = db;
 			System.out.println("DB onCreate --- table_value");			
 			
@@ -220,7 +221,7 @@ public class Database {
 		Cursor cursor = null;
 		try {
 			cursor = SQLdb.query(table_value, // table名
-					new String[] { "id", "mode", "unit", "value", "date","time" }, // 字段
+					new String[] { "id", "mode", "unit", "value", "date","time", "note" }, // 字段
 					"devicetype = '" + devicetype + "'", // 条件
 					null, null, null, null);
 		} catch (Exception e) {
@@ -234,7 +235,7 @@ public class Database {
 		Cursor cursor = null;
 		try {
 			cursor = SQLdb.query(table_value, // table名
-					new String[] { "id", "mode", "unit", "value", "date","time" }, // 字段
+					new String[] { "id", "mode", "unit", "value", "date","time", "note" }, // 字段
 					"id = '" + id + "' and " + "devicetype = '" + devicetype + "'", // 条件
 					null, null, null, null);
 		} catch (Exception e) {
@@ -248,7 +249,7 @@ public class Database {
 		Cursor cursor = null;
 		try {
 			cursor = SQLdb.query(table_value, // table名
-					new String[] { "id", "mode", "unit", "value", "date","time" }, // 字段
+					new String[] { "id", "mode", "unit", "value", "date","time", "note" }, // 字段
 					"id = '" + id + "' and " + "devicetype = '" + devicetype + "' and " + "mode = '" + mode + "'", // 条件
 					null, null, null, null);
 		} catch (Exception e) {
@@ -257,6 +258,14 @@ public class Database {
 		}
 		return cursor;
 	}
+	
+	// 修改信息
+		public int updateRecord (String id, String date, String note ) {
+			ContentValues cv = new ContentValues();
+			cv.put("note", note);
+			String[] args = { id, date };
+			return SQLdb.update(table_value, cv, "id=? and date=?", args);
+		}
 	
 	public long delRecord(String id, String date) {
 		return SQLdb.delete(table_value, "id = '" + id + "' and date = '" + date + "'",

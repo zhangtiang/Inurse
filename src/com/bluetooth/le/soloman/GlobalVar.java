@@ -158,6 +158,10 @@ public class GlobalVar extends Application{
 		return database.getRecord(id, devicetype, mode );
 	}
 	
+	public int updateRecord(String id, String date, String note ) {
+		return database.updateRecord(id, date , note);
+	}
+	
 	public long delRecord(String id, String date) {
 		return database.delRecord(id, date);
 	}

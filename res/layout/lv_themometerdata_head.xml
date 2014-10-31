@@ -20,7 +20,7 @@
         android:textStyle="bold" />
     
     <TextView
-        android:layout_width="64dip"
+        android:layout_width="32dip"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dip"
         android:text="Mode"
@@ -30,7 +30,7 @@
 
 
     <TextView
-        android:layout_width="48dip"
+        android:layout_width="32dip"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dip"
         android:text="Value"
@@ -38,11 +38,13 @@
         android:textStyle="bold" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="80dip"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dip"
         android:text="Time"
         android:textSize="12sp"
         android:textStyle="bold" />
+
+    
 
 </LinearLayout>
