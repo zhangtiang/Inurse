@@ -173,6 +173,10 @@ public class FirstActivity extends FragmentActivity {
 
 		appState.firstActivityRunning = false;
 		appState.runThread = false;
+		
+		if (appState.BluetoothAdapter != null && appState.BluetoothAdapter.isEnabled() ){
+			appState.BluetoothAdapter.disable();
+		}
 	}
 	
 	// 检测按键

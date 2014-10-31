@@ -88,6 +88,7 @@ public class DeviceScanActivity extends ListActivity {
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
+        appState.BluetoothAdapter = mBluetoothAdapter;
         
         // Checks if Bluetooth is supported on the device.
         if (mBluetoothAdapter == null) {
@@ -95,8 +96,10 @@ public class DeviceScanActivity extends ListActivity {
             finish();
             return;
         }
+        
         //开启蓝牙
         mBluetoothAdapter.enable();
+        
         
         
         mBLE_reciv = new BluetoothLeClass(this);
@@ -129,10 +132,16 @@ public class DeviceScanActivity extends ListActivity {
     protected void onResume() {
         super.onResume();
 
-        // Initializes list view adapter.
-        mLeDeviceListAdapter = new LeDeviceListAdapter(this);
+        // Initializes list view adapter.    
+        mLeDeviceListAdapter = new LeDeviceListAdapter(this);        	
         setListAdapter(mLeDeviceListAdapter);
-        scanLeDevice(true);
+        if (mBluetoothAdapter.isEnabled()){
+        	scanLeDevice(true);
+        }else{
+        	finish();
+        	return;
+        }
+                	 
     }
 
     @Override

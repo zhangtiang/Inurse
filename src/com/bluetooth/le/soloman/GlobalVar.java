@@ -3,6 +3,7 @@ package com.bluetooth.le.soloman;
 import java.math.BigDecimal;
 import com.soloman.DB.Database;
 import android.app.Application;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.database.Cursor;
 
@@ -19,8 +20,9 @@ public class GlobalVar extends Application{
 	public int fielduid, fieldfname,fieldlname, fielddevicetype, fielddeviceid,fielddate, fieldvalue, fieldmode, fieldunit, fieldnote;
 	
 	 /**读写BLE终端*/
+	public BluetoothAdapter BluetoothAdapter = null;
 	public BluetoothLeClass mBLE_send, mBLE_reciv;
-	BluetoothGattCharacteristic  gattCharacteristic_send, gattCharacteristic_reciv;
+	public BluetoothGattCharacteristic  gattCharacteristic_send, gattCharacteristic_reciv;
 	public byte c[] =new byte [16];
 	
 	public boolean runThread = false;
