@@ -10,6 +10,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.MediaRecorder;
@@ -21,6 +24,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class FirstActivity extends FragmentActivity {
 
@@ -118,7 +122,8 @@ public class FirstActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				Log.i("info", "iv_repair onClicked");
-				
+				Intent it = new Intent(FirstActivity.this, PairedDevice.class);				
+				startActivity(it);
 			}
 		});
 		
@@ -136,8 +141,21 @@ public class FirstActivity extends FragmentActivity {
 	public void btn_wendu_onclick(View view){
 		Log.i("info","点击温度计按钮");
 //		Intent it = new Intent(FirstActivity.this, CeliangActivity.class);
-		Intent it = new Intent(FirstActivity.this, DeviceScanActivity.class);
-		startActivity(it);
+		BluetoothAdapter mBluetoothAdapter;
+		final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = bluetoothManager.getAdapter();
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
+        }
+        
+        if (mBluetoothAdapter.isEnabled()){ //如果蓝牙开了，进搜索蓝牙，然后进体温计
+        	Intent it = new Intent(FirstActivity.this, DeviceScanActivity.class);
+    		startActivity(it);
+        }else {//如果蓝牙没开，直接进体温计
+        	Intent it = new Intent(FirstActivity.this, CeliangActivity.class);
+    		startActivity(it);
+        }
+				
 	}
 
 

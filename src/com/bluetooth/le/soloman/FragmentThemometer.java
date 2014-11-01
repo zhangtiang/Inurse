@@ -56,7 +56,11 @@ public class FragmentThemometer extends Fragment {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				Log.i("info","FagmentThemometer onTouch");
-				cewen();
+				if (appState.BluetoothAdapter!=null && appState.BluetoothAdapter.isEnabled()){	
+					//如果蓝牙是开着的，启用测温、选择模式、单位等功能
+					cewen();
+				}
+				
 				return false;
 			}
 
@@ -180,11 +184,35 @@ public class FragmentThemometer extends Fragment {
 		tv_cewennum = (TextView) view.findViewById(R.id.tv_cewennum);
 		
 
-		btn_getTemp.setOnClickListener(new Button.OnClickListener(){//创建监听    
-            public void onClick(View v) {    
-            	cewen();
-            }  
-        });    
+		if (appState.BluetoothAdapter!=null && appState.BluetoothAdapter.isEnabled()){	
+			//如果蓝牙是开着的，启用测温、选择模式、单位等功能
+			btn_getTemp.setOnClickListener(new Button.OnClickListener(){//创建监听    
+	            public void onClick(View v) {    
+	            	cewen();
+	            }  
+	        });  
+			
+			//切换模式0body 1surface 2room
+			btn_swichcewenmode.setOnClickListener(new Button.OnClickListener(){//创建监听    
+	            public void onClick(View v) {    
+	            	ti ++;
+	            	appState.setMode(appState.gattCharacteristic_send, (byte) (ti % 3 & 0xff), (byte) (tj % 2 & 0xff) );
+	            }
+			});
+			
+			btn_swichcewenunit.setOnClickListener(new Button.OnClickListener(){//创建监听    
+	            public void onClick(View v) {    
+	            	tj ++;
+	            	if (tj %2 ==0){
+	            		tv_cewenunit.setText("℃");
+	            	}else if (tj % 2 ==1){
+	            		tv_cewenunit.setText("℉");
+	            	}
+	            	appState.setMode(appState.gattCharacteristic_send, (byte) (ti % 3 & 0xff), (byte) (tj % 2 & 0xff) );
+	            	tv_cewenwendu.setText("- -");
+	            }
+			});
+		}		  
 		
 		btn_selectuser.setOnClickListener(new Button.OnClickListener(){//创建监听    
             public void onClick(View v) {    
@@ -192,30 +220,7 @@ public class FragmentThemometer extends Fragment {
     			startActivityForResult(it, 1);	
             }
 		});
-		
-		//切换模式0body 1surface 2room
-		btn_swichcewenmode.setOnClickListener(new Button.OnClickListener(){//创建监听    
-            public void onClick(View v) {    
-            	ti ++;
-            	appState.setMode(appState.gattCharacteristic_send, (byte) (ti % 3 & 0xff), (byte) (tj % 2 & 0xff) );
-            }
-		});
-		
-		btn_swichcewenunit.setOnClickListener(new Button.OnClickListener(){//创建监听    
-            public void onClick(View v) {    
-            	tj ++;
-            	if (tj %2 ==0){
-            		tv_cewenunit.setText("℃");
-            	}else if (tj % 2 ==1){
-            		tv_cewenunit.setText("℉");
-            	}
-            	appState.setMode(appState.gattCharacteristic_send, (byte) (ti % 3 & 0xff), (byte) (tj % 2 & 0xff) );
-            	tv_cewenwendu.setText("- -");
-            }
-		});
-		
-		
-						
+				
 	}
 	
 	@Override

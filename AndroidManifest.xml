@@ -49,6 +49,8 @@ limitations under the License.
         </activity>
          <activity android:name="com.bluetooth.le.soloman.CeliangActivity" >
         </activity>
+        <activity android:name="com.bluetooth.le.soloman.PairedDevice" >
+        </activity>
         <activity android:name="com.bluetooth.le.soloman.gridUser"
            		  android:theme="@android:style/Theme.Holo.Dialog" >
         </activity>

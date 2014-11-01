@@ -171,6 +171,12 @@ public final class R {
         public static final int chart=0x7f07004c;
         public static final int connection_state=0x7f07005c;
         public static final int data_value=0x7f07005d;
+        public static final int del_bp=0x7f07007e;
+        public static final int del_cardio=0x7f070082;
+        public static final int del_oxi=0x7f070084;
+        public static final int del_scale=0x7f070088;
+        public static final int del_sleep=0x7f070086;
+        public static final int del_ther=0x7f070080;
         public static final int device_address=0x7f07005b;
         public static final int device_name=0x7f070063;
         public static final int ed_listnote=0x7f07007b;
@@ -222,11 +228,18 @@ public final class R {
         public static final int lv_user=0x7f07005a;
         public static final int main_bottom=0x7f070001;
         public static final int main_title=0x7f070000;
-        public static final int menu_connect=0x7f07007e;
-        public static final int menu_disconnect=0x7f07007f;
-        public static final int menu_refresh=0x7f07007d;
-        public static final int menu_scan=0x7f070080;
-        public static final int menu_stop=0x7f070081;
+        public static final int menu_connect=0x7f07008b;
+        public static final int menu_disconnect=0x7f07008c;
+        public static final int menu_refresh=0x7f07008a;
+        public static final int menu_scan=0x7f07008d;
+        public static final int menu_stop=0x7f07008e;
+        public static final int paired_bp=0x7f07007d;
+        public static final int paired_cardio=0x7f070081;
+        public static final int paired_oxi=0x7f070083;
+        public static final int paired_rtn=0x7f070089;
+        public static final int paired_scale=0x7f070087;
+        public static final int paired_sleep=0x7f070085;
+        public static final int paired_ther=0x7f07007f;
         public static final int rg_autodel=0x7f070017;
         public static final int rg_automail=0x7f070022;
         public static final int sp_fileformat=0x7f07002d;
@@ -274,6 +287,7 @@ public final class R {
         public static final int main_bottom=0x7f030015;
         public static final int main_title=0x7f030016;
         public static final int note=0x7f030017;
+        public static final int paireddevice=0x7f030018;
     }
     public static final class menu {
         public static final int gatt_services=0x7f060000;

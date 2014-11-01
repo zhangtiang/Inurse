@@ -1,15 +1,9 @@
 package com.bluetooth.le.soloman;
 
-import java.util.ArrayList;
-
 import com.bluetooth.le.soloman.FragmentThemometer;
 import com.bluetooth.le.soloman.R;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.content.pm.ActivityInfo;
 import android.media.MediaRecorder;
 import android.os.Bundle;
