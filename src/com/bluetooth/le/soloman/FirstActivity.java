@@ -1,6 +1,13 @@
 package com.bluetooth.le.soloman;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.bluetooth.le.soloman.FragmentThemometer;
 import com.bluetooth.le.soloman.R;
@@ -10,6 +17,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.telephony.TelephonyManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
@@ -18,6 +26,9 @@ import android.content.pm.ActivityInfo;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -74,10 +85,29 @@ public class FirstActivity extends FragmentActivity {
 		//ft.replace(R.id.viewPager, fragmentSleep);
 		ft.commit();	
 
-	
-
+		new Thread() {
+			@Override
+			public void run() {
+				// 你要执行的方法
+				uploadDevice();
+				// 执行完毕后给handler发送一个空消息
+				handler.sendEmptyMessage(0);
+			}
+		}.start();
+		
 	}
 
+	//定义Handler对象
+	private Handler handler =new Handler(){
+	 @Override
+	 //当有消息发送出来的时候就执行Handler的这个方法
+	public void handleMessage(Message msg){
+	 super.handleMessage(msg);
+	//处理UI
+	 
+	 }
+	 };
+	 
 	
 	private void setOnClickListener() {
 		// TODO Auto-generated method stub
@@ -334,4 +364,99 @@ public class FirstActivity extends FragmentActivity {
 		}			
 	} 
 
+	
+	private void getDeviceInfo() {
+		// TODO Auto-generated method stub
+			DisplayMetrics metric = new DisplayMetrics();
+			getWindowManager().getDefaultDisplay().getMetrics(metric);
+			appState.screenWidth = metric.widthPixels; // 屏幕宽度（像素）
+			appState.screenHeight = metric.heightPixels; // 屏幕高度（像素）
+			appState.density = metric.density; // 屏幕密度（0.75 / 1.0 / 1.5）
+			appState.densityDpi = metric.densityDpi; // 屏幕密度DPI（120 / 160 / 240）
+			appState.wh = appState.screenHeight / appState.screenWidth;
+
+			appState.firm = android.os.Build.VERSION.RELEASE;
+			appState.tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+			/*
+			 * 唯一的设备ID： GSM手机的 IMEI 和 CDMA手机的 MEID. Return null if device ID is not
+			 * available.
+			 */
+			appState.IMEI = appState.tm.getDeviceId();// String
+			appState.card1num = appState.tm.getLine1Number();// String
+			appState.simserial = appState.tm. getSimSerialNumber();// String
+	}
+	
+	private void uploadDevice() {
+		// TODO Auto-generated method stub
+		 getDeviceInfo() ;
+		 String servletUrl = "http://solomanhl.3322.org:8888/WebLoginToandroid/servlet/inurse";
+//		 String servletUrl = "http://192.168.1.9:8080/WebLoginToandroid/servlet/inurse";
+		 String send;
+		 Date dt = new Date(System.currentTimeMillis());
+		 String devicetime = dt.toGMTString();
+			
+			// 将参数传给服务器
+			String resultData = "";
+			send = "device=" + appState.IMEI
+					+ "&devicetime=" + devicetime
+					+ "&note=Firm:" + appState.firm + ",Pixels:" + appState.screenWidth + "/" + appState.screenHeight + "/" + appState.wh
+								+ ",Density:" + appState.density + ",densityDpi:" + appState.densityDpi
+								+ ",Tel:" + appState.card1num + ",Sim:" + appState.simserial;
+			URL url = null;
+			try {
+				url = new URL(servletUrl);
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			if (url != null) {
+				try {
+					// 使用HttpURLConnection打开连接
+					HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
+					urlConn.setConnectTimeout(appState.REQUEST_TIMEOUT);
+					urlConn.setReadTimeout(appState.SO_TIMEOUT);
+					// 因为要求使用Post方式提交数据，需要设置为true
+					urlConn.setDoOutput(true);
+					urlConn.setDoInput(true);
+					// 设置以Post方式，注意此处的“POST”必须大写
+					urlConn.setRequestMethod("POST");
+					// Post 请求不能使用缓存
+					urlConn.setUseCaches(false);
+					urlConn.setInstanceFollowRedirects(true);
+					// 配置本次连接的Content-Type，配置为application/x-www-form-urlencoded
+					urlConn.setRequestProperty("Content-Type",
+							"application/x-www-form-urlencoded");
+					// 连接，从postUrl.openConnection()至此的配置必须在connect之前完成
+					// 要注意的事connection.getOutputStream会隐含地进行connect。
+					urlConn.connect();
+					// DataOutputStream流上传数据
+					DataOutputStream out = new DataOutputStream(
+							urlConn.getOutputStream());					
+					// 将要上传的内容写入流中
+					out.writeBytes(send);
+					// 刷新，关闭
+					out.flush();
+					out.close();
+					// 得到读取的数据
+					InputStreamReader in = new InputStreamReader(
+							urlConn.getInputStream());
+					BufferedReader buffer = new BufferedReader(in);
+					String str = null;
+					while ((str = buffer.readLine()) != null) {
+						resultData += str;
+					}
+					in.close();
+					urlConn.disconnect();
+					
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}// if(url!=null)
+			else {
+
+			}
+	}
+	
 }

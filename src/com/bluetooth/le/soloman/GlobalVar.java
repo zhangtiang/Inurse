@@ -6,9 +6,20 @@ import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.database.Cursor;
+import android.telephony.TelephonyManager;
 
 public class GlobalVar extends Application{
-
+	public String firm;
+	//public Integer version = Integer.valueOf(android.os.Build.VERSION.SDK);
+	public String version = android.os.Build.VERSION.RELEASE;
+	public float screenWidth, screenHeight;
+	public float density; // 屏幕密度（0.75 / 1.0 /1.25/ 1.5）
+	public int densityDpi; // 屏幕密度DPI（120 / 160 /200/ 240）
+	public float wh; // 长宽比
+	public TelephonyManager tm;
+	public String IMEI;
+	public String card1num, simserial;
+	
 	public FileUtils file = new FileUtils();
 	public String sdcard;
 	
@@ -27,6 +38,9 @@ public class GlobalVar extends Application{
 	
 	public boolean runThread = false;
 	public boolean firstActivityRunning = false;
+	
+	public static final int REQUEST_TIMEOUT = 3*1000;//设置请求超时3秒钟  
+	public static final int SO_TIMEOUT = 50*1000;  //设置等待数据超时时间5秒钟  
 	
 	public void init_BluetoothLeClass () {
 		mBLE_reciv = new BluetoothLeClass(this);
