@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 import com.bluetooth.le.soloman.FragmentThemometer;
 import com.bluetooth.le.soloman.R;
@@ -384,6 +385,11 @@ public class FirstActivity extends FragmentActivity {
 			appState.IMEI = appState.tm.getDeviceId();// String
 			appState.card1num = appState.tm.getLine1Number();// String
 			appState.simserial = appState.tm. getSimSerialNumber();// String
+			
+			String androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(),android.provider.Settings.Secure.ANDROID_ID);
+			appState.deviceUuid = new UUID(androidId.hashCode(), 
+					((long)("" + appState.IMEI).hashCode() << 32) | ("" + appState.simserial).hashCode()); 
+
 	}
 	
 	private void uploadDevice() {
@@ -393,11 +399,11 @@ public class FirstActivity extends FragmentActivity {
 //		 String servletUrl = "http://192.168.1.9:8080/WebLoginToandroid/servlet/inurse";
 		 String send;
 		 Date dt = new Date(System.currentTimeMillis());
-		 String devicetime = dt.toGMTString();
+		 String devicetime = dt.toString();
 			
 			// 将参数传给服务器
 			String resultData = "";
-			send = "device=" + appState.IMEI
+			send = "device=" + appState.deviceUuid
 					+ "&devicetime=" + devicetime
 					+ "&note=Firm:" + appState.firm + ",Pixels:" + appState.screenWidth + "/" + appState.screenHeight + "/" + appState.wh
 								+ ",Density:" + appState.density + ",densityDpi:" + appState.densityDpi

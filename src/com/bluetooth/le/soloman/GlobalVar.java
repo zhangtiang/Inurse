@@ -1,6 +1,8 @@
 package com.bluetooth.le.soloman;
 
 import java.math.BigDecimal;
+import java.util.UUID;
+
 import com.soloman.DB.Database;
 import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
@@ -19,6 +21,7 @@ public class GlobalVar extends Application{
 	public TelephonyManager tm;
 	public String IMEI;
 	public String card1num, simserial;
+	public UUID deviceUuid;
 	
 	public FileUtils file = new FileUtils();
 	public String sdcard;
