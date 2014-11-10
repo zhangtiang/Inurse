@@ -24,7 +24,7 @@ public class CeliangActivity extends FragmentActivity {
 	public FragmentThemometerData fragmentThemometerData;
 	public FragmentThemometerHelp fragmentThemometerHelp;
 //	public FragmentThemometerSetting fragmentThemometerSetting;
-	public FragmentSetting fragmentThemometerSetting;
+	public FragmentSetting fragmentSetting;
 
 
 	public MediaRecorder recorder;	
@@ -153,7 +153,7 @@ public class CeliangActivity extends FragmentActivity {
 			public void onClick(View v) {
 				Log.i("info", "iv_celiangsetting onClicked");
 //				viewPager.setCurrentItem(4);
-				replaceFrag(new FragmentThemometerSetting() );
+				replaceFrag(new FragmentSetting() );
 				iv_graph.setBackgroundResource(R.drawable.graph);
 				iv_celianghome.setBackgroundResource(R.drawable.home);
 				iv_data.setBackgroundResource(R.drawable.data);

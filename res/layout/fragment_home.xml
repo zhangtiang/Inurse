@@ -39,7 +39,7 @@
             android:layout_gravity="right"
             android:layout_marginRight="16dip"
             android:background="@drawable/shuimian_selector"
-            android:enabled="false" />
+            android:onClick="btn_shuimian_onclick" />
     </LinearLayout>
 
     <LinearLayout
@@ -76,7 +76,8 @@
             android:layout_gravity="left"
             android:layout_marginRight="16dip"
             android:background="@drawable/dianzichen_selector"
-            android:enabled="false" />
+            android:enabled="false"
+            android:onClick="btn_dianzichen_onclick" />
     </LinearLayout>
 
 </LinearLayout>

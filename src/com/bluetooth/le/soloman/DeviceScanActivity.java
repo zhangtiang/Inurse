@@ -333,7 +333,7 @@ public class DeviceScanActivity extends ListActivity {
         			Log.e(TAG,"---->char value:"+ Utils.bytesToHexString(data) );
         		}
 
-//        		if ( gattService.getUuid().toString().equals(UUID_KEY_SERVICE) ) { //如果是手环的service
+        		if ( gattService.getUuid().toString().equals(UUID_KEY_SERVICE) ) { //如果是手环的service
         			//UUID_KEY_DATA是可以跟蓝牙模块串口通信的Characteristic
             		if(gattCharacteristic.getUuid().toString().equals(UUID_KEY_DATA_RECIV)) {    
             			//测试读取当前Characteristic数据，会触发mOnDataAvailable.onCharacteristicRead()
@@ -383,7 +383,7 @@ public class DeviceScanActivity extends ListActivity {
             			}
             			
             		}
-//        		} 	//结束 if ( gattService.getUuid().toString().equals(UUID_KEY_SERVICE) )
+        		} 	//结束 if ( gattService.getUuid().toString().equals(UUID_KEY_SERVICE) )
         		
         		
         		//-----Descriptors的字段信息-----//

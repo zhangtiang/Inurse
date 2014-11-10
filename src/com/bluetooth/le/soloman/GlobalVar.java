@@ -33,6 +33,7 @@ public class GlobalVar extends Application{
 	public String whendel, mail1, mail2, whenmail, mailtime1, mailtime2, serverurl,path, ext, separate;
 	public int fielduid, fieldfname,fieldlname, fielddevicetype, fielddeviceid,fielddate, fieldvalue, fieldmode, fieldunit, fieldnote;
 	
+	public boolean recTag;//睡眠是否录音
 	 /**读写BLE终端*/
 	public BluetoothAdapter BluetoothAdapter = null;
 	public BluetoothLeClass mBLE_send, mBLE_reciv;

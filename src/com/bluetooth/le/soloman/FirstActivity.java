@@ -12,6 +12,8 @@ import java.util.UUID;
 
 import com.bluetooth.le.soloman.FragmentThemometer;
 import com.bluetooth.le.soloman.R;
+import com.soloman.shuimian.ShuimianActivity;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -19,9 +21,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.telephony.TelephonyManager;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.MediaRecorder;
@@ -51,7 +55,7 @@ public class FirstActivity extends FragmentActivity {
 	public MediaRecorder recorder;	
 	public ViewPager viewPager;	
 	public ImageView iv_home, iv_setting, iv_help, iv_user, iv_sound, iv_repair;	//首页图片  设置图片
-	public Button btn_wendu;	//温度计
+	public Button btn_wendu, btn_shuimian, btn_dianzichen;	//温度计,睡眠，电子秤
 
 	
 	@Override
@@ -169,6 +173,37 @@ public class FirstActivity extends FragmentActivity {
 		
 	}
 	
+	public void btn_shuimian_onclick(View view){
+		Log.i("info","点击睡眠按钮");
+        
+        Intent it = new Intent(FirstActivity.this, ShuimianActivity.class);
+		startActivity(it);
+				
+	}
+	
+	public void btn_dianzichen_onclick(View view){
+		Log.i("info","点击电子秤按钮");
+//		Intent it = new Intent(FirstActivity.this, CeliangActivity.class);
+		BluetoothAdapter mBluetoothAdapter;
+		final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = bluetoothManager.getAdapter();
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
+        }
+        
+//        if (mBluetoothAdapter.isEnabled()){ //如果蓝牙开了，进搜索蓝牙，然后进体温计
+//        	Intent it = new Intent(FirstActivity.this, DeviceScanActivity.class);
+//    		startActivity(it);
+//        }else {//如果蓝牙没开，直接进体温计
+//        	Intent it = new Intent(FirstActivity.this, CeliangActivity.class);
+//    		startActivity(it);
+//        }
+        
+        Intent it = new Intent(FirstActivity.this, DianzichenActivity.class);
+		startActivity(it);
+				
+	}
+
 	public void btn_wendu_onclick(View view){
 		Log.i("info","点击温度计按钮");
 //		Intent it = new Intent(FirstActivity.this, CeliangActivity.class);
@@ -182,13 +217,29 @@ public class FirstActivity extends FragmentActivity {
         if (mBluetoothAdapter.isEnabled()){ //如果蓝牙开了，进搜索蓝牙，然后进体温计
         	Intent it = new Intent(FirstActivity.this, DeviceScanActivity.class);
     		startActivity(it);
-        }else {//如果蓝牙没开，直接进体温计
-        	Intent it = new Intent(FirstActivity.this, CeliangActivity.class);
-    		startActivity(it);
+        }else {//如果蓝牙没开，提示是否直接进体温计
+        	new AlertDialog.Builder(this)
+				.setTitle("Bluetooth")
+				.setMessage("Your Bluetooth is closed now, do you want to open it ?")
+				.setNegativeButton("No,Thanks",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								//this.s = "Negative";
+								Intent it = new Intent(FirstActivity.this, CeliangActivity.class);
+					    		startActivity(it);
+					}
+				})
+				.setPositiveButton("Yes,Open it", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						Intent it = new Intent(FirstActivity.this, DeviceScanActivity.class);
+			    		startActivity(it);
+					}
+					}).show();
+					
+        	
         }
-				
 	}
-
 
 //	@Override
 //	public boolean onCreateOptionsMenu(Menu menu) {
@@ -253,6 +304,8 @@ public class FirstActivity extends FragmentActivity {
 		iv_sound = (ImageView) findViewById(R.id.iv_sound);
 		
 		btn_wendu =  (Button) findViewById(R.id.btn_wendu);
+		btn_dianzichen =  (Button) findViewById(R.id.btn_dianzichen);
+		btn_shuimian =  (Button) findViewById(R.id.btn_shuimian);
 	}
 
 	

@@ -51,6 +51,10 @@ limitations under the License.
         </activity>
          <activity android:name="com.bluetooth.le.soloman.CeliangActivity" >
         </activity>
+         <activity android:name="com.bluetooth.le.soloman.DianzichenActivity" >
+        </activity>
+        <activity android:name="com.soloman.shuimian.ShuimianActivity" >
+        </activity>
         <activity android:name="com.bluetooth.le.soloman.PairedDevice" >
         </activity>
         <activity android:name="com.bluetooth.le.soloman.gridUser"

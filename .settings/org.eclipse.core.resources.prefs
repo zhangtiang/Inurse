@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//src/com/bluetooth/le/soloman/FirstActivity.java=UTF-8
+encoding//src/com/bluetooth/le/soloman/FragmentDianzichen.java=UTF-8
 encoding//src/com/bluetooth/le/soloman/FragmentHelp.java=UTF-8
 encoding//src/com/bluetooth/le/soloman/FragmentThemometer.java=UTF-8
 encoding//src/com/bluetooth/le/soloman/FragmentThemometerData.java=UTF-8
@@ -8,5 +9,9 @@ encoding//src/com/bluetooth/le/soloman/FragmentThemometerHelp.java=UTF-8
 encoding//src/com/bluetooth/le/soloman/FragmentThemometerSetting.java=UTF-8
 encoding//src/com/bluetooth/le/soloman/FragmentUser.java=UTF-8
 encoding//src/com/soloman/DB/Database.java=GBK
+encoding//src/com/soloman/shuimian/FragmentThemometer.java=UTF-8
+encoding//src/com/soloman/shuimian/FragmentThemometerData.java=UTF-8
+encoding//src/com/soloman/shuimian/FragmentThemometerGraph.java=UTF-8
+encoding//src/com/soloman/shuimian/FragmentThemometerHelp.java=UTF-8
 encoding/res=UTF-8
 encoding/src=UTF-8
